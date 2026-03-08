@@ -1,32 +1,18 @@
-mod models;
-mod handlers;
-mod repository;
-mod templates;
 mod api;
+mod handlers;
+mod models;
+mod repository;
+mod router;
+mod templates;
 
-#[cfg(test)]
-mod tests;
-
-use axum::{ routing::get, Router };
+use crate::router::app;
 use tokio::net::TcpListener;
-use crate::handlers::{ home, food, food_detail, resume, health, blog, contact };
-use tower_http::services::ServeDir;
 
 #[tokio::main]
 async fn main() {
+    let app = app();
 
-    let app = Router::new()
-        .route("/", get(home))
-        .route("/food", get(food))
-        .route("/food/:slug", get(food_detail))
-        .route("/resume", get(resume))
-        .route("/blog", get(blog))
-        .route("/contact", get(contact))
-        .route("/api/health", get(health))
-        .nest_service("/static", ServeDir::new("static"))
-        .nest_service("/media", ServeDir::new("media"));
-
-    let listener = TcpListener::bind("127.0.0.1:3000").await.unwrap();
+    let listener = TcpListener::bind("0.0.0.0:3000").await.unwrap();
     println!("🚀 Listening on http://{}", listener.local_addr().unwrap());
 
     axum::serve(listener, app).await.unwrap();

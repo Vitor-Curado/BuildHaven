@@ -1,7 +1,8 @@
 main ul {
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 45% 45%;
     row-gap: 5vh;
+    column-gap: 5vw;
 }
 
 main ul li {

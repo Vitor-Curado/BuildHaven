@@ -1,5 +1,6 @@
 use crate::models::Food;
 
+#[allow(clippy::too_many_lines)]
 pub fn mock_food_data() -> Vec<Food> {
     vec![
         Food {
@@ -19,7 +20,7 @@ pub fn mock_food_data() -> Vec<Food> {
                 "Gently lower the eggs into the boiling water using tongs.",
                 "Boil for 6 minutes for runny yolks or 8 minutes for slightly firmer yolks.",
                 "Remove the eggs with tongs and place them in a bowl of cold water to stop the cooking process.",
-                "Peel and enjoy!"
+                "Peel and enjoy!",
             ],
             diet_friendly_to: vec![
                 "low-carb",
@@ -30,16 +31,16 @@ pub fn mock_food_data() -> Vec<Food> {
                 "vegetarian",
                 "gluten-free",
                 "dairy-free",
-                "nut-free"
-            ]
+                "nut-free",
+            ],
         },
         Food {
             title: "Scrambled Eggs",
             slug: "scrambled-eggs",
-            image_gallery: vec![ "scrambled-eggs.jpg" ],
-            main_ingredients: vec![ "Eggs", "Animal fat (the more the merrier)", "Salt" ],
+            image_gallery: vec!["scrambled-eggs.jpg"],
+            main_ingredients: vec!["Eggs", "Animal fat (the more the merrier)", "Salt"],
             cooking_method: "pan-frying",
-            equipment: vec![ "skillet", "spatula", "bowl" ],
+            equipment: vec!["skillet", "spatula", "bowl"],
             estimated_time_required_in_minutes: 15,
             one_serving_visual_reference: "2 eggs",
             one_serving_weight_reference_in_grams: 100,
@@ -51,7 +52,7 @@ pub fn mock_food_data() -> Vec<Food> {
                 "Pour the eggs into the skillet and let them cook undisturbed for a few seconds.",
                 "Gently stir the eggs with a spatula, pushing them from the edges to the center.",
                 "Continue to cook and stir until the eggs are softly set and slightly runny in places.",
-                "Season with salt and pepper to taste, then remove from heat and serve immediately."
+                "Season with salt and pepper to taste, then remove from heat and serve immediately.",
             ],
             diet_friendly_to: vec![
                 "low-carb",
@@ -62,14 +63,18 @@ pub fn mock_food_data() -> Vec<Food> {
                 "vegetarian",
                 "gluten-free",
                 "dairy-free",
-                "nut-free"
-            ]
+                "nut-free",
+            ],
         },
         Food {
             title: "Pan-fried burger patties",
             slug: "pan-fried-burger-patties",
             image_gallery: vec!["pan-fried-burgers.jpg"],
-            main_ingredients: vec!["Ground beef", "Salt", "Animal fat (for greasing the skillet)"],
+            main_ingredients: vec![
+                "Ground beef",
+                "Salt",
+                "Animal fat (for greasing the skillet)",
+            ],
             cooking_method: "pan-frying",
             equipment: vec!["skillet", "spatula"],
             estimated_time_required_in_minutes: 30,
@@ -82,7 +87,7 @@ pub fn mock_food_data() -> Vec<Food> {
                 "Divide the ground beef into equal portions and shape them into patties.",
                 "Season both sides of the patties with salt.",
                 "Place the patties in the hot skillet and cook for about 4-5 minutes on each side for medium doneness, or adjust the time to your preferred level of doneness.",
-                "Remove the patties from the skillet and let them rest for a few minutes before serving."
+                "Remove the patties from the skillet and let them rest for a few minutes before serving.",
             ],
             diet_friendly_to: vec![
                 "low-carb",
@@ -92,8 +97,8 @@ pub fn mock_food_data() -> Vec<Food> {
                 "paleo",
                 "gluten-free",
                 "dairy-free",
-                "nut-free"
-            ]
+                "nut-free",
+            ],
         },
         Food {
             title: "Italian pork sausage",
@@ -121,8 +126,8 @@ pub fn mock_food_data() -> Vec<Food> {
                 "paleo",
                 "gluten-free",
                 "dairy-free",
-                "nut-free"
-            ]
+                "nut-free",
+            ],
         },
         Food {
             title: "Medovik",
@@ -144,11 +149,9 @@ pub fn mock_food_data() -> Vec<Food> {
                 "Allow the baked layers to cool completely.",
                 "In a separate bowl, whisk together sour cream and a bit of honey to make the filling.",
                 "Assemble the cake by layering the baked dough circles with the sour cream filling in between each layer.",
-                "Refrigerate the assembled cake for several hours or overnight to allow the flavors to meld and the cake to set before slicing and serving."
+                "Refrigerate the assembled cake for several hours or overnight to allow the flavors to meld and the cake to set before slicing and serving.",
             ],
-            diet_friendly_to: vec![
-                "Vegetarian"
-            ]
+            diet_friendly_to: vec!["Vegetarian"],
         },
         Food {
             title: "Cheesecake",
@@ -169,11 +172,9 @@ pub fn mock_food_data() -> Vec<Food> {
                 "Pour the cream cheese mixture over the graham cracker crust in a springform pan.",
                 "Bake for about 60-70 minutes, or until the center is set and the edges are lightly browned.",
                 "Turn off the oven and let the cheesecake cool in the oven with the door slightly open for about an hour.",
-                "Refrigerate the cheesecake for at least 4 hours or overnight before slicing and serving."
+                "Refrigerate the cheesecake for at least 4 hours or overnight before slicing and serving.",
             ],
-            diet_friendly_to: vec![
-                "Vegetarian"
-            ]
-        }
+            diet_friendly_to: vec!["Vegetarian"],
+        },
     ]
 }

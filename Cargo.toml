@@ -1,5 +1,5 @@
 [package]
-name = "Personal-website"
+name = "personal-website"
 version = "0.1.0"
 edition = "2024"
 
@@ -11,3 +11,7 @@ askama_axum = "0.4"
 serde = { version = "1", features = ["derive"] }
 tower-http = { version = "0.6.8", features = ["fs"] }
 pulldown-cmark = "0.13.0"
+
+[dev-dependencies]
+tower = "0.4"
+http-body-util = "0.1"

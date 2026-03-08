@@ -1,15 +1,21 @@
-use crate::templates::{ IndexTemplate, FoodTemplate, FoodDetailTemplate, ResumeTemplate, BlogTemplate, ContactTemplate };
-use axum::{ response::{ Html, IntoResponse }, extract::Path };
-use askama::Template;
-use std::fs;
-use pulldown_cmark::{Parser, html};
 use crate::repository::mock_food_data;
+use crate::templates::{
+    AssetsTemplate, BlogTemplate, ContactTemplate, FoodDetailTemplate, FoodTemplate, IndexTemplate,
+    ResumeTemplate,
+};
+use askama::Template;
+use axum::{
+    extract::Path,
+    response::{Html, IntoResponse},
+};
+use pulldown_cmark::{Parser, html};
+use std::fs;
 
-use axum::Json;
 use crate::api::HealthResponse;
+use axum::Json;
 
 fn load_readme() -> String {
-    fs::read_to_string("/home/bucko/Documents/Buckos proprietary software/Personal-website/readme.md")
+    fs::read_to_string("./readme.md") // relative to working dir in container
         .unwrap_or_else(|_| "# README not found".to_string())
 }
 
@@ -48,10 +54,7 @@ pub async fn food() -> impl IntoResponse {
 pub async fn food_detail(Path(slug): Path<String>) -> impl IntoResponse {
     let foods = mock_food_data();
 
-    let food = foods
-        .iter()
-        .find(|f| f.slug == slug)
-        .unwrap();
+    let food = foods.iter().find(|f| f.slug == slug).unwrap();
 
     let template = FoodDetailTemplate {
         title: food.title.to_string(),
@@ -66,7 +69,7 @@ pub async fn resume() -> impl IntoResponse {
     Html(
         ResumeTemplate {
             title: "Resume",
-            favicon: "resume-icon.png"
+            favicon: "resume-icon.png",
         }
         .render()
         .unwrap(),
@@ -74,16 +77,14 @@ pub async fn resume() -> impl IntoResponse {
 }
 
 pub async fn health() -> Json<HealthResponse> {
-    Json(HealthResponse {
-        status: "ok",
-    })
+    Json(HealthResponse { status: "ok" })
 }
 
 pub async fn blog() -> impl IntoResponse {
     Html(
         BlogTemplate {
             title: "Blog",
-            favicon: "blog-icon.png"
+            favicon: "blog-icon.png",
         }
         .render()
         .unwrap(),
@@ -94,9 +95,30 @@ pub async fn contact() -> impl IntoResponse {
     Html(
         ContactTemplate {
             title: "Contact Me",
-            favicon: "contact-icon.png"
+            favicon: "contact-icon.png",
         }
         .render()
         .unwrap(),
     )
+}
+
+pub async fn assets() -> impl IntoResponse {
+    Html(
+        AssetsTemplate {
+            title: "Assets",
+            favicon: "assets-icon.png",
+        }
+        .render()
+        .unwrap(),
+    )
+}
+
+// Unit tests
+#[test]
+fn converts_multiple_markdown_features() {
+    let input = "# Title\n\n**Bold** text";
+    let html = markdown_to_html(input);
+
+    assert!(html.contains("<h1>Title</h1>"));
+    assert!(html.contains("<strong>Bold</strong>"));
 }

@@ -1,29 +1,152 @@
-# 📘 Victor's personal website
-This is my personal website for very practical purposes not limited to demonstrating programming expertise.
+# 📘 Victor's Personal Website
 
-## 🌐 Sections of the website
-### Home 
-It's where there will be presentations on each section of the website, showing what can be found in "Food" and "Board games" section for example. It's supposed to be nothing more than a welcome mat.
+**Version:** 0.2
+**Last updated:** March 8, 2026
 
-### Food
-I cook a lot, was thinking to have a page just to make people salivate over. This page was initially a huge roadblock because I had all this grandiose idea behind it, but now I'm thinking to simplify the process given the n=1 manpower situation and the amount of features that need to be rolled. And also the development process gives me time to make the damn pics. 
+A small Rust web application serving my personal website.
+The project uses server-side rendering with Askama, runs inside containers with Podman, and is deployed on a Fedora Linux server behind Nginx.
 
-### Board games
-I want to show people the board games I have! It's a nice way to let people know and maybe even have 'how to play' links and perhaps even some room for tags and filtering?
+---
 
-### Resume
-This is fairly straight-forward. Having a personal website is also very good for personal branding, one could say it gives an edge and it's an amazing chance to show a bit of personality and work ethic.
+# 📐 Architecture
 
-### Software
-I plan to put things I do in here to be downloaded, for free.
+## Application Layer
 
-## ⚙️ Technical overview
-### Technology stack
-Rust, Axum, Askama, HTML, CSS. DB yet to be implemented. Remote server running on Linux Fedora.
+* **Language:** Rust
+* **Web framework:** Axum
+* **Async runtime:** Tokio
+* **Server-side templating:** Askama
 
-### Constraints
-Currently, I'm using stock images, but futurely I'll use real pictures. No videos will be hosted, only links and descriptions. I also hate using <div> in my code, which should be very clear I strongly dislike divs. This is a divs-free space, and I'm making efforts to keep it JS-free too.
+## Frontend
 
-### Notes
-I always felt forced to using frameworks and libraries which most of the time were slowing me down rather than helping me. I would spend more time trying to figure out the framework shenanigans when I knew what I needed to do with raw CSS (I'm particularly referring to style-focused libraries). I always felt I needed to use cool technology to be part of the cool kids, I'm slowly realizing I need to make cool stuff to be between the cool kids.
+* HTML
+* Raw CSS (no frameworks)
 
+## Infrastructure
+
+* **Server OS:** Fedora Linux
+* **Reverse proxy:** Nginx
+* **Container engine:** Podman
+* **Container orchestration:** Docker Compose
+
+## CI / Tooling
+
+* **CI pipeline:** Woodpecker CI
+* **Formatting:** `cargo fmt`
+* **Linting:** `cargo clippy --pedantic`
+* **Tests:** `cargo test`
+
+## Supporting Assets
+
+* Static media files
+* Shell scripts for deployment and maintenance
+
+---
+
+# 🔁 Request Flow
+
+```
+Browser
+   ↓
+Nginx (reverse proxy)
+   ↓
+Axum Router
+   ↓
+Request Handler
+   ↓
+Data Layer
+   ↓
+Askama Template
+   ↓
+HTML Response
+   ↓
+Browser
+```
+
+---
+
+# 🧩 Project Modules
+
+* **main.rs** — server startup and routing
+* **handlers.rs** — request handlers
+* **models.rs** — domain data structures
+* **templates.rs** — Askama template bindings
+* **data.rs** — mock data provider
+* **api.rs** — JSON response types
+* **tests.rs** — unit and integration tests
+
+---
+
+# 📁 Project Structure
+
+```
+.
+├── src
+│   ├── api.rs
+│   ├── handlers.rs
+│   ├── main.rs
+│   ├── models.rs
+│   ├── repository.rs
+│   ├── templates.rs
+│   └── tests.rs
+│
+├── templates
+│   ├── base.html
+│   ├── index.html
+│   ├── blog.html
+│   ├── boardgames.html
+│   ├── food.html
+│   ├── food_detail.html
+│   ├── assets.html
+│   ├── apps.html
+│   ├── contact_me.html
+│   └── resume.html
+│
+├── static
+│   ├── css
+│   │   ├── base-style.css
+│   │   ├── contact-style.css
+│   │   ├── food-style.css
+│   │   ├── food-detail-style.css
+│   │   └── resume-style.css
+│   │
+│   └── media
+│       ├── food
+│       ├── icons
+│       └── languages
+│
+├── scripts
+│   └── deploy.sh
+│
+├── docs
+│   ├── architecture.md
+│   └── features.md
+│
+├── Dockerfile
+├── docker-compose.yml
+├── Cargo.toml
+├── Cargo.lock
+├── .gitignore
+├── .dockerignore
+└── README.md
+```
+
+---
+
+# ✨ Features
+
+* Containerized deployment with Podman
+* Server-side rendered pages with Askama
+* Static assets (CSS, images)
+* Unit testing
+* Integration testing
+
+---
+
+# 🛣️ Roadmap
+
+Planned improvements:
+
+* Introduce shared **AppState**
+* Add a **database layer**
+* Implement a `/health` endpoint
