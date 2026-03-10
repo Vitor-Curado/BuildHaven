@@ -6,3 +6,4 @@ pub mod router;
 pub mod state;
 pub mod templates;
 pub mod utils;
+pub mod config;
