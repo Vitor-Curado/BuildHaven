@@ -2,12 +2,12 @@ pipeline:
   build:
     image: rust:latest
     commands:
-      - cargo fmt
-      - cargo clippy --all-targets --all-features -- -D warnings -W clippy::pedantic
-      - cargo test
+      - ./scripts/check.sh
 
   deploy:
     image: appleboy/drone-ssh
+    depends_on:
+      - build
     settings:
       host: 167.99.180.229
       username: root
@@ -15,5 +15,4 @@ pipeline:
         from_secret: ssh_key
       script:
         - cd /srv/Personal-website
-        - git pull
-        - podman compose up -d --build
+        - ./scripts/deploy.sh
