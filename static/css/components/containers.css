@@ -1,0 +1,11 @@
+.container {
+  width: 95vw;
+  margin: 0 auto;
+  padding: var(--spacing-medium);
+}
+
+.container-narrow {
+  width: 80vw;
+  margin: 0 auto;
+  padding: var(--spacing-medium);
+}

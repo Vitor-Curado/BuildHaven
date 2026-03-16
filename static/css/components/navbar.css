@@ -4,14 +4,13 @@
   background-color: var(--color-navbar);
 
   width: 95vw;
-  margin: var(--spacing-medium);
+  margin: var(--spacing-medium) auto;
 
   padding: var(--spacing-small);
 
   border-radius: var(--radius-medium);
   box-shadow: var(--shadow-soft);
 }
-
 
 /* Navbar list */
 .navbar-list {

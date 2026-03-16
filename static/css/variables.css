@@ -27,36 +27,27 @@
    --spacing-extra-large: 3rem;
 
 
-   /* =========================
-      Border radius
-      ========================= */
+   /* Border radius */
 
    --radius-small: 4px;
    --radius-medium: 8px;
    --radius-large: 12px;
 
 
-   /* =========================
-      Shadows
-      ========================= */
+   /* Shadows */
 
    --shadow-soft: 0 2px 6px rgba(0,0,0,0.08);
    --shadow-medium: 0 4px 12px rgba(0,0,0,0.12);
 
-   /* =========================
-      Font sizes
-      ========================= */
+   /* Font sizes */
 
    --font-size-small: 0.875rem;
    --font-size-medium: 1rem;
    --font-size-large: 1.25rem;
    --font-size-title: 1.5rem;
 
-   /* =========================
-      Transition
-      ========================= */
+   /* Transition */
 
    --transition-fast: 0.15s ease;
    --transition-medium: 0.25s ease;
-
 }

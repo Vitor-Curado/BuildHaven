@@ -132,6 +132,8 @@ Browser
 │   │   ├── dropdown.css
 │   │   ├── layout.css
 │   │   ├── navbar.css
+│   │   ├── themes.css
+│   │   ├── typography.css
 │   │   └── variables.css
 │   │
 │   └── media

@@ -1,27 +1,25 @@
-main ul {
-    display: grid;
-    grid-template-columns: 45% 45%;
-    row-gap: 5vh;
-    column-gap: 5vw;
+.contact-list {
+  list-style: none;
+  padding: 0;
 }
 
-main ul li {
-    display: flex;
-    align-items: center;
-    gap: 1vw;
-    padding: 0.5vh 1vw;
-    transition: background-color 0.3s ease;
-    box-shadow: 5px 5px 5px grey;
-    border-radius: 1vh;
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-medium);
 }
 
-main ul li:hover {
-    background-color: beige;
-    border-radius: 1vh;
-    box-shadow: 5px 5px 5px grey;
+.contact-icon {
+  width: 32px;
+  height: 32px;
 }
 
-main ul li img {
-    width: 20%;
-    height: auto;
+.contact-link {
+  text-decoration: none;
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.contact-link:hover {
+  color: var(--color-accent);
 }

@@ -2,9 +2,8 @@
   position: relative;
 }
 
-
 .dropdown-menu {
-
+  list-style: none;
   position: absolute;
   top: 120%;
   left: 0;
@@ -12,9 +11,9 @@
   display: none;
   flex-direction: column;
 
-  min-width: 160px;
+  min-width: 6vw;
 
-  background: var(--color-surface);
+  background: var(--color-surface-hover);
 
   border-radius: var(--radius-medium);
   box-shadow: var(--shadow-medium);
@@ -22,7 +21,7 @@
   padding: var(--spacing-extra-small) 0;
 }
 
-.dropdown-menu a {
+.dropdown-menu a, .dropdown-menu button {
 
   padding: var(--spacing-extra-small) var(--spacing-medium);
   text-decoration: none;
