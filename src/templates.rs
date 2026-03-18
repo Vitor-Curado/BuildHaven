@@ -1,54 +1,63 @@
 use crate::models::Food;
+use crate::assets::Assets;
 use askama::Template;
 
 #[derive(Template)]
-#[template(path = "index.html", escape = "none")]
+#[template(path = "pages/index.html", escape = "none")]
 pub struct IndexTemplate {
     pub title: &'static str,
     pub favicon: &'static str,
     pub readme_html: String,
+    pub assets: Assets
+
 }
 
 #[derive(Template)]
-#[template(path = "food.html")]
+#[template(path = "pages/food.html")]
 pub struct FoodTemplate {
     pub title: &'static str,
     pub favicon: &'static str,
     pub foods: Vec<Food>,
+    pub assets: Assets
 }
 
 #[derive(Template)]
-#[template(path = "food_detail.html")]
+#[template(path = "pages/food_detail.html")]
 pub struct FoodDetailTemplate<'a> {
     pub title: String,
     pub favicon: &'static str,
     pub food: &'a Food,
+    pub assets: Assets
 }
 
 #[derive(Template)]
-#[template(path = "resume.html")]
+#[template(path = "pages/resume.html")]
 pub struct ResumeTemplate {
     pub title: &'static str,
     pub favicon: &'static str,
+    pub assets: Assets
 }
 
 #[derive(Template)]
-#[template(path = "blog.html")]
+#[template(path = "pages/blog.html")]
 pub struct BlogTemplate {
     pub title: &'static str,
     pub favicon: &'static str,
+    pub assets: Assets
 }
 
 #[derive(Template)]
-#[template(path = "contact_me.html")]
+#[template(path = "pages/contact_me.html")]
 pub struct ContactTemplate {
     pub title: &'static str,
     pub favicon: &'static str,
+    pub assets: Assets
 }
 
 #[derive(Template)]
-#[template(path = "assets.html")]
+#[template(path = "pages/assets.html")]
 pub struct AssetsTemplate {
     pub title: &'static str,
     pub favicon: &'static str,
+    pub assets: Assets
 }

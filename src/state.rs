@@ -1,3 +1,4 @@
+use crate::assets::{load_manifest, Assets};
 use pulldown_cmark::{Parser, html};
 use std::fs;
 
@@ -8,11 +9,24 @@ use crate::repository::mock_food_data;
 pub struct AppState {
     pub readme_html: String,
     pub food_data: Vec<Food>,
+    pub assets: Assets
 }
 
 impl AppState {
     #[must_use]
     pub fn new() -> Self {
+        let manifest = load_manifest();
+        let assets = Assets {
+            css: manifest
+                .get("index.css")
+                .expect("missing css bundle")
+                .clone(),
+            js: manifest
+                .get("app.js")
+                .expect("missing js bungle")
+                .clone()
+        };
+
         let readme_md =
             fs::read_to_string("./readme.md").unwrap_or_else(|_| "# README not found".to_string());
 
@@ -23,6 +37,7 @@ impl AppState {
         Self {
             readme_html,
             food_data: mock_food_data(),
+            assets: assets
         }
     }
 }

@@ -1,7 +1,7 @@
 # 📘 Victor's Personal Website
 
-**Version:** 0.3
-**Last updated:** March 10, 2026
+**Version:** 0.4
+**Last updated:** March 19, 2026
 
 A small Rust web application serving my personal website.
 The project uses server-side rendering with Askama, runs inside containers with Podman, and is deployed on a Fedora Linux server behind Nginx.
@@ -74,6 +74,7 @@ Browser
 # 🧩 Project Modules
 
 * **api.rs** — JSON response structures (API responses)
+* **compresser.rs** —cache busting, compression of static files
 * **config.rs** — environment-based application configuration 
 * **handlers.rs** — HTTP request handlers
 * **lib.rs** — crate module declarations
@@ -91,9 +92,14 @@ Browser
 # 📁 Project Structure
 
 ```
-.
+├── scripts
+│   ├── check.sh
+│   ├── deploy.sh
+│   └── inspect.sh
+│
 ├── src
 │   ├── api.rs
+│   ├── compresser.rs
 │   ├── config.rs
 │   ├── handlers.rs
 │   ├── lib.rs
@@ -105,53 +111,70 @@ Browser
 │   ├── templates.rs
 │   └── utils.rs
 │
-├── tests
-│   └── tests.rs
-│
-├── templates
-│   ├── apps.html
-│   ├── assets.html
-│   ├── base.html
-│   ├── blog.html
-│   ├── boardgames.html
-│   ├── contact_me.html
-│   ├── food_detail.html
-│   ├── food.html
-│   ├── index.html
-│   └── resume.html
-│
 ├── static
 │   ├── css
+│   │   ├── components
+│   │   │   ├── buttons.css
+│   │   │   ├── cards.css
+│   │   │   ├── containers.css
+│   │   │   ├── dropdown.css
+│   │   │   ├── grids.css
+│   │   │   └── navbar.css
+│   │   │
 │   │   ├── pages
 │   │   │   ├── contact.css
-│   │   │   ├── food.css
 │   │   │   ├── food-detail.css
-│   │   │   └── resume.css
+│   │   │   └── food.css
+│   │   │
 │   │   ├── base.css
-│   │   ├── components.css
-│   │   ├── dropdown.css
 │   │   ├── layout.css
 │   │   ├── navbar.css
 │   │   ├── themes.css
 │   │   ├── typography.css
 │   │   └── variables.css
 │   │
+│   ├── media
+│   │   ├── food
+│   │   ├── icons
+│   │   └── languages
+│   │
+│   ├── js
+│   │   ├── navbar.js
+│   │   └── languages
+│   │
 │   └── media
 │       ├── food
 │       ├── icons
 │       └── languages
+│   
+├── templates
+│   ├── pages
+│   │   ├── apps.html
+│   │   ├── assets.html
+│   │   ├── blog.html
+│   │   ├── boardgames.html
+│   │   ├── contact_me.html
+│   │   ├── food_detail.html
+│   │   ├── food.html
+│   │   ├── index.html
+│   │   └── resume.html
+│   │
+│   ├── partials
+│   │   └── navbar.html
+│   │
+│   └── base.html
 │
-├── scripts
-│   ├── deploy.sh
-│   └── check.sh
+├── tests
+│   └── tests.rs
 │
-├── Dockerfile
-├── docker-compose.yml
-├── Cargo.toml
-├── Cargo.lock
-├── .gitignore
 ├── .dockerignore
-└── README.md
+├── .gitignore
+├── .woodpecker.yml
+├── Cargo.lock
+├── Cargo.toml
+├── docker-compose.yml
+├── Dockerfile
+└── readme.md
 ```
 
 ---
