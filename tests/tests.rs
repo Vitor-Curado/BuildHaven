@@ -8,7 +8,7 @@ const BODY_LIMIT: usize = 64 * 1024; // 64 KB
 
 #[tokio::test]
 async fn health_endpoint_returns_ok() {
-    let response = app.clone();
+    let app = app();
 
     let response = app
         .oneshot(
@@ -27,12 +27,12 @@ async fn health_endpoint_returns_ok() {
 
     assert_eq!(json["status"], "ok");
     assert_eq!(json["service"], "personal-website");
-    assert!(json["version"].as_str().unwrap().len() > 0);
+    assert!(json["version"].as_str().unwrap().is_empty());
 }
 
 #[tokio::test]
 async fn home_page_renders() {
-    let response = app.clone();
+    let app = app();
 
     let response = app
         .oneshot(Request::builder().uri("/").body(Body::empty()).unwrap())
@@ -48,7 +48,7 @@ async fn home_page_renders() {
 
 #[tokio::test]
 async fn food_page_renders() {
-    let response = app.clone();
+    let app = app();
 
     let response = app
         .oneshot(Request::builder().uri("/food").body(Body::empty()).unwrap())
@@ -66,10 +66,11 @@ async fn food_page_renders() {
 
 #[tokio::test]
 async fn food_detail_existing_and_missing() {
-    let response = app.clone();
+    let app = app();
 
     // Existing food
     let response = app
+        .clone()
         .oneshot(
             Request::builder()
                 .uri("/food/soft-boiled-eggs")
@@ -99,7 +100,7 @@ async fn food_detail_existing_and_missing() {
 
 #[tokio::test]
 async fn generic_pages_render() {
-    let response = app.clone();
+    let app = app();
 
     let pages = ["/resume", "/blog", "/contact", "/assets"];
     let expected_titles = ["Resume", "Blog", "Contact", "Assets"];

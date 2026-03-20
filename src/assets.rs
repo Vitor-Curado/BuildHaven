@@ -5,18 +5,20 @@
 * compression: gzip/brotli versions
 */
 
+use serde::Serialize;
 use sha2::{Digest, Sha256};
+use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
-use std::collections::HashMap;
-use serde::Serialize;
 
 #[derive(Serialize, Clone)]
 pub struct Assets {
     pub css: String,
-    pub js: String
+    pub js: String,
 }
 
+/// # Errors
+/// Returns an error if file writing fails.
 pub fn build_assets() -> std::io::Result<()> {
     // clean dist
     if Path::new("static/dist").exists() {
@@ -29,11 +31,11 @@ pub fn build_assets() -> std::io::Result<()> {
     let css_minified = minify_css(&css);
     let css_hash = hash_content(&css_minified);
     let css_filename = format!("index-{}.css", &css_hash[..12]);
-    fs::write(format!("static/dist/{}", css_filename), css_minified)?;
+    fs::write(format!("static/dist/{css_filename}"), css_minified)?;
 
     // JS
     let js = bundle_js()?;
-    let js_minified = minify_css(&js);
+    let js_minified = minify_js(&js);
     let js_hash = hash_content(&js_minified);
     let js_filename = format!("app-{}.js", &js_hash[..12]);
     fs::write(format!("static/dist/{}", js_filename), js_minified)?;
@@ -72,10 +74,7 @@ fn bundle_css() -> std::io::Result<String> {
 }
 
 fn bundle_js() -> std::io::Result<String> {
-    let js_files = vec![
-        "static/js/theme.js",
-        "static/js/navbar.js",
-    ];
+    let js_files = vec!["static/js/navbar.js", "static/js/theme.js"];
 
     let mut result = String::new();
 
@@ -87,10 +86,11 @@ fn bundle_js() -> std::io::Result<String> {
 }
 
 fn minify_css(input: &str) -> String {
-    input
-        .lines()
-        .map(str::trim)
-        .collect::<String>()
+    input.lines().map(str::trim).collect::<String>()
+}
+
+fn minify_js(input: &str) -> String {
+    input.lines().map(str::trim).collect::<Vec<_>>().join("\n") // keep line breaks!
 }
 
 fn hash_content(content: &str) -> String {
@@ -104,10 +104,9 @@ fn write_manifest(manifest: &HashMap<String, String>) -> std::io::Result<()> {
     fs::write("static/dist/manifest.json", json)
 }
 
+#[must_use]
 pub fn load_manifest() -> HashMap<String, String> {
-    let content = std::fs::read_to_string("static/dist/manifest.json")
-        .expect("manifest missing");
+    let content = std::fs::read_to_string("static/dist/manifest.json").expect("manifest missing");
 
-    serde_json::from_str(&content)
-        .expect("invalid manifest")
+    serde_json::from_str(&content).expect("invalid manifest")
 }

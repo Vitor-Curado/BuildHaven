@@ -31,7 +31,7 @@ pub async fn home(State(app_state): State<AppState>) -> impl IntoResponse {
         title: "Buildhaven",
         favicon: "home-icon.png",
         readme_html: app_state.readme_html.clone(),
-        assets: app_state.assets.clone()
+        assets: app_state.assets.clone(),
     })
 }
 
@@ -44,7 +44,7 @@ pub async fn food(State(app_state): State<AppState>) -> impl IntoResponse {
         title: "Food",
         favicon: "food-icon.png",
         foods: app_state.food_data.clone(),
-        assets: app_state.assets.clone()
+        assets: app_state.assets.clone(),
     })
 }
 
@@ -60,7 +60,7 @@ pub async fn food_detail(
         title: food.title.to_string(),
         favicon: "food-detail-icon.png",
         food,
-        assets: state.assets.clone()
+        assets: state.assets.clone(),
     })
 }
 
@@ -71,7 +71,7 @@ pub async fn resume(State(app_state): State<AppState>) -> impl IntoResponse {
     render_template(ResumeTemplate {
         title: "Resume",
         favicon: "resume-icon.png",
-        assets: app_state.assets.clone()
+        assets: app_state.assets.clone(),
     })
 }
 
@@ -93,7 +93,7 @@ pub async fn blog(State(app_state): State<AppState>) -> impl IntoResponse {
     render_template(BlogTemplate {
         title: "Blog",
         favicon: "blog-icon.png",
-        assets: app_state.assets.clone()
+        assets: app_state.assets.clone(),
     })
 }
 
@@ -104,7 +104,7 @@ pub async fn contact(State(app_state): State<AppState>) -> impl IntoResponse {
     render_template(ContactTemplate {
         title: "Contact",
         favicon: "contact-icon.png",
-        assets: app_state.assets.clone()
+        assets: app_state.assets.clone(),
     })
 }
 
@@ -115,6 +115,6 @@ pub async fn assets(State(app_state): State<AppState>) -> impl IntoResponse {
     render_template(AssetsTemplate {
         title: "Assets",
         favicon: "assets-icon.png",
-        assets: app_state.assets.clone()
+        assets: app_state.assets.clone(),
     })
 }

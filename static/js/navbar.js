@@ -1,16 +1,9 @@
 document.addEventListener("click", function (event) {
-    const dropdowns = document.querySelectorAll(".dropdown");
+    const themeButton = event.target.closest("[data-theme]");
 
-    dropdowns.forEach(dropdown => {
-        const button = dropdown.querySelector(".dropdown-button");
-
-        if (button.contains(event.target)) {
-            dropdown.classList.toggle("open");
-            return;
-        }
-
-        if (!dropdown.contains(event.target)) {
-            dropdown.classList.remove("open");
-        }
-    });
+    if (themeButton) {
+        const theme = themeButton.dataset.theme;
+        setTheme(theme);
+        return;
+    }
 });

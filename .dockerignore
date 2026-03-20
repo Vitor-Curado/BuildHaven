@@ -1,6 +1,7 @@
-target
-.git
+/target
+/.git
 .gitignore
 .dockerignore
-tests
-scripts
+/tests
+/scripts
+/static/dist

@@ -1,4 +1,4 @@
-use crate::assets::{load_manifest, Assets};
+use crate::assets::{Assets, load_manifest};
 use pulldown_cmark::{Parser, html};
 use std::fs;
 
@@ -9,7 +9,7 @@ use crate::repository::mock_food_data;
 pub struct AppState {
     pub readme_html: String,
     pub food_data: Vec<Food>,
-    pub assets: Assets
+    pub assets: Assets,
 }
 
 impl AppState {
@@ -21,10 +21,7 @@ impl AppState {
                 .get("index.css")
                 .expect("missing css bundle")
                 .clone(),
-            js: manifest
-                .get("app.js")
-                .expect("missing js bungle")
-                .clone()
+            js: manifest.get("app.js").expect("missing js bungle").clone(),
         };
 
         let readme_md =
@@ -37,7 +34,7 @@ impl AppState {
         Self {
             readme_html,
             food_data: mock_food_data(),
-            assets: assets
+            assets,
         }
     }
 }

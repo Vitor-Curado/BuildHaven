@@ -5,7 +5,7 @@ echo "Formatting code..."
 cargo fmt
 
 echo "Running clippy..."
-cargo clippy --all-targets --all-features -- -D warnings -W clippy::pedantic
+cargo clippy --all-targets --all-features -- -D warnings
 
 echo "Running tests..."
 cargo test

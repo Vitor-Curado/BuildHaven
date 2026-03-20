@@ -1,5 +1,5 @@
-use crate::models::Food;
 use crate::assets::Assets;
+use crate::models::Food;
 use askama::Template;
 
 #[derive(Template)]
@@ -8,8 +8,7 @@ pub struct IndexTemplate {
     pub title: &'static str,
     pub favicon: &'static str,
     pub readme_html: String,
-    pub assets: Assets
-
+    pub assets: Assets,
 }
 
 #[derive(Template)]
@@ -18,7 +17,7 @@ pub struct FoodTemplate {
     pub title: &'static str,
     pub favicon: &'static str,
     pub foods: Vec<Food>,
-    pub assets: Assets
+    pub assets: Assets,
 }
 
 #[derive(Template)]
@@ -27,7 +26,7 @@ pub struct FoodDetailTemplate<'a> {
     pub title: String,
     pub favicon: &'static str,
     pub food: &'a Food,
-    pub assets: Assets
+    pub assets: Assets,
 }
 
 #[derive(Template)]
@@ -35,7 +34,7 @@ pub struct FoodDetailTemplate<'a> {
 pub struct ResumeTemplate {
     pub title: &'static str,
     pub favicon: &'static str,
-    pub assets: Assets
+    pub assets: Assets,
 }
 
 #[derive(Template)]
@@ -43,7 +42,7 @@ pub struct ResumeTemplate {
 pub struct BlogTemplate {
     pub title: &'static str,
     pub favicon: &'static str,
-    pub assets: Assets
+    pub assets: Assets,
 }
 
 #[derive(Template)]
@@ -51,7 +50,7 @@ pub struct BlogTemplate {
 pub struct ContactTemplate {
     pub title: &'static str,
     pub favicon: &'static str,
-    pub assets: Assets
+    pub assets: Assets,
 }
 
 #[derive(Template)]
@@ -59,5 +58,5 @@ pub struct ContactTemplate {
 pub struct AssetsTemplate {
     pub title: &'static str,
     pub favicon: &'static str,
-    pub assets: Assets
+    pub assets: Assets,
 }
