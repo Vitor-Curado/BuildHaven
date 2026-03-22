@@ -46,7 +46,6 @@ pub fn build_assets() -> std::io::Result<()> {
     manifest.insert("app.js".to_string(), js_filename);
 
     write_manifest(&manifest)?;
-
     Ok(())
 }
 
@@ -68,6 +67,7 @@ fn bundle_css() -> std::io::Result<String> {
 
     for file in css_bundle {
         result.push_str(&fs::read_to_string(file)?);
+        result.push('\n');
     }
 
     Ok(result)
@@ -80,13 +80,35 @@ fn bundle_js() -> std::io::Result<String> {
 
     for file in js_files {
         result.push_str(&fs::read_to_string(file)?);
+        result.push('\n');
     }
 
     Ok(result)
 }
 
 fn minify_css(input: &str) -> String {
-    input.lines().map(str::trim).collect::<String>()
+    let mut result = String::new();
+    let mut in_comment = false;
+
+    for line in input.lines() {
+        let trimmed = line.trim();
+
+        if trimmed.starts_with("/*") {
+            in_comment = true;
+            continue;
+        }
+
+        if trimmed.ends_with("*/") {
+            in_comment = false;
+            continue;
+        }
+
+        if !in_comment {
+            result.push_str(trimmed);
+        }
+    }
+
+    result
 }
 
 fn minify_js(input: &str) -> String {
