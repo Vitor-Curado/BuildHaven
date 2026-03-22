@@ -7,13 +7,13 @@ echo "Updating repository..."
 git fetch origin
 git reset --hard origin/main
 
-echo "Building new image..."
-podman build -t localhost/personal-website_web .
+echo "Pulling latest image from GHCR..."
+podman pull ghcr.io/vitor-curado/personal-website:latest
 
 echo "Restarting service..."
 systemctl restart container-personal-website
 
-echo "Cleaning unused images..."
-podman image prune -af
+echo "Cleaning dangling images..."
+podman image prune -f
 
-echo "Deployment complete."
+echo "Done."

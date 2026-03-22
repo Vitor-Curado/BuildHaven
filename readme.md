@@ -49,8 +49,10 @@ Themes include:
 * **Server OS:** Fedora Linux
 * **Reverse proxy:** Nginx
 * **Container engine:** Podman
-* **Container orchestration:** Podman Compose
-* **Container runtime:** Distroless
+* **Container runtime:** Podman
+* **Service management:** systemd
+* **Image registry:** GitHub Container Registry (GHCR)
+* **Container image:** Distroless
 
 ## CI / Tooling
 
@@ -153,6 +155,50 @@ The application initializes a shared `AppState` at startup containing:
 * In-memory mock data (food database)
 
 This avoids repeated computation during request handling.
+
+---
+
+## 🚀 Deployment Pipeline
+
+The application is deployed using a registry-driven container workflow.
+
+### Flow Overview
+
+```
+Developer pushes to GitHub (main branch)
+        ↓
+Woodpecker CI runs checks:
+    - cargo fmt
+    - cargo clippy
+    - cargo test
+        ↓
+Container image is built using Dockerfile
+        ↓
+Image is pushed to GitHub Container Registry (GHCR)
+        ↓
+Production server pulls latest image
+        ↓
+systemd restarts container
+        ↓
+Nginx serves updated application
+```
+
+---
+
+## 🧰 Production Runtime
+
+The production server uses:
+
+* Podman for container runtime
+* systemd for container lifecycle management
+* GitHub Container Registry (GHCR) as image source
+* Nginx as reverse proxy
+
+The systemd unit automatically pulls the latest image before starting:
+
+```ini
+ExecStartPre=/usr/bin/podman pull ghcr.io/vitor-curado/personal-website:latest
+```
 
 ---
 

@@ -18,6 +18,7 @@ RUN cargo chef cook --release --recipe-path recipe.json
 
 COPY . .
 RUN cargo build --release
+RUN cargo run --bin assets
 
 # ---------- Runtime stage ----------
 FROM gcr.io/distroless/cc-debian12
