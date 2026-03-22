@@ -74,7 +74,7 @@ fn bundle_css() -> std::io::Result<String> {
 }
 
 fn bundle_js() -> std::io::Result<String> {
-    let js_files = vec!["static/js/navbar.js", "static/js/theme.js"];
+    let js_files = vec!["static/js/javascript.js"];
 
     let mut result = String::new();
 

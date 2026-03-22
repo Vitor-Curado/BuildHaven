@@ -39,3 +39,8 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+.active-theme {
+    font-weight: bold;
+    outline: 2px solid var(--color-accent);
+}
