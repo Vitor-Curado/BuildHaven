@@ -1,12 +1,14 @@
 pub mod api;
 pub mod assets;
 pub mod config;
+pub mod cors;
 pub mod handlers;
 // lib.rs
 // main.rs
 pub mod middleware;
 pub mod models;
 pub mod pool;
+pub mod rate_limit;
 pub mod repository;
 pub mod router;
 pub mod routes;

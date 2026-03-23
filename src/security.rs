@@ -40,4 +40,8 @@ pub fn apply_security_headers(router: Router) -> Router {
             HeaderName::from_static("cross-origin-resource-policy"),
             HeaderValue::from_static("same-origin"),
         ))
+        .layer(SetResponseHeaderLayer::if_not_present(
+            HeaderName::from_static("x-xss-protection"),
+            HeaderValue::from_static("1; mode=block"),
+        ))
 }
