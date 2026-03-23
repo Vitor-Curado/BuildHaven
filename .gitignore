@@ -1,3 +1,4 @@
 /target
 /static/dist/manifest.json
 /static/dist/
+.env

@@ -5,3 +5,4 @@
 /tests
 /scripts
 /static/dist
+.env

@@ -1,5 +1,6 @@
 use crate::assets::{Assets, load_manifest};
 use pulldown_cmark::{Parser, html};
+use sqlx::PgPool;
 use std::fs;
 
 use crate::models::Food;
@@ -7,6 +8,7 @@ use crate::repository::mock_food_data;
 
 #[derive(Clone)]
 pub struct AppState {
+    pub db: PgPool,
     pub readme_html: String,
     pub food_data: Vec<Food>,
     pub assets: Assets,
@@ -14,7 +16,7 @@ pub struct AppState {
 
 impl AppState {
     #[must_use]
-    pub fn new() -> Self {
+    pub fn new(db: PgPool) -> Self {
         let manifest = load_manifest();
         let assets = Assets {
             css: manifest
@@ -32,15 +34,10 @@ impl AppState {
         html::push_html(&mut readme_html, parser);
 
         Self {
+            db,
             readme_html,
             food_data: mock_food_data(),
             assets,
         }
-    }
-}
-
-impl Default for AppState {
-    fn default() -> Self {
-        Self::new()
     }
 }
