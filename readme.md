@@ -270,6 +270,13 @@ Browser
 # 📁 Project Structure
 
 ```
+├── docs
+│   ├── deployment.md
+│   ├── features.md
+│   ├── modules.md
+│   ├── roadmap.md
+│   └── structure.md
+│
 ├── scripts
 │   ├── check.sh
 │   ├── deploy.sh
