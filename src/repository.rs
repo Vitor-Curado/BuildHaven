@@ -2,25 +2,31 @@ use crate::models::{Food, NewPost, Post};
 use sqlx::PgPool;
 use uuid::Uuid;
 
+#[must_use]
 pub async fn create_post(pool: &PgPool, new_post: &NewPost) -> Result<Post, sqlx::Error> {
-    let post = sqlx::query_as::<_, Post>(
+    let id = Uuid::new_v4();
+
+    let post = sqlx::query_as!(
+        Post,
         r#"
         INSERT INTO posts (id, title, content)
         VALUES ($1, $2, $3)
         RETURNING id, title, content, created_at
         "#,
+        id,
+        new_post.title,
+        new_post.content
     )
-    .bind(Uuid::new_v4())
-    .bind(&new_post.title)
-    .bind(&new_post.content)
     .fetch_one(pool)
     .await?;
 
     Ok(post)
 }
 
+#[must_use]
 pub async fn get_all_posts(pool: &PgPool) -> Result<Vec<Post>, sqlx::Error> {
-    sqlx::query_as::<_, Post>(
+    sqlx::query_as!(
+        Post,
         r#"
         SELECT id, title, content, created_at
         FROM posts
@@ -31,29 +37,32 @@ pub async fn get_all_posts(pool: &PgPool) -> Result<Vec<Post>, sqlx::Error> {
     .await
 }
 
+#[must_use]
 pub async fn get_post_by_id(pool: &PgPool, post_id: Uuid) -> Result<Option<Post>, sqlx::Error> {
-    let post = sqlx::query_as::<_, Post>(
+    let post = sqlx::query_as!(
+        Post,
         r#"
         SELECT id, title, content, created_at
         FROM posts
         WHERE id = $1
         "#,
+        post_id
     )
-    .bind(post_id)
     .fetch_optional(pool)
     .await?;
 
     Ok(post)
 }
 
+#[must_use]
 pub async fn delete_post(pool: &PgPool, post_id: Uuid) -> Result<bool, sqlx::Error> {
-    let result = sqlx::query(
+    let result = sqlx::query!(
         r#"
-            DELETE FROM posts
-            WHERE id = $1
-            "#,
+        DELETE FROM posts
+        WHERE id = $1
+        "#,
+        post_id
     )
-    .bind(post_id)
     .execute(pool)
     .await?;
 
