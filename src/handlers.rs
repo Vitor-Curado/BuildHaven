@@ -1,9 +1,11 @@
 use crate::api::HealthResponse;
+use crate::repository::get_all_posts;
 use crate::state::AppState;
 use crate::templates::{
     AssetsTemplate, BlogTemplate, ContactTemplate, FoodDetailTemplate, FoodTemplate, IndexTemplate,
     ResumeTemplate,
 };
+
 use axum::Json;
 use axum::extract::State;
 use axum::http::StatusCode;
@@ -89,12 +91,17 @@ pub async fn health() -> Json<HealthResponse> {
 /// Renders the blog page.
 /// # Panics
 /// This function will panic if the template rendering fails.
-pub async fn blog(State(app_state): State<AppState>) -> impl IntoResponse {
-    render_template(BlogTemplate {
+pub async fn blog(State(app_state): State<AppState>) -> Result<impl IntoResponse, StatusCode> {
+    let posts = get_all_posts(&app_state.db)
+        .await
+        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+
+    Ok(render_template(BlogTemplate {
         title: "Blog",
         favicon: "blog-icon.png",
         assets: app_state.assets.clone(),
-    })
+        posts,
+    }))
 }
 
 /// Renders the contact page.

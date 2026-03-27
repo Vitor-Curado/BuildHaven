@@ -1,5 +1,38 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1> Blog posts </h1>
+<h1>Blog Posts</h1>
+
+<section class="posts">
+
+  {% if posts.is_empty() %}
+    <p>No posts yet.</p>
+  {% endif %}
+
+  {% for post in posts %}
+    <article class="post">
+
+      <header class="post-header">
+        <h2 class="post-title">
+          {{ post.title }}
+        </h2>
+
+        <time class="post-date">
+          {{ post.created_at.format("%B %d, %Y") }}
+        </time>
+      </header>
+
+      <div class="post-content">
+        <p>
+          {{ post.content }}
+        </p>
+      </div>
+
+      <hr>
+
+    </article>
+  {% endfor %}
+
+</section>
+
 {% endblock %}

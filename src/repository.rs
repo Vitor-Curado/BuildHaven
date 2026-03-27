@@ -1,4 +1,64 @@
-use crate::models::Food;
+use crate::models::{Food, NewPost, Post};
+use sqlx::PgPool;
+use uuid::Uuid;
+
+pub async fn create_post(pool: &PgPool, new_post: &NewPost) -> Result<Post, sqlx::Error> {
+    let post = sqlx::query_as::<_, Post>(
+        r#"
+        INSERT INTO posts (id, title, content)
+        VALUES ($1, $2, $3)
+        RETURNING id, title, content, created_at
+        "#,
+    )
+    .bind(Uuid::new_v4())
+    .bind(&new_post.title)
+    .bind(&new_post.content)
+    .fetch_one(pool)
+    .await?;
+
+    Ok(post)
+}
+
+pub async fn get_all_posts(pool: &PgPool) -> Result<Vec<Post>, sqlx::Error> {
+    sqlx::query_as::<_, Post>(
+        r#"
+        SELECT id, title, content, created_at
+        FROM posts
+        ORDER BY created_at DESC
+        "#,
+    )
+    .fetch_all(pool)
+    .await
+}
+
+pub async fn get_post_by_id(pool: &PgPool, post_id: Uuid) -> Result<Option<Post>, sqlx::Error> {
+    let post = sqlx::query_as::<_, Post>(
+        r#"
+        SELECT id, title, content, created_at
+        FROM posts
+        WHERE id = $1
+        "#,
+    )
+    .bind(post_id)
+    .fetch_optional(pool)
+    .await?;
+
+    Ok(post)
+}
+
+pub async fn delete_post(pool: &PgPool, post_id: Uuid) -> Result<bool, sqlx::Error> {
+    let result = sqlx::query(
+        r#"
+            DELETE FROM posts
+            WHERE id = $1
+            "#,
+    )
+    .bind(post_id)
+    .execute(pool)
+    .await?;
+
+    Ok(result.rows_affected() > 0)
+}
 
 #[allow(clippy::too_many_lines)]
 #[must_use]

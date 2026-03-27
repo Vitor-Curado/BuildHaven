@@ -1,10 +1,7 @@
 use axum::Router;
 
 #[cfg(not(debug_assertions))]
-use tower_governor::{
-    GovernorLayer,
-    governor::GovernorConfigBuilder,
-};
+use tower_governor::{GovernorLayer, governor::GovernorConfigBuilder};
 
 pub fn apply_rate_limiting(router: Router) -> Router {
     #[cfg(debug_assertions)]

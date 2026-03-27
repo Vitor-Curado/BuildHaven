@@ -1,6 +1,13 @@
 # 📁 Project Structure
 
 ```
+├── docs
+│   ├── deployment.md
+│   ├── features.md
+│   ├── modules.md
+│   ├── roadmap.md
+│   └── structure.md
+│
 ├── scripts
 │   ├── check.sh
 │   ├── deploy.sh
@@ -11,7 +18,7 @@
 │   │   └── assets.rs
 │   │
 │   ├── api.rs
-│   ├── compresser.rs
+│   ├── assets.rs
 │   ├── config.rs
 │   ├── handlers.rs
 │   ├── lib.rs
@@ -19,6 +26,8 @@
 │   ├── models.rs
 │   ├── repository.rs
 │   ├── router.rs
+│   ├── routes.rs
+│   ├── security.rs
 │   ├── state.rs
 │   ├── templates.rs
 │   └── utils.rs
@@ -51,8 +60,7 @@
 │   │   └── manifest.json
 │   │
 │   ├── js
-│   │   ├── navbar.js
-│   │   └── theme.js
+│   │   └── javascript.js
 │   │
 │   └── media
 │       ├── food

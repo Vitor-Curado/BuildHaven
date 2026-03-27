@@ -17,6 +17,10 @@ The project uses server-side rendering with Askama, runs inside containers with 
 * **Async runtime:** Tokio
 * **Server-side templating:** Askama
 * **Serialization:** Serde
+* **Database:** PostgreSQL
+* **Database Layer:** SQLx
+
+---
 
 ## Front-end
 
@@ -44,6 +48,22 @@ Themes include:
 * Ocean
 * Forest
 
+---
+
+## 🗄️ Data Layer
+
+Persistent storage is handled through **PostgreSQL** using **SQLx** for compile-time verified queries.
+
+### Responsibilities
+
+* Database connection pooling
+* Query execution via SQLx
+* Schema migrations
+* Data modeling
+* Optional seed data loading
+
+---
+
 ## Infrastructure
 
 * **Server OS:** Fedora Linux
@@ -68,65 +88,6 @@ Themes include:
 * HTML templates
 * CSS stylesheets
 * Shell scripts for deployment and maintenance
-
----
-
-# ✨ Features
-
-**Server Architecture**
-* Server-side rendered HTML using Askama templates
-* Modular Axum router and handler architecture
-* Shared application state container
-* Environment-driven configuration
-
-**Performance**
-* Gzip compression for HTTP responses
-* Static files served via `tower-http::ServeDir`
-* Cache-Control headers for client-side caching
-* Support for pre-compressed static assets
-* Multi-stage container builds with cargo-chef for faster rebuilds
-* Very few JavaScript
-
-**Observability**
-* Structured request tracing via tower-http
-* Configurable logging through tracing and RUST_LOG
-
-**Security**
-* Secure HTTP headers:
-   * Content-Security-Policy (CSP)
-   * Strict-Transport-Security (HSTS)
-   * X-Frame-Options
-   * X-Content-Type-Options
-   * Referrer-Policy
-   * Permissions-Policy
-   * Cross-Origin-Resource-Policy
-* Distroless container runtime for reduced attack surface
-* Runs as non-root user for improved security
-
-**Infrastructure**
-* Containerized deployment using Podman
-* Orchestrated with Podman Compose
-* Reverse-proxied through Nginx
-* Automated deployment using Woodpecker CI
-* Multi-stage builds using `cargo-chef` for dependency caching
-* Minimal distroless runtime image
-
-**API**
-* JSON health check endpoint
-`GET /health`
-* Returns service metadata and runtime status.
-
-**Content System**
-* Markdown rendering using pulldown-cmark
-* README content dynamically rendered on the homepage
-* Structured content models (example: food database)
-
-**Testing**
-* Unit tests
-* Integration tests
-* Automated verification via CI pipeline
-
----
 
 # 🎨 Asset Pipeline
 
@@ -158,93 +119,6 @@ This avoids repeated computation during request handling.
 
 ---
 
-## 🚀 Deployment Pipeline
-
-The application is deployed using a registry-driven container workflow.
-
-### Flow Overview
-
-```
-Developer pushes to GitHub (main branch)
-        ↓
-Woodpecker CI runs checks:
-    - cargo fmt
-    - cargo clippy
-    - cargo test
-        ↓
-Container image is built using Dockerfile
-        ↓
-Image is pushed to GitHub Container Registry (GHCR)
-        ↓
-Production server pulls latest image
-        ↓
-systemd restarts container
-        ↓
-Nginx serves updated application
-```
-
----
-
-## 🧰 Production Runtime
-
-The production server uses:
-
-* Podman for container runtime
-* systemd for container lifecycle management
-* GitHub Container Registry (GHCR) as image source
-* Nginx as reverse proxy
-
-The systemd unit automatically pulls the latest image before starting:
-
-```ini
-ExecStartPre=/usr/bin/podman pull ghcr.io/vitor-curado/personal-website:latest
-```
-
----
-
-# 🛣️ Roadmap
-
-Planned improvements:
-
-**Content**
-* Populate blog and project sections
-* Expand content models
-
-**Back-end**
-* Add a database layer
-* Replace mock repositories with persistent storage
-* Introduce authentication and user sessions
-
-**Front-end**
-* Build a modular CSS system
-* Improve layout and typography
-* Introduce reusable UI components
-
-**Internationalization**
-* Multi-language support
-
----
-
-# 🧩 Project Modules
-
-* **src/bin/assets.rs** — build assets
-* **src/api.rs** — JSON response structures (API responses)
-* **src/assets.rs** — cache busting, compression of static files
-* **src/config.rs** — environment-based application configuration 
-* **src/handlers.rs** — HTTP request handlers
-* **src/lib.rs** — crate module declarations
-* **src/main.rs** — server initialization and runtime setup
-* **src/models.rs** — domain data structures
-* **src/repository.rs** — mock data provider
-* **src/router.rs** — Axum router middleware and global configuration
-* **src/routes.rs** — route definitions
-* **src/state.rs** — shared application state
-* **src/templates.rs** — Askama template bindings
-* **src/utils.rs** — utility helpers (markdown conversion, file loading)
-* **tests/tests.rs** — integration tests
-
----
-
 # 🔁 Request Flow
 
 ```
@@ -267,100 +141,203 @@ Browser
 
 ---
 
-# 📁 Project Structure
+# 📐 Architecture
+
+## 🧠 Core Application
+
+**Language:** Rust
+**Web Framework:** Axum
+**Async Runtime:** Tokio
+**Templating Engine:** Askama
+**Serialization:** Serde
+**Database:** PostgreSQL
+**Database Layer:** SQLx
+**Migration System:** SQLx migrations
+
+The application is structured around a shared `AppState`, initialized at startup and injected into request handlers.
+
+---
+
+## 🧱 Application State
+
+A shared `AppState` is initialized during server startup.
+
+It includes:
+
+* Database connection pool
+* Static asset manifest mappings
+* Pre-rendered Markdown content (README → HTML)
+* In-memory mock or cached data (when applicable)
+
+This approach minimizes repeated computation during request handling and keeps handlers lightweight.
+
+---
+
+# 🎨 Front-End Architecture
+
+The front-end follows a **framework-free, component-oriented CSS structure** built around reusable primitives.
+
+### Design Philosophy
+
+* No front-end framework dependency
+* Token-driven styling
+* Modular components
+* Page isolation
+* Predictable cascade layers
+
+---
+
+## 🎨 Theme System
+
+The UI supports multiple visual themes powered entirely by CSS variables.
+
+### Behavior
+
+* Controlled via `data-theme` on `<html>`
+* Persisted using `localStorage`
+* Updated via lightweight JavaScript (`javascript.js`)
+* Fully CSS-variable driven
+
+### Available Themes
+
+* Night *(default)*
+* Sunset
+* Ocean
+* Forest
+
+---
+
+# 🏗️ Asset Pipeline
+
+Static assets are processed at build time using a **custom Rust-based pipeline**.
+
+## Processing Steps
+
+1. **Bundling**
+   Combines CSS and JavaScript into unified output files.
+
+2. **Minification**
+   Removes unnecessary whitespace and characters.
+
+3. **Fingerprinting**
+   Generates content-hashed filenames:
 
 ```
-├── docs
-│   ├── deployment.md
-│   ├── features.md
-│   ├── modules.md
-│   ├── roadmap.md
-│   └── structure.md
-│
-├── scripts
-│   ├── check.sh
-│   ├── deploy.sh
-│   └── inspect.sh
-│
-├── src
-│   ├── bin
-│   │   └── assets.rs
-│   │
-│   ├── api.rs
-│   ├── compresser.rs
-│   ├── config.rs
-│   ├── handlers.rs
-│   ├── lib.rs
-│   ├── main.rs
-│   ├── models.rs
-│   ├── repository.rs
-│   ├── router.rs
-│   ├── state.rs
-│   ├── templates.rs
-│   └── utils.rs
-│
-├── static
-│   ├── css
-│   │   ├── components
-│   │   │   ├── buttons.css
-│   │   │   ├── cards.css
-│   │   │   ├── containers.css
-│   │   │   ├── dropdown.css
-│   │   │   ├── grids.css
-│   │   │   └── navbar.css
-│   │   │
-│   │   ├── pages
-│   │   │   ├── contact.css
-│   │   │   ├── food-detail.css
-│   │   │   └── food.css
-│   │   │
-│   │   ├── base.css
-│   │   ├── layout.css
-│   │   ├── navbar.css
-│   │   ├── themes.css
-│   │   ├── typography.css
-│   │   └── variables.css
-│   │
-│   ├── dist
-│   │   ├── app-[sha256].js
-│   │   ├── index-[sha256].css
-│   │   └── manifest.json
-│   │
-│   ├── js
-│   │   ├── navbar.js
-│   │   └── theme.js
-│   │
-│   └── media
-│       ├── food
-│       ├── icons
-│       └── languages
-│   
-├── templates
-│   ├── pages
-│   │   ├── apps.html
-│   │   ├── assets.html
-│   │   ├── blog.html
-│   │   ├── boardgames.html
-│   │   ├── contact_me.html
-│   │   ├── food_detail.html
-│   │   ├── food.html
-│   │   ├── index.html
-│   │   └── resume.html
-│   │
-│   ├── partials
-│   │   └── navbar.html
-│   │
-│   └── base.html
-│
-├── tests
-│   └── tests.rs
-│
-├── .dockerignore
-├── .gitignore
-├── .woodpecker.yml
-├── Cargo.lock
-├── Cargo.toml
-├── docker-compose.yml
-├── Dockerfile
-└── readme.md
+index-[hash].css
+app-[hash].js
 ```
+
+4. **Manifest Generation**
+   Produces:
+
+```
+manifest.json
+```
+
+Mapping logical names to fingerprinted files.
+
+5. **Precompression**
+   Generates compressed assets:
+
+* gzip (`.gz`)
+* optional Brotli (`.br` — recommended)
+
+---
+
+## Output Directory
+
+```
+static/dist/
+```
+
+At runtime, the application loads:
+
+```
+manifest.json
+```
+
+to resolve correct asset filenames.
+
+---
+
+# 🖥️ Infrastructure
+
+The application is deployed using containerized Linux infrastructure.
+
+## Host Environment
+
+* **Operating System:** Fedora Linux
+* **Service Management:** systemd
+* **Reverse Proxy:** Nginx
+
+---
+
+## Containerization
+
+* **Container Engine:** Podman
+* **Container Runtime:** Podman
+* **Base Image:** Distroless
+* **Image Registry:** GitHub Container Registry (GHCR)
+
+Container images are built using multi-stage builds for minimal runtime footprint.
+
+---
+
+# 🔄 CI / Tooling
+
+Continuous integration and development tooling ensure consistent builds and code quality.
+
+## CI Pipeline
+
+* **CI System:** Woodpecker CI
+
+---
+
+## Rust Tooling
+
+Formatting:
+
+```
+cargo fmt
+```
+
+Linting:
+
+```
+cargo clippy --pedantic
+```
+
+Testing:
+
+```
+cargo test
+```
+
+---
+
+## Container Builds
+
+Uses a multi-stage Dockerfile with:
+
+```
+cargo chef
+```
+
+to optimize build caching and dependency reuse.
+
+---
+
+# 📦 Supporting Assets
+
+The project includes non-code resources required at runtime or deployment.
+
+## Includes
+
+* Static media files
+* HTML templates
+* CSS stylesheets
+* JavaScript utilities
+* SQL migrations
+* Shell scripts for deployment and maintenance
+
+---

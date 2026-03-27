@@ -1,5 +1,5 @@
 use crate::assets::Assets;
-use crate::models::Food;
+use crate::models::{Food, Post};
 use askama::Template;
 
 #[derive(Template)]
@@ -43,6 +43,8 @@ pub struct BlogTemplate {
     pub title: &'static str,
     pub favicon: &'static str,
     pub assets: Assets,
+
+    pub posts: Vec<Post>,
 }
 
 #[derive(Template)]

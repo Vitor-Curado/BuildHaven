@@ -1,5 +1,5 @@
 use crate::cors::apply_cors;
-use crate::middleware::apply_logging;
+use crate::logging::apply_logging;
 use crate::rate_limit::apply_rate_limiting;
 use crate::routes::public_routes;
 use crate::security::apply_security_headers;
@@ -19,7 +19,5 @@ pub fn app(state: AppState) -> Router {
     let router = apply_security_headers(router);
     let router = apply_logging(router);
     let router = apply_cors(router);
-    let router = apply_rate_limiting(router);
-
-    router
+    apply_rate_limiting(router)
 }
