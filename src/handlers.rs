@@ -1,6 +1,7 @@
 use crate::api::HealthResponse;
-use crate::repository::get_all_posts;
+use crate::services::list_posts;
 use crate::state::AppState;
+//use crate::error::AppError;
 use crate::templates::{
     AssetsTemplate, BlogTemplate, ContactTemplate, FoodDetailTemplate, FoodTemplate, IndexTemplate,
     ResumeTemplate,
@@ -20,11 +21,15 @@ use askama::Template;
 pub fn render_template<T: Template>(t: T) -> Response {
     match t.render() {
         Ok(html) => Html(html).into_response(),
-        Err(_) => (
-            axum::http::StatusCode::INTERNAL_SERVER_ERROR,
-            "Template rendering failed",
-        )
-            .into_response(),
+        Err(e) => {
+            tracing::error!("Template error: {}", e);
+            (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                "Template rendering failed",
+            )
+                .into_response()
+        }
+        .into_response(),
     }
 }
 
@@ -45,7 +50,7 @@ pub async fn food(State(app_state): State<AppState>) -> impl IntoResponse {
     render_template(FoodTemplate {
         title: "Food",
         favicon: "food-icon.png",
-        foods: app_state.food_data.clone(),
+        foods: &app_state.food_data,
         assets: app_state.assets.clone(),
     })
 }
@@ -54,6 +59,10 @@ pub async fn food_detail(
     Path(slug): Path<String>,
     State(state): State<AppState>,
 ) -> impl IntoResponse {
+    /*
+    let food = state.food_data.iter().find(|f| f.slug == slug)
+    .ok_or(AppError::NotFound)?;
+    */
     let Some(food) = state.food_data.iter().find(|f| f.slug == slug) else {
         return StatusCode::NOT_FOUND.into_response();
     };
@@ -92,7 +101,7 @@ pub async fn health() -> Json<HealthResponse> {
 /// # Panics
 /// This function will panic if the template rendering fails.
 pub async fn blog(State(app_state): State<AppState>) -> Result<impl IntoResponse, StatusCode> {
-    let posts = get_all_posts(&app_state.db)
+    let posts = list_posts(&app_state.db)
         .await
         .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 

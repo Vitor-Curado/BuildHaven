@@ -1,10 +1,4 @@
-/* This file's functions are:
-* bundling: merge JS/CSS into fewer files
-* minification: remove whitespace, comments, etc
-* fingerprinting (hashing): index-[sha512].css
-* compression: gzip/brotli versions
-*/
-
+use crate::error::AppError;
 use serde::Serialize;
 use sha2::{Digest, Sha256};
 use std::collections::HashMap;
@@ -127,8 +121,9 @@ fn write_manifest(manifest: &HashMap<String, String>) -> std::io::Result<()> {
 }
 
 #[must_use]
-pub fn load_manifest() -> HashMap<String, String> {
-    let content = std::fs::read_to_string("static/dist/manifest.json").expect("manifest missing");
+pub fn load_manifest() -> Result<HashMap<String, String>, AppError> {
+    let content =
+        std::fs::read_to_string("static/dist/manifest.json").map_err(|_| AppError::Internal)?;
 
-    serde_json::from_str(&content).expect("invalid manifest")
+    serde_json::from_str(&content).map_err(|_| AppError::Internal)
 }

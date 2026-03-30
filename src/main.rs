@@ -6,27 +6,32 @@ use tokio::net::TcpListener;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 use dotenvy::dotenv;
-use std::env;
 
 #[tokio::main]
 async fn main() {
     dotenv().ok();
 
-    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    let config = Config::from_env();
+    let db_pool = create_pool(&config.database_url).await;
+    let state = AppState::new(db_pool, config).expect("Failed to initialize AppState");
 
-    let db_pool = create_pool(&database_url).await;
-
-    let state = AppState::new(db_pool);
+    let port = state.config.port;
 
     tracing_subscriber::registry()
         .with(tracing_subscriber::EnvFilter::from_default_env())
         .with(tracing_subscriber::fmt::layer())
         .init();
+
     let app = app(state);
-    let config = Config::from_env();
-    let listener = TcpListener::bind(("0.0.0.0", config.port)).await.unwrap();
+
+    let listener = TcpListener::bind(("0.0.0.0", port))
+        .await
+        .expect("Failed to bind TCP listener");
     // let listener = TcpListener::bind("0.0.0.0:3000").await.unwrap();
-    println!("🚀 Listening on http://{}", listener.local_addr().unwrap());
+    tracing::info!(
+        "Server listening on {}",
+        listener.local_addr().expect("Failed to get local address")
+    );
 
     axum::serve(listener, app).await.unwrap();
 }

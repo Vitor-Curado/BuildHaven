@@ -1,12 +1,15 @@
 pub struct Config {
     pub port: u16,
+    pub environment: Environment,
+    pub database_url: String,
+}
+
+pub enum Environment {
+    Development,
+    Production,
 }
 
 impl Config {
-    /// Load configuration from environment variables.
-    /// This function reads the `PORT` environment variable and defaults to `3000` if not set.
-    /// # Panics
-    /// Panics if the `PORT` environment variable is set but cannot be parsed as a number.
     #[must_use]
     pub fn from_env() -> Self {
         let port = std::env::var("PORT")
@@ -14,6 +17,16 @@ impl Config {
             .parse()
             .expect("PORT must be a number");
 
-        Self { port }
+        let environment = match std::env::var("APP_ENV")
+            .unwrap_or_else(|_| "development".to_string())
+            .as_str()
+        {
+            "production" => Environment::Production,
+            _ => Environment::Development,
+        };
+
+        let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+
+        Self { port, environment, database_url }
     }
 }

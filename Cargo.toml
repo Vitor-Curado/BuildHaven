@@ -27,6 +27,8 @@ sqlx = { version = "0.8.6", features = ["postgres", "runtime-tokio-rustls", "uui
 dotenvy = "0.15.7"
 uuid = {version = "1.22.0", features = ["serde", "v4"]}
 chrono = "0.4.44"
+walkdir = "2.5.0"
+thiserror = "2.0.18"
 
 [dev-dependencies]
 tower = { version = "0.4", features = ["util"] }

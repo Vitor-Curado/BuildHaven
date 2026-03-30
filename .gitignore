@@ -2,3 +2,4 @@
 /static/dist/manifest.json
 /static/dist/
 .env
+.index.txt

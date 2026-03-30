@@ -1,10 +1,9 @@
 use pulldown_cmark::{Parser, html};
-use std::fs;
 
 #[must_use]
 pub fn load_readme() -> String {
-    fs::read_to_string("./readme.md") // relative to working dir in container
-        .unwrap_or_else(|_| "# README not found".to_string())
+    const README: &str = include_str!("../readme.md");
+    README.to_string()
 }
 
 #[must_use]
