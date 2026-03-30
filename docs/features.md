@@ -52,3 +52,22 @@
 * Unit tests
 * Integration tests
 * Automated verification via CI pipeline
+
+---
+
+| Feature                  | Library / Tool              |
+|--------------------------|-----------------------------|
+| Server-side rendering    | Askama, Askama-Axum         |
+| Async runtime            | Tokio                       |
+| Web framework            | Axum                        |
+| JSON serialization       | Serde, serde_json           |
+| Database layer           | SQLx, PostgreSQL            |
+| Rate limiting            | tower-governor              |
+| Environment config       | dotenvy                     |
+| Logging & tracing        | tracing, tracing-subscriber |
+| Compression & static     | tower-http                  |
+| Asset pipeline           | walkdir, sha2, once_cell    |
+| Markdown rendering       | pulldown-cmark              |
+| Unique IDs / timestamps  | uuid, chrono                |
+
+---

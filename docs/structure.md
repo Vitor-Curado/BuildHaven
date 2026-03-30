@@ -2,11 +2,17 @@
 
 ```
 ├── docs
+│   ├── architecture.md
+│   ├── backend.md
+│   ├── ci_cd.md
 │   ├── deployment.md
 │   ├── features.md
+│   ├── frontend.md
+│   ├── glossary.md
 │   ├── modules.md
 │   ├── roadmap.md
-│   └── structure.md
+│   ├── structure.md
+│   └── testing.md
 │
 ├── scripts
 │   ├── check.sh
@@ -20,14 +26,20 @@
 │   ├── api.rs
 │   ├── assets.rs
 │   ├── config.rs
+│   ├── cors.rs
+│   ├── error.rs
 │   ├── handlers.rs
 │   ├── lib.rs
+│   ├── logging.rs
 │   ├── main.rs
 │   ├── models.rs
+│   ├── pool.rs
+│   ├── rate_limit.rs
 │   ├── repository.rs
 │   ├── router.rs
 │   ├── routes.rs
 │   ├── security.rs
+│   ├── services.rs
 │   ├── state.rs
 │   ├── templates.rs
 │   └── utils.rs

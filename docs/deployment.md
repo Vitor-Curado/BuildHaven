@@ -2,6 +2,21 @@
 
 The application is deployed using a registry-driven container workflow.
 
+## Infrastructure
+
+- **OS:** Fedora Linux
+- **Service management:** systemd
+- **Reverse proxy:** Nginx
+
+## Containerization
+
+- **Engine:** Podman
+- **Runtime:** Podman
+- **Base image:** Distroless
+- **Registry:** GitHub Container Registry (GHCR)
+
+Multi-stage container builds for minimal footprint.
+
 ## Flow Overview
 
 ```
