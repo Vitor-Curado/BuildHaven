@@ -1,6 +1,6 @@
 # 🧪 Testing
 
-Unit and integration tests included:
+Integration-style endpoint tests included:
 
 - Health endpoint check
 - Home page render

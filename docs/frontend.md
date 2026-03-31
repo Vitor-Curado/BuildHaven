@@ -12,6 +12,7 @@ The front-end follows a **framework-free, component-oriented CSS structure** bui
 
 The application supports multiple visual themes:
 
+- Static assets referenced via fingerprinted filenames for cache safety
 - Controlled via `data-theme` on `<html>`
 - Persisted using `localStorage`
 - Updated via lightweight JavaScript (`javascript.js`)

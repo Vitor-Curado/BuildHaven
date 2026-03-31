@@ -1,5 +1,13 @@
 # 🗄️ Back-End Overview
 
+## APIs
+
+- Health: `/health` → returns service status in JSON
+- Food: `/food` → lists foods, `/food/:slug` → food details
+- Resume, Blog, Contact, Assets: respective pages
+
+---
+
 ## 🔁 Request Flow
 
 ```
@@ -22,9 +30,18 @@ Browser
 
 ---
 
+## Database Flow
 
-## APIs
-
-- Health: `/health` → returns service status in JSON
-- Food: `/food` → lists foods, `/food/:slug` → food details
-- Resume, Blog, Contact, Assets: respective pages
+```
+Browser
+↓
+Request Handler
+↓
+Service Layer
+↓
+Repository Layer
+↓
+PostgreSQL
+↓
+Response
+```

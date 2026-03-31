@@ -8,7 +8,7 @@ Static assets are processed at build time using a **custom Rust-based pipeline**
 2. **Minification** — removes whitespace and unnecessary characters
 3. **Fingerprinting** — content-based hashing (e.g. `index-[hash].css`, `app-[hash].css`)
 4.  **Manifest generation** — produces manifest.json, maps logical names to hashed files
-5. **Precompression** — generates compressed assets (`.gz`, `.br`) for efficient delivery
+5. **Precompression Support** — supports serving precompressed assets (`.gz`)
 
 The generated files are placed in:
 

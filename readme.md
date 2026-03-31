@@ -1,45 +1,40 @@
 # 📘 Victor's Personal Website
 
-**Version:** 0.4.1
-**Last updated:** March 30, 2026
+**Version:** 0.4.1  
+**Last updated:** March 30, 2026  
 
-A small Rust web application serving my personal website.
-The project uses server-side rendering with Askama, runs inside containers with Podman, and is deployed on a Fedora Linux server behind Nginx.
+A containerized Rust web application serving a personal website with server-side rendering, persistent storage, and a custom asset pipeline.
 
----
-
-## 🗄️ Data Layer
-
-Persistent storage is handled through **PostgreSQL** using **SQLx** for compile-time verified queries.
-
-### Responsibilities
-
-* Database connection pooling
-* Query execution via SQLx
-* Schema migrations
-* Data modeling
-* Optional seed data loading
+Built using modern Rust tooling and deployed on a Fedora Linux server behind Nginx.
 
 ---
 
-## Supporting Assets
+## 🧠 Core Stack
 
-* Static media files
-* HTML templates
-* CSS stylesheets
-* Shell scripts for deployment and maintenance
-
-## 📦 Supporting Assets
-
-The project includes non-code resources required at runtime or deployment.
-
-### Includes
-
-* Static media files
-* HTML templates
-* CSS stylesheets
-* JavaScript utilities
-* SQL migrations
-* Shell scripts for deployment and maintenance
+- **Language:** Rust
+- **Framework:** Axum
+- **Templates:** Askama
+- **Database:** PostgreSQL (SQLx)
+- **Runtime:** Tokio
+- **Deployment:** Podman + systemd
+- **Reverse Proxy:** Nginx
 
 ---
+
+## 🚀 Highlights
+
+- Server-side rendered HTML
+- Database-backed blog system
+- Shared application state
+- Custom Rust asset pipeline
+- Containerized deployment workflow
+- Structured logging and tracing
+- Security-focused HTTP configuration
+- Production rate limiting via tower-governor
+
+## 📁 Key Capabilities
+
+- HTTP routing via modular Axum layers
+- Runtime asset resolution through manifest loading
+- Database-backed content rendering
+- In-memory shared application state

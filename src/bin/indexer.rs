@@ -14,7 +14,7 @@ fn main() {
 
     // Change here according to taste
     // Possibilities: rs, html, sql, toml, js, css, etc.
-    let allowed = ["md", "toml"];
+    let allowed = ["md"];
 
     let mut output = File::create(".index.txt").expect("Failed to create output file");
 

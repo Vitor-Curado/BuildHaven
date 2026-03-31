@@ -14,6 +14,20 @@
 * Multi-stage container builds with cargo-chef for faster rebuilds
 * Very few JavaScript
 
+**Data Persistence**
+
+* PostgreSQL-backed storage using SQLx
+* Compile-time verified SQL queries
+* Repository pattern for data access
+* Blog content stored in database
+
+**Asset Pipeline**
+
+* Custom Rust-based asset bundling system
+* CSS and JavaScript concatenation
+* Minification and SHA256 fingerprinting
+* Runtime manifest resolution
+
 **Observability**
 * Structured request tracing via tower-http
 * Configurable logging through tracing and RUST_LOG

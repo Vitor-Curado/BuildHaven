@@ -29,6 +29,18 @@ This avoids repeated computation during request handling and keeps handlers ligh
 
 ---
 
+## 🗃️ Persistence Layer
+
+Database operations are separated into:
+
+- Repository layer — SQL queries
+- Service layer — business logic
+- Models — domain data structures
+
+This separation improves maintainability and testability.
+
+---
+
 ## 🧭 High-Level Flow
 
 ```
