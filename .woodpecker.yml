@@ -5,15 +5,17 @@ pipeline:
       - ./scripts/check.sh
 
   build-image:
-    image: docker
+    image: podman
     commands:
-      - docker build -t ghcr.io/vitor-curado/personal-website:latest .
-      - docker push ghcr.io/vitor-curado/personal-website:latest
+      - podman build -t ghcr.io/vitor-curado/personal-website:latest .
+      - podman push ghcr.io/vitor-curado/personal-website:latest
 
   deploy:
     image: appleboy/drone-ssh
     depends_on:
       - build-image
+    when:
+      branch: main
     settings:
       host: 167.99.180.229
       username: root
