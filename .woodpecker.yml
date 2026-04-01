@@ -1,13 +1,19 @@
 pipeline:
-  build:
+  check:
     image: rust:latest
     commands:
       - ./scripts/check.sh
 
+  build-image:
+    image: docker
+    commands:
+      - docker build -t ghcr.io/vitor-curado/personal-website:latest .
+      - docker push ghcr.io/vitor-curado/personal-website:latest
+
   deploy:
     image: appleboy/drone-ssh
     depends_on:
-      - build
+      - build-image
     settings:
       host: 167.99.180.229
       username: root

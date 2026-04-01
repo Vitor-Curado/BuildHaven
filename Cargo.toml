@@ -1,8 +1,8 @@
 [package]
 name = "personal-website"
-version = "0.4.0"
-edition = "2024"
 default-run = "personal-website"
+version = "0.4.1"
+edition = "2024"
 
 [dependencies]
 axum = "0.7"

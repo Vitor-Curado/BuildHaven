@@ -11,6 +11,8 @@ RUN cargo chef prepare --recipe-path recipe.json
 FROM rust:latest AS builder
 WORKDIR /app
 
+ENV SQLX_OFFLINE=true
+
 RUN cargo install cargo-chef
 
 COPY --from=planner /app/recipe.json recipe.json

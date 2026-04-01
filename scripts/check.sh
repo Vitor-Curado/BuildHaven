@@ -10,4 +10,7 @@ cargo clippy --all-targets --all-features -- -D warnings
 echo "Running tests..."
 cargo test
 
-echo "All checks passed."
+echo "Checking SQLx query metadata..."
+cargo sqlx prepare --check
+
+echo "Done."
