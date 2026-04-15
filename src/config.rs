@@ -27,6 +27,10 @@ impl Config {
 
         let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
 
-        Self { port, environment, database_url }
+        Self {
+            port,
+            environment,
+            database_url,
+        }
     }
 }

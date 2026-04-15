@@ -1,6 +1,6 @@
 use crate::assets::{Assets, load_manifest};
-use crate::error::AppError;
 use crate::config::Config;
+use crate::error::AppError;
 use crate::models::Food;
 use crate::repository::mock_food_data;
 
@@ -19,7 +19,6 @@ pub struct AppState {
 }
 
 impl AppState {
-    #[must_use]
     pub fn new(db: PgPool, config: Config) -> Result<Self, AppError> {
         let manifest = load_manifest()?;
         let assets = Assets {

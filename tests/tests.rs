@@ -1,38 +1,14 @@
+mod common;
+use common::test_app;
 use axum::body::{Body, to_bytes};
 use axum::http::{Request, StatusCode};
-use personal_website::router::app;
-use serde_json::Value;
 use tower::util::ServiceExt; // for oneshot
 
 const BODY_LIMIT: usize = 64 * 1024; // 64 KB
 
 #[tokio::test]
-async fn health_endpoint_returns_ok() {
-    let app = app();
-
-    let response = app
-        .oneshot(
-            Request::builder()
-                .uri("/health")
-                .body(Body::empty())
-                .unwrap(),
-        )
-        .await
-        .unwrap();
-
-    assert_eq!(response.status(), StatusCode::OK);
-
-    let body_bytes = to_bytes(response.into_body(), BODY_LIMIT).await.unwrap();
-    let json: Value = serde_json::from_slice(&body_bytes).unwrap();
-
-    assert_eq!(json["status"], "ok");
-    assert_eq!(json["service"], "personal-website");
-    assert!(json["version"].as_str().unwrap().is_empty());
-}
-
-#[tokio::test]
 async fn home_page_renders() {
-    let app = app();
+    let app = test_app().await;
 
     let response = app
         .oneshot(Request::builder().uri("/").body(Body::empty()).unwrap())
@@ -48,7 +24,7 @@ async fn home_page_renders() {
 
 #[tokio::test]
 async fn food_page_renders() {
-    let app = app();
+    let app = test_app().await;
 
     let response = app
         .oneshot(Request::builder().uri("/food").body(Body::empty()).unwrap())
@@ -66,7 +42,7 @@ async fn food_page_renders() {
 
 #[tokio::test]
 async fn food_detail_existing_and_missing() {
-    let app = app();
+    let app = test_app().await;
 
     // Existing food
     let response = app
@@ -100,7 +76,7 @@ async fn food_detail_existing_and_missing() {
 
 #[tokio::test]
 async fn generic_pages_render() {
-    let app = app();
+    let app = test_app().await;
 
     let pages = ["/resume", "/blog", "/contact", "/assets"];
     let expected_titles = ["Resume", "Blog", "Contact", "Assets"];

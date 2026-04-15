@@ -4,6 +4,7 @@ use crate::rate_limit::apply_rate_limiting;
 use crate::routes::public_routes;
 use crate::security::apply_security_headers;
 use crate::state::AppState;
+use tower_http::compression::CompressionLayer;
 
 use axum::Router;
 use tower_http::services::ServeDir;
@@ -14,6 +15,7 @@ pub fn app(state: AppState) -> Router {
     let router = Router::new()
         .nest("/", public_routes())
         .nest_service("/static", static_service)
+        .layer(CompressionLayer::new())
         .with_state(state);
 
     let router = apply_security_headers(router);

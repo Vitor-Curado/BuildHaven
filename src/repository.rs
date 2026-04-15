@@ -2,7 +2,6 @@ use crate::models::{Food, NewPost, Post};
 use sqlx::PgPool;
 use uuid::Uuid;
 
-#[must_use]
 pub async fn create_post(pool: &PgPool, new_post: &NewPost) -> Result<Post, sqlx::Error> {
     let id = Uuid::new_v4();
 
@@ -23,7 +22,6 @@ pub async fn create_post(pool: &PgPool, new_post: &NewPost) -> Result<Post, sqlx
     Ok(post)
 }
 
-#[must_use]
 pub async fn get_all_posts(pool: &PgPool) -> Result<Vec<Post>, sqlx::Error> {
     sqlx::query_as!(
         Post,
@@ -37,7 +35,6 @@ pub async fn get_all_posts(pool: &PgPool) -> Result<Vec<Post>, sqlx::Error> {
     .await
 }
 
-#[must_use]
 pub async fn get_post_by_id(pool: &PgPool, post_id: Uuid) -> Result<Option<Post>, sqlx::Error> {
     let post = sqlx::query_as!(
         Post,
@@ -54,7 +51,6 @@ pub async fn get_post_by_id(pool: &PgPool, post_id: Uuid) -> Result<Option<Post>
     Ok(post)
 }
 
-#[must_use]
 pub async fn delete_post(pool: &PgPool, post_id: Uuid) -> Result<bool, sqlx::Error> {
     let result = sqlx::query!(
         r#"

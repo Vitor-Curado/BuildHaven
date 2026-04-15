@@ -27,7 +27,7 @@ FROM gcr.io/distroless/cc-debian12
 
 WORKDIR /app
 
-COPY --from=builder /app/target/release/personal-website .
+COPY --from=builder /app/target/release/buildhaven .
 
 COPY templates ./templates
 COPY static ./static
@@ -37,4 +37,4 @@ USER nonroot:nonroot
 
 EXPOSE 3000
 
-CMD ["./personal-website"]
+CMD ["./buildhaven"]

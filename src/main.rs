@@ -1,7 +1,7 @@
-use personal_website::config::Config;
-use personal_website::pool::create_pool;
-use personal_website::router::app;
-use personal_website::state::AppState;
+use buildhaven::config::Config;
+use buildhaven::pool::create_pool;
+use buildhaven::router::app;
+use buildhaven::state::AppState;
 use tokio::net::TcpListener;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 

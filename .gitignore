@@ -3,3 +3,4 @@
 /static/dist/
 .env
 .index.txt
+benchmarks/results/*.raw

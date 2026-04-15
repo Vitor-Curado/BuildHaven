@@ -2,6 +2,24 @@ use chrono::{DateTime, Utc};
 use serde::Serialize;
 use uuid::Uuid;
 
+
+
+#[derive(Debug, Clone, sqlx::FromRow)]
+pub struct Post {
+    pub id: Uuid,
+    pub title: String,
+    pub content: String,
+    //pub excerpt: String,
+    pub created_at: DateTime<Utc>,
+}
+
+#[derive(Debug, Serialize, Clone)]
+pub struct NewPost {
+    pub title: String,
+    pub content: String,
+    //pub excerpt: String
+}
+
 #[derive(Debug, Clone, sqlx::FromRow)]
 pub struct User {
     pub id: Uuid,
@@ -25,21 +43,6 @@ pub struct PublicUser {
     pub email: String,
 }
 
-#[derive(Debug, Clone, sqlx::FromRow)]
-pub struct Post {
-    pub id: Uuid,
-    pub title: String,
-    pub content: String,
-    //pub excerpt: String,
-    pub created_at: DateTime<Utc>,
-}
-
-#[derive(Debug, Serialize, Clone)]
-pub struct NewPost {
-    pub title: String,
-    pub content: String,
-    //pub excerpt: String
-}
 #[derive(Serialize, Clone)]
 pub struct Food {
     pub title: &'static str,

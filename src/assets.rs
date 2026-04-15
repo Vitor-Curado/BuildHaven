@@ -120,7 +120,6 @@ fn write_manifest(manifest: &HashMap<String, String>) -> std::io::Result<()> {
     fs::write("static/dist/manifest.json", json)
 }
 
-#[must_use]
 pub fn load_manifest() -> Result<HashMap<String, String>, AppError> {
     let content =
         std::fs::read_to_string("static/dist/manifest.json").map_err(|_| AppError::Internal)?;
