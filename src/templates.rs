@@ -1,5 +1,7 @@
-use crate::assets::Assets;
-use crate::models::{Food, Post};
+use crate::{
+    assets::Assets,
+    models::{Food, Post},
+};
 use askama::Template;
 use std::sync::Arc;
 
@@ -13,20 +15,18 @@ pub struct IndexTemplate {
 }
 
 #[derive(Template)]
-#[template(path = "pages/food.html")]
-pub struct FoodTemplate<'a> {
+#[template(path = "pages/register.html")]
+pub struct RegisterTemplate {
     pub title: &'static str,
     pub favicon: &'static str,
-    pub foods: &'a [Food],
     pub assets: Arc<Assets>,
 }
 
 #[derive(Template)]
-#[template(path = "pages/food_detail.html")]
-pub struct FoodDetailTemplate<'a> {
-    pub title: String,
+#[template(path = "pages/login.html")]
+pub struct LoginTemplate {
+    pub title: &'static str,
     pub favicon: &'static str,
-    pub food: &'a Food,
     pub assets: Arc<Assets>,
 }
 
@@ -53,6 +53,24 @@ pub struct BlogTemplate {
 pub struct ContactTemplate {
     pub title: &'static str,
     pub favicon: &'static str,
+    pub assets: Arc<Assets>,
+}
+
+#[derive(Template)]
+#[template(path = "pages/food.html")]
+pub struct FoodTemplate<'a> {
+    pub title: &'static str,
+    pub favicon: &'static str,
+    pub foods: &'a [Food],
+    pub assets: Arc<Assets>,
+}
+
+#[derive(Template)]
+#[template(path = "pages/food_detail.html")]
+pub struct FoodDetailTemplate<'a> {
+    pub title: String,
+    pub favicon: &'static str,
+    pub food: &'a Food,
     pub assets: Arc<Assets>,
 }
 

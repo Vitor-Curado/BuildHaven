@@ -1,5 +1,7 @@
-use axum::Router;
-use axum::http::header::{HeaderName, HeaderValue};
+use axum::{
+    Router,
+    http::header::{HeaderName, HeaderValue},
+};
 use tower_http::set_header::SetResponseHeaderLayer;
 
 pub fn apply_security_headers(router: Router) -> Router {

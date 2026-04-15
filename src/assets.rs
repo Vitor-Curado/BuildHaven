@@ -1,9 +1,7 @@
 use crate::error::AppError;
 use serde::Serialize;
 use sha2::{Digest, Sha256};
-use std::collections::HashMap;
-use std::fs;
-use std::path::Path;
+use std::{collections::HashMap, fs, path::Path};
 
 #[derive(Serialize, Clone)]
 pub struct Assets {

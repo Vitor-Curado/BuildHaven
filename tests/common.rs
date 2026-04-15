@@ -21,9 +21,9 @@ pub async fn setup_test_db() -> PgPool {
         .expect("Failed to connect to test database");
 
     sqlx::migrate!()
-    .run(&pool)
-    .await
-    .expect("Failed to run migrations");
+        .run(&pool)
+        .await
+        .expect("Failed to run migrations");
 
     // Clean posts table before each test
     sqlx::query("TRUNCATE posts RESTART IDENTITY CASCADE")

@@ -1,11 +1,7 @@
-use buildhaven::config::Config;
-use buildhaven::pool::create_pool;
-use buildhaven::router::app;
-use buildhaven::state::AppState;
+use buildhaven::{config::Config, pool::create_pool, router::app, state::AppState};
+use dotenvy::dotenv;
 use tokio::net::TcpListener;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
-
-use dotenvy::dotenv;
 
 #[tokio::main]
 async fn main() {

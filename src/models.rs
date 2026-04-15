@@ -1,8 +1,13 @@
 use chrono::{DateTime, Utc};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-
+#[derive(Deserialize)]
+pub struct RegisterForm {
+    pub username: String,
+    pub email: String,
+    pub password: String,
+}
 
 #[derive(Debug, Clone, sqlx::FromRow)]
 pub struct Post {

@@ -1,5 +1,8 @@
-use axum::Router;
-use axum::http::{HeaderValue, Method};
+use axum::{
+    Router,
+    http::{HeaderValue, Method},
+};
+
 use tower_http::cors::{Any, CorsLayer};
 
 pub fn apply_cors(router: Router) -> Router {

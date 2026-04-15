@@ -1,6 +1,5 @@
 use axum::Router;
-use tower_http::limit::RequestBodyLimitLayer;
-use tower_http::trace::TraceLayer;
+use tower_http::{limit::RequestBodyLimitLayer, trace::TraceLayer};
 use tracing::Level;
 
 pub fn apply_logging(router: Router) -> Router {

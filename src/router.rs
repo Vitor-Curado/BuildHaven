@@ -1,13 +1,9 @@
-use crate::cors::apply_cors;
-use crate::logging::apply_logging;
-use crate::rate_limit::apply_rate_limiting;
-use crate::routes::public_routes;
-use crate::security::apply_security_headers;
-use crate::state::AppState;
-use tower_http::compression::CompressionLayer;
-
+use crate::{
+    cors::apply_cors, logging::apply_logging, rate_limit::apply_rate_limiting,
+    routes::public_routes, security::apply_security_headers, state::AppState,
+};
 use axum::Router;
-use tower_http::services::ServeDir;
+use tower_http::{compression::CompressionLayer, services::ServeDir};
 
 pub fn app(state: AppState) -> Router {
     let static_service = ServeDir::new("static").precompressed_gzip();

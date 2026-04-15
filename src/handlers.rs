@@ -1,18 +1,21 @@
-use crate::api::HealthResponse;
-use crate::services::list_posts;
-use crate::state::AppState;
-//use crate::error::AppError;
-use crate::templates::{
-    AssetsTemplate, BlogTemplate, ContactTemplate, FoodDetailTemplate, FoodTemplate, IndexTemplate,
-    ResumeTemplate,
+use crate::{
+    api::HealthResponse,
+    services::list_posts,
+    state::AppState,
+    templates::{
+        AssetsTemplate, BlogTemplate, ContactTemplate, FoodDetailTemplate, FoodTemplate,
+        IndexTemplate, ResumeTemplate, RegisterTemplate, LoginTemplate,
+    },
+    repository::create_user,
+    models::{NewUser, RegisterForm},
 };
 
-use axum::Json;
-use axum::extract::State;
-use axum::http::StatusCode;
 use axum::{
-    extract::Path,
-    response::{Html, IntoResponse, Response},
+    Json,
+    Form,
+    extract::{Path, State},
+    http::StatusCode,
+    response::{Html, IntoResponse, Response, Redirect},
 };
 
 use askama::Template;
@@ -39,6 +42,43 @@ pub async fn home(State(app_state): State<AppState>) -> impl IntoResponse {
         favicon: "home-icon.png",
         readme_html: app_state.readme_html.clone(),
         assets: app_state.assets.clone(),
+    })
+}
+
+pub async fn register_user(
+    State(state): State<AppState>,
+    Form(form): Form<RegisterForm>,
+) -> impl IntoResponse {
+
+    let hashed =
+        state.auth.hash_password(&form.password);
+
+    let new_user = NewUser {
+        username: form.username,
+        email: form.email,
+        password_hash: hashed,
+    };
+
+    create_user(&state.db, new_user)
+        .await
+        .unwrap();
+
+    Redirect::to("/login")
+}
+
+pub async fn register_page(State(state): State<AppState>) -> impl IntoResponse {
+    render_template(RegisterTemplate {
+        title: "Register",
+        favicon: "register-icon.png",
+        assets: state.assets.clone(),
+    })
+}
+
+pub async fn login_page(State(state): State<AppState>) -> impl IntoResponse {
+    render_template(LoginTemplate {
+        title: "Login",
+        favicon: "login-icon.png",
+        assets: state.assets.clone(),
     })
 }
 

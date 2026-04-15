@@ -1,7 +1,7 @@
 mod common;
-use common::setup_test_db;
 use buildhaven::models::NewPost;
 use buildhaven::repository;
+use common::setup_test_db;
 
 #[tokio::test]
 async fn create_and_fetch_post() {
@@ -12,16 +12,12 @@ async fn create_and_fetch_post() {
         content: "Hello world".into(),
     };
 
-    let created =
-        repository::create_post(&db, &new_post)
-            .await
-            .unwrap();
+    let created = repository::create_post(&db, &new_post).await.unwrap();
 
-    let fetched =
-        repository::get_post_by_id(&db, created.id)
-            .await
-            .unwrap()
-            .unwrap();
+    let fetched = repository::get_post_by_id(&db, created.id)
+        .await
+        .unwrap()
+        .unwrap();
 
     assert_eq!(fetched.title, "Test Post");
 }
