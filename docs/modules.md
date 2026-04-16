@@ -1,24 +1,104 @@
 # 🧩 Project Modules
 
-* **bin/assets.rs** — build assets
-* **indexer.rs** — developer utility that scans project files and generates a searchable index file
-* **api.rs** — JSON response structures (API responses)
-* **assets.rs** — cache busting, compression of static files
-* **config.rs** — environment-based application configuration
-* **cors.rs** — CORS middleware configuration
-* **error.rs** — defines application error types (thiserror)
-* **handlers.rs** — HTTP request handlers
-* **lib.rs** — crate module declarations
-* **main.rs** — server initialization and runtime setup
-* **models.rs** — domain data structures
-* **pool.rs** — database connection pooling (SQLx)
-* **rate_limit.rs** — request throttling using tower-governor
-* **repository.rs** — database access layer (SQL queries and persistence logic)
-* **router.rs** — Axum router middleware and global configuration
-* **routes.rs** — route definitions
-* **security.rs** — HTTP header & auth middleware
-* **services.rs** — business logic layer / domain services
-* **state.rs** — shared application state
-* **templates.rs** — Askama template bindings
-* **utils.rs** — utility helpers (markdown conversion, file loading)
-* **tests.rs** — integration tests
+## Core Application
+
+**main.rs**  
+Initializes the server, middleware, and runtime.
+
+**lib.rs**  
+Declares crate modules and shared interfaces.
+
+---
+
+## Runtime Infrastructure
+
+**config.rs**  
+Loads environment-driven configuration.
+
+**state.rs**  
+Defines shared `AppState`.
+
+**pool.rs**  
+Initializes database connection pool.
+
+**logging.rs**  
+Configures structured logging and tracing.
+
+---
+
+## HTTP Layer
+
+**router.rs**  
+Builds middleware stack.
+
+**routes.rs**  
+Defines route mappings.
+
+**handlers.rs**  
+Processes HTTP requests.
+
+**cors.rs**  
+Applies cross-origin policies.
+
+**rate_limit.rs**  
+Applies request throttling.
+
+**security.rs**  
+Applies HTTP security headers.
+
+---
+
+## Domain Layer
+
+**models.rs**  
+Domain data structures.
+
+**services.rs**  
+Business logic operations.
+
+**repository.rs**  
+Database queries and persistence logic.
+
+---
+
+## Asset System
+
+**assets.rs**  
+Handles runtime asset resolution.
+
+**bin/assets.rs**  
+Build-time asset pipeline.
+
+---
+
+## Templates
+
+**templates.rs**  
+Template bindings and rendering helpers.
+
+---
+
+## Utilities
+
+**utils.rs**  
+General-purpose helpers.
+
+**api.rs**  
+JSON response structures.
+
+**error.rs**  
+Application error types.
+
+---
+
+## Development Tools
+
+**indexer.rs**  
+Build-time searchable file index generator.
+
+---
+
+## Testing
+
+**tests.rs**  
+Integration tests.

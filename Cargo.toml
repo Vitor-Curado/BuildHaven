@@ -34,6 +34,8 @@ thiserror = "2.0.18"
 argon2 = "0.5"
 password-hash = "0.5"
 rand_core = "0.6"
+time = "0.3.47"
+validator = "0.20.0"
 
 [dev-dependencies]
 tower = { version = "0.4", features = ["util"] }

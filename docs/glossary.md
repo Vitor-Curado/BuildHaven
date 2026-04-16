@@ -13,8 +13,7 @@
 - **Distroless** — minimal container runtime image
 - **systemd** — Linux service manager
 - **Nginx** — reverse proxy server
-
-
-This is one of the most valuable additions you can make.
-
----
+- **AppState** — Shared runtime state injected into handlers
+- **Repository Pattern** — Structured database access layer
+- **Fingerprinting** — Hash-based asset naming
+- **Distroless** — Minimal runtime container image

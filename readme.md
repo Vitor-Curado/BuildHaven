@@ -23,14 +23,16 @@ Built using modern Rust tooling and deployed on a Fedora Linux server behind Ngi
 
 ## 🚀 Highlights
 
+- Layered Rust web architecture
 - Server-side rendered HTML
 - Database-backed blog system
-- Shared application state
+- Compile-time verified SQL queries
 - Custom Rust asset pipeline
-- Containerized deployment workflow
+- Containerized production deployment
 - Structured logging and tracing
 - Security-focused HTTP configuration
 - Production rate limiting via tower-governor
+- Deterministic build and deployment workflow
 
 ## 📁 Key Capabilities
 

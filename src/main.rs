@@ -44,12 +44,7 @@ async fn main() {
     let db_pool = create_pool(&config.database_url).await;
     let state = AppState::new(db_pool, config).expect("Failed to initialize AppState");
 
-    let port = state.config.port;
-
-    tracing_subscriber::registry()
-        .with(tracing_subscriber::EnvFilter::from_default_env())
-        .with(tracing_subscriber::fmt::layer())
-        .init();
+    let port = state.ctx.config.port;
 
     let app = app(state);
 

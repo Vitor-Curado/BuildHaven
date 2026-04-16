@@ -2,6 +2,8 @@ pub mod api;
 pub mod assets;
 pub mod auth;
 pub mod config;
+pub mod content;
+pub mod context;
 pub mod cors;
 pub mod error;
 pub mod handlers;

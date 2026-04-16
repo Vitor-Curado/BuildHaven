@@ -5,10 +5,7 @@ use crate::{
     },
     state::AppState,
 };
-use axum::{
-    Router,
-    routing::{get, post},
-};
+use axum::{Router, routing::get};
 
 pub fn public_routes() -> Router<AppState> {
     Router::new()

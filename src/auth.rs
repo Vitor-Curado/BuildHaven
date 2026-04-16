@@ -25,7 +25,10 @@ impl AuthService {
     }
 
     pub fn verify_password(&self, password: &str, hash: &str) -> bool {
-        let parsed_hash = PasswordHash::new(hash).expect("invalid password hash format");
+        let parsed_hash = match PasswordHash::new(hash) {
+            Ok(h) => h,
+            Err(_) => return false,
+        };
 
         self.argon2
             .verify_password(password.as_bytes(), &parsed_hash)

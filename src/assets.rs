@@ -20,14 +20,14 @@ pub fn build_assets() -> std::io::Result<()> {
 
     // CSS
     let css = bundle_css()?;
-    let css_minified = minify_css(&css);
+    let css_minified = &css;
     let css_hash = hash_content(&css_minified);
     let css_filename = format!("index-{}.css", &css_hash[..12]);
     fs::write(format!("static/dist/{css_filename}"), css_minified)?;
 
     // JS
     let js = bundle_js()?;
-    let js_minified = minify_js(&js);
+    let js_minified = &js;
     let js_hash = hash_content(&js_minified);
     let js_filename = format!("app-{}.js", &js_hash[..12]);
     fs::write(format!("static/dist/{}", js_filename), js_minified)?;
@@ -37,24 +37,15 @@ pub fn build_assets() -> std::io::Result<()> {
     manifest.insert("index.css".to_string(), css_filename);
     manifest.insert("app.js".to_string(), js_filename);
 
+    // Images
+    process_images(&mut manifest)?;
+
     write_manifest(&manifest)?;
     Ok(())
 }
 
 fn bundle_css() -> std::io::Result<String> {
-    let css_bundle = vec![
-        "static/css/variables.css",
-        "static/css/themes.css",
-        "static/css/base.css",
-        "static/css/typography.css",
-        "static/css/components/navbar.css",
-        "static/css/components/dropdown.css",
-        "static/css/components/containers.css",
-        "static/css/components/grids.css",
-        "static/css/components/cards.css",
-        "static/css/components/buttons.css",
-    ];
-
+    let css_bundle = collect_files("static/css")?;
     let mut result = String::new();
 
     for file in css_bundle {
@@ -78,33 +69,33 @@ fn bundle_js() -> std::io::Result<String> {
     Ok(result)
 }
 
-fn minify_css(input: &str) -> String {
-    let mut result = String::new();
-    let mut in_comment = false;
+fn process_images(manifest: &mut HashMap<String, String>) -> std::io::Result<()> {
+    let src_dir = Path::new("static/media/icons");
+    let dest_dir = Path::new("static/dist/icons");
 
-    for line in input.lines() {
-        let trimmed = line.trim();
+    fs::create_dir_all(dest_dir)?;
 
-        if trimmed.starts_with("/*") {
-            in_comment = true;
-            continue;
-        }
+    for entry in fs::read_dir(src_dir)? {
+        let path = entry?.path();
 
-        if trimmed.ends_with("*/") {
-            in_comment = false;
-            continue;
-        }
+        if path.is_file() {
+            let content = fs::read(&path)?;
 
-        if !in_comment {
-            result.push_str(trimmed);
+            let filename = path
+                .file_name()
+                .and_then(|s| s.to_str())
+                .unwrap_or("file.png");
+
+            let dest_path = dest_dir.join(filename);
+
+            fs::write(dest_path, content)?;
+
+            // Optional manifest entry (useful later)
+            manifest.insert(format!("icons/{}", filename), format!("icons/{}", filename));
         }
     }
 
-    result
-}
-
-fn minify_js(input: &str) -> String {
-    input.lines().map(str::trim).collect::<Vec<_>>().join("\n") // keep line breaks!
+    Ok(())
 }
 
 fn hash_content(content: &str) -> String {
@@ -123,4 +114,27 @@ pub fn load_manifest() -> Result<HashMap<String, String>, AppError> {
         std::fs::read_to_string("static/dist/manifest.json").map_err(|_| AppError::Internal)?;
 
     serde_json::from_str(&content).map_err(|_| AppError::Internal)
+}
+
+fn visit(path: &Path, files: &mut Vec<String>) -> std::io::Result<()> {
+    for entry in fs::read_dir(path)? {
+        let entry = entry?;
+        let path = entry.path();
+
+        if path.is_dir() {
+            visit(&path, files)?;
+        } else if path.extension().and_then(|s| s.to_str()) == Some("css") {
+            files.push(path.to_string_lossy().to_string());
+        }
+    }
+
+    Ok(())
+}
+
+fn collect_files(dir: &str) -> std::io::Result<Vec<String>> {
+    let mut files = vec![];
+
+    visit(Path::new(dir), &mut files)?;
+    files.sort();
+    Ok(files)
 }
