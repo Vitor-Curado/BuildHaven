@@ -9,6 +9,12 @@ pub struct RegisterForm {
     pub password: String,
 }
 
+#[derive(Deserialize)]
+pub struct LoginForm {
+    pub email: String,
+    pub password: String,
+}
+
 #[derive(Debug, Clone, sqlx::FromRow)]
 pub struct Post {
     pub id: Uuid,
@@ -46,6 +52,14 @@ pub struct PublicUser {
     pub id: Uuid,
     pub username: String,
     pub email: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct Session {
+    pub id: Uuid,
+    pub user_id: Uuid,
+    pub created_at: DateTime<Utc>,
+    pub expires_at: DateTime<Utc>,
 }
 
 #[derive(Serialize, Clone)]

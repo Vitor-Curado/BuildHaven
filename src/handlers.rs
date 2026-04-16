@@ -1,21 +1,22 @@
 use crate::{
     api::HealthResponse,
+    models::{NewUser, RegisterForm, LoginForm},
+    repository::{create_user, find_user_by_email},
     services::list_posts,
+    session::create_session,
     state::AppState,
     templates::{
         AssetsTemplate, BlogTemplate, ContactTemplate, FoodDetailTemplate, FoodTemplate,
-        IndexTemplate, ResumeTemplate, RegisterTemplate, LoginTemplate,
+        IndexTemplate, LoginTemplate, RegisterTemplate, ResumeTemplate,
     },
-    repository::create_user,
-    models::{NewUser, RegisterForm},
 };
 
+use axum_extra::extract::cookie::{Cookie, CookieJar};
 use axum::{
-    Json,
-    Form,
+    Form, Json,
     extract::{Path, State},
     http::StatusCode,
-    response::{Html, IntoResponse, Response, Redirect},
+    response::{Html, IntoResponse, Redirect, Response},
 };
 
 use askama::Template;
@@ -49,9 +50,7 @@ pub async fn register_user(
     State(state): State<AppState>,
     Form(form): Form<RegisterForm>,
 ) -> impl IntoResponse {
-
-    let hashed =
-        state.auth.hash_password(&form.password);
+    let hashed = state.auth.hash_password(&form.password);
 
     let new_user = NewUser {
         username: form.username,
@@ -59,9 +58,7 @@ pub async fn register_user(
         password_hash: hashed,
     };
 
-    create_user(&state.db, new_user)
-        .await
-        .unwrap();
+    create_user(&state.db, new_user).await.unwrap();
 
     Redirect::to("/login")
 }
@@ -72,6 +69,61 @@ pub async fn register_page(State(state): State<AppState>) -> impl IntoResponse {
         favicon: "register-icon.png",
         assets: state.assets.clone(),
     })
+}
+
+pub async fn login_user(
+    State(state): State<AppState>,
+    jar: CookieJar,
+    Form(form): Form<LoginForm>,
+) -> impl IntoResponse {
+    /*
+    Receive form
+    → Find user in DB
+    → Verify password
+    → If correct → create session
+    → Send cookie
+    → Redirect
+    */
+
+    // Find user in DB
+    let user = match find_user_by_email(&state.db, &form.email).await {
+    Ok(Some(user)) => user,
+    _ => {
+        return (jar, Redirect::to("/login"))
+    }
+    };
+
+    // Verify password
+    let valid = state
+        .auth
+        .verify_password(&form.password, &user.password_hash);
+
+    if !valid {
+        return (jar, Redirect::to("/login"))
+    }
+
+    // If correct → create session
+    let session = match create_session(&state.db, user.id).await {
+        Ok(session) => session,
+        Err(_) => {
+            return (
+                jar, 
+                Redirect::to("/login")
+            );
+        }
+    };
+
+    // Create cookie
+    let cookie = Cookie::build(("session_id", session.id.to_string()))
+        .path("/")
+        .http_only(true);
+        //.finish();
+
+    // Attach cookie
+    let jar = jar.add(cookie);
+
+    // Redirect
+    (jar, Redirect::to("/"))
 }
 
 pub async fn login_page(State(state): State<AppState>) -> impl IntoResponse {
