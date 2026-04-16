@@ -58,9 +58,13 @@ pub async fn register_user(
         password_hash: hashed,
     };
 
-    create_user(&state.db, new_user).await.unwrap();
-
-    Redirect::to("/login")
+    match create_user(&state.db, new_user).await {
+        Ok(_) => Redirect::to("/login").into_response(),
+        Err(e) => {
+            tracing::error!("User creation failed: {:?}", e);
+            StatusCode::INTERNAL_SERVER_ERROR.into_response()
+        }
+    }
 }
 
 pub async fn register_page(State(state): State<AppState>) -> impl IntoResponse {

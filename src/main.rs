@@ -3,9 +3,42 @@ use dotenvy::dotenv;
 use tokio::net::TcpListener;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
+async fn shutdown_signal() {
+    let ctrl_c = async {
+        tokio::signal::ctrl_c()
+            .await
+            .expect("Failed to install Ctrl+C handler");
+    };
+
+    #[cfg(unix)]
+    let terminate = async {
+        use tokio::signal::unix::{SignalKind, signal};
+
+        signal(SignalKind::terminate())
+            .expect("Failed to install SIGTERM handler")
+            .recv()
+            .await;
+    };
+
+    #[cfg(not(unix))]
+    let terminate = std::future::pending::<()>();
+
+    tokio::select! {
+        _ = ctrl_c => {},
+        _ = terminate => {},
+    }
+
+    tracing::info!("Shutdown signal received");
+}
+
 #[tokio::main]
 async fn main() {
     dotenv().ok();
+
+    tracing_subscriber::registry()
+        .with(tracing_subscriber::EnvFilter::from_default_env())
+        .with(tracing_subscriber::fmt::layer())
+        .init();
 
     let config = Config::from_env();
     let db_pool = create_pool(&config.database_url).await;
@@ -29,12 +62,12 @@ async fn main() {
         listener.local_addr().expect("Failed to get local address")
     );
 
-    axum::serve(listener, app)
-        .with_graceful_shutdown(async {
-            tokio::signal::ctrl_c()
-                .await
-                .expect("Failed to listen for shutdown signal");
-        })
+    if let Err(err) = axum::serve(listener, app)
+        .with_graceful_shutdown(shutdown_signal())
         .await
-        .unwrap();
+    {
+        tracing::error!("Server error: {}", err);
+    }
+
+    tracing::info!("Server stopped");
 }
