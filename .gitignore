@@ -4,3 +4,4 @@
 .env
 .index.txt
 benchmarks/results/*.raw
+/src/bin/indexer.rs

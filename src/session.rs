@@ -26,3 +26,18 @@ pub async fn create_session(pool: &PgPool, user_id: Uuid) -> Result<Session, sql
         expires_at,
     })
 }
+
+pub async fn get_session_by_id(
+    pool: &PgPool,
+    session_id: Uuid,
+) -> Result<Option<Session>, sqlx::Error> {
+    let record = sqlx::query_as!(
+        Session,
+        "SELECT id, user_id, created_at, expires_at FROM sessions WHERE id = $1 AND expires_at > NOW()",
+        session_id
+    )
+    .fetch_optional(pool)
+    .await?;
+
+    Ok(record)
+}

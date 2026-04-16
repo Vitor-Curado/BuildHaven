@@ -6,12 +6,17 @@ use axum::Router;
 use tower_http::{compression::CompressionLayer, services::ServeDir};
 
 pub fn app(state: AppState) -> Router {
-    let static_service = ServeDir::new("static").precompressed_gzip();
+    let static_service = ServeDir::new("static")
+    .precompressed_br()
+    .precompressed_gzip();
 
     let router = Router::new()
         .nest("/", public_routes())
         .nest_service("/static", static_service)
-        .layer(CompressionLayer::new())
+        .layer(CompressionLayer::new()
+            .br(true)
+            .gzip(true)
+            .deflate(true))
         .with_state(state);
 
     let router = apply_security_headers(router);

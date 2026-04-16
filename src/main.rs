@@ -29,5 +29,12 @@ async fn main() {
         listener.local_addr().expect("Failed to get local address")
     );
 
-    axum::serve(listener, app).await.unwrap();
+    axum::serve(listener, app)
+        .with_graceful_shutdown(async {
+            tokio::signal::ctrl_c()
+                .await
+                .expect("Failed to listen for shutdown signal");
+        })
+        .await
+        .unwrap();
 }

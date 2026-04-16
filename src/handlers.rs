@@ -1,6 +1,6 @@
 use crate::{
     api::HealthResponse,
-    models::{NewUser, RegisterForm, LoginForm},
+    models::{LoginForm, NewUser, RegisterForm},
     repository::{create_user, find_user_by_email},
     services::list_posts,
     session::create_session,
@@ -11,7 +11,6 @@ use crate::{
     },
 };
 
-use axum_extra::extract::cookie::{Cookie, CookieJar};
 use axum::{
     Form, Json,
     extract::{Path, State},
@@ -20,6 +19,7 @@ use axum::{
 };
 
 use askama::Template;
+use axum_extra::extract::cookie::{Cookie, CookieJar, SameSite};
 
 #[allow(clippy::needless_pass_by_value)]
 pub fn render_template<T: Template>(t: T) -> Response {
@@ -87,10 +87,8 @@ pub async fn login_user(
 
     // Find user in DB
     let user = match find_user_by_email(&state.db, &form.email).await {
-    Ok(Some(user)) => user,
-    _ => {
-        return (jar, Redirect::to("/login"))
-    }
+        Ok(Some(user)) => user,
+        _ => return (jar, Redirect::to("/login")),
     };
 
     // Verify password
@@ -99,25 +97,24 @@ pub async fn login_user(
         .verify_password(&form.password, &user.password_hash);
 
     if !valid {
-        return (jar, Redirect::to("/login"))
+        return (jar, Redirect::to("/login"));
     }
 
     // If correct → create session
     let session = match create_session(&state.db, user.id).await {
         Ok(session) => session,
         Err(_) => {
-            return (
-                jar, 
-                Redirect::to("/login")
-            );
+            return (jar, Redirect::to("/login"));
         }
     };
 
     // Create cookie
     let cookie = Cookie::build(("session_id", session.id.to_string()))
         .path("/")
-        .http_only(true);
-        //.finish();
+        .http_only(true)
+        .secure(true)
+        .same_site(SameSite::Lax);
+    //.finish();
 
     // Attach cookie
     let jar = jar.add(cookie);
