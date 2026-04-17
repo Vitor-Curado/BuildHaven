@@ -20,6 +20,7 @@ pub mod routes;
 pub mod security;
 pub mod services;
 pub mod session;
+pub mod shutdown;
 pub mod state;
 pub mod templates;
 pub mod utils;

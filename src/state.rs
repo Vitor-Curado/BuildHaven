@@ -7,12 +7,12 @@ use crate::{
     error::AppError,
     repository::mock_food_data,
     services::Services,
+    utils::{load_readme, markdown_to_html},
 };
 
-use pulldown_cmark::{Parser, html};
 use sqlx::PgPool;
 
-use std::{fs, sync::Arc};
+use std::sync::Arc;
 
 #[derive(Clone)]
 pub struct AppState {
@@ -21,7 +21,6 @@ pub struct AppState {
 
 impl AppState {
     pub fn new(db: PgPool, config: Config) -> Result<Self, AppError> {
-
         // Load assets manifest
         let manifest = load_manifest()?;
 
@@ -31,22 +30,12 @@ impl AppState {
                 .expect("missing css bundle")
                 .clone(),
 
-            js: manifest
-                .get("app.js")
-                .ok_or(AppError::Internal)?
-                .clone(),
+            js: manifest.get("app.js").ok_or(AppError::Internal)?.clone(),
         };
 
         // Load README
-        let readme_md =
-            fs::read_to_string("./readme.md")
-                .unwrap_or_else(|_| "# README not found".to_string());
-
-        let parser = Parser::new(&readme_md);
-
-        let mut readme_html = String::new();
-
-        html::push_html(&mut readme_html, parser);
+        let readme_md = load_readme();
+        let readme_html = markdown_to_html(&readme_md);
 
         // Services
         let services = Services {
@@ -68,8 +57,6 @@ impl AppState {
             config,
         };
 
-        Ok(Self {
-            ctx: Arc::new(ctx),
-        })
+        Ok(Self { ctx: Arc::new(ctx) })
     }
 }

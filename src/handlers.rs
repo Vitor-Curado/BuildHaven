@@ -1,5 +1,6 @@
 use crate::{
     api::HealthResponse,
+    error::{AppError, AppResult},
     models::{LoginForm, NewUser, RegisterForm},
     repository::{create_user, find_user_by_email},
     services::list_posts,
@@ -22,24 +23,14 @@ use askama::Template;
 use axum_extra::extract::cookie::{Cookie, CookieJar, SameSite};
 
 #[allow(clippy::needless_pass_by_value)]
-pub fn render_template<T: Template>(t: T) -> Response {
-    match t.render() {
-        Ok(html) => Html(html).into_response(),
-        Err(e) => {
-            tracing::error!("Template error: {}", e);
-            (
-                StatusCode::INTERNAL_SERVER_ERROR,
-                "Template rendering failed"
-            )
-                .into_response()
-        }
-        .into_response(),
-    }
+pub fn render_template<T: Template>(t: T) -> AppResult<Response> {
+    let html = t.render()?;
+    Ok(Html(html).into_response())
 }
 
-pub async fn home(State(app_state): State<AppState>) -> impl IntoResponse {
+pub async fn home(State(app_state): State<AppState>) -> Result<Response, AppError> {
     render_template(IndexTemplate {
-        title: "Buildhaven",
+        title: "BuildHaven",
         favicon: "home-icon.png",
         readme_html: app_state.ctx.content.readme_html.clone(),
         assets: app_state.ctx.content.assets.clone(),
@@ -67,7 +58,7 @@ pub async fn register_user(
     }
 }
 
-pub async fn register_page(State(state): State<AppState>) -> impl IntoResponse {
+pub async fn register_page(State(state): State<AppState>) -> AppResult<Response> {
     render_template(RegisterTemplate {
         title: "Register",
         favicon: "register-icon.png",
@@ -133,7 +124,7 @@ pub async fn login_page(State(state): State<AppState>) -> impl IntoResponse {
 ///
 /// # Panics
 /// This function will panic if the template rendering fails.
-pub async fn food(State(app_state): State<AppState>) -> impl IntoResponse {
+pub async fn food(State(app_state): State<AppState>) -> AppResult<Response> {
     render_template(FoodTemplate {
         title: "Food",
         favicon: "food-icon.png",
@@ -145,14 +136,14 @@ pub async fn food(State(app_state): State<AppState>) -> impl IntoResponse {
 pub async fn food_detail(
     Path(slug): Path<String>,
     State(state): State<AppState>,
-) -> impl IntoResponse {
-    /*
-    let food = state.food_data.iter().find(|f| f.slug == slug)
-    .ok_or(AppError::NotFound)?;
-    */
-    let Some(food) = state.ctx.content.food_data.iter().find(|f| f.slug == slug) else {
-        return StatusCode::NOT_FOUND.into_response();
-    };
+) -> AppResult<Response> {
+    let food = state
+        .ctx
+        .content
+        .food_data
+        .iter()
+        .find(|f| f.slug == slug)
+        .ok_or(AppError::NotFound)?;
 
     render_template(FoodDetailTemplate {
         title: food.title.to_string(),
@@ -165,7 +156,7 @@ pub async fn food_detail(
 /// Renders the resume page.
 /// # Panics
 /// This function will panic if the template rendering fails.
-pub async fn resume(State(app_state): State<AppState>) -> impl IntoResponse {
+pub async fn resume(State(app_state): State<AppState>) -> AppResult<Response> {
     render_template(ResumeTemplate {
         title: "Resume",
         favicon: "resume-icon.png",
@@ -187,23 +178,21 @@ pub async fn health() -> Json<HealthResponse> {
 /// Renders the blog page.
 /// # Panics
 /// This function will panic if the template rendering fails.
-pub async fn blog(State(app_state): State<AppState>) -> Result<impl IntoResponse, StatusCode> {
-    let posts = list_posts(&app_state.ctx.services.db)
-        .await
-        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+pub async fn blog(State(app_state): State<AppState>) -> AppResult<Response> {
+    let posts = list_posts(&app_state.ctx.services.db).await?;
 
-    Ok(render_template(BlogTemplate {
+    render_template(BlogTemplate {
         title: "Blog",
         favicon: "blog-icon.png",
         assets: app_state.ctx.content.assets.clone(),
         posts,
-    }))
+    })
 }
 
 /// Renders the contact page.
 /// # Panics
 /// This function will panic if the template rendering fails.
-pub async fn contact(State(app_state): State<AppState>) -> impl IntoResponse {
+pub async fn contact(State(app_state): State<AppState>) -> AppResult<Response> {
     render_template(ContactTemplate {
         title: "Contact",
         favicon: "contact-icon.png",
@@ -214,7 +203,7 @@ pub async fn contact(State(app_state): State<AppState>) -> impl IntoResponse {
 /// Renders the assets page.
 /// # Panics
 /// This function will panic if the template rendering fails.
-pub async fn assets(State(app_state): State<AppState>) -> impl IntoResponse {
+pub async fn assets(State(app_state): State<AppState>) -> AppResult<Response> {
     render_template(AssetsTemplate {
         title: "Assets",
         favicon: "assets-icon.png",

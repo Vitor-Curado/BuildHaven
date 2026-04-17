@@ -1,35 +1,10 @@
-use buildhaven::{config::Config, pool::create_pool, router::app, state::AppState};
+use buildhaven::{
+    config::Config, pool::create_pool, router::app, shutdown::graceful_shutdown_signal,
+    state::AppState,
+};
 use dotenvy::dotenv;
 use tokio::net::TcpListener;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
-
-async fn shutdown_signal() {
-    let ctrl_c = async {
-        tokio::signal::ctrl_c()
-            .await
-            .expect("Failed to install Ctrl+C handler");
-    };
-
-    #[cfg(unix)]
-    let terminate = async {
-        use tokio::signal::unix::{SignalKind, signal};
-
-        signal(SignalKind::terminate())
-            .expect("Failed to install SIGTERM handler")
-            .recv()
-            .await;
-    };
-
-    #[cfg(not(unix))]
-    let terminate = std::future::pending::<()>();
-
-    tokio::select! {
-        _ = ctrl_c => {},
-        _ = terminate => {},
-    }
-
-    tracing::info!("Shutdown signal received");
-}
 
 #[tokio::main]
 async fn main() {
@@ -51,14 +26,13 @@ async fn main() {
     let listener = TcpListener::bind(("0.0.0.0", port))
         .await
         .expect("Failed to bind TCP listener");
-    // let listener = TcpListener::bind("0.0.0.0:3000").await.unwrap();
     tracing::info!(
         "Server listening on {}",
         listener.local_addr().expect("Failed to get local address")
     );
 
     if let Err(err) = axum::serve(listener, app)
-        .with_graceful_shutdown(shutdown_signal())
+        .with_graceful_shutdown(graceful_shutdown_signal())
         .await
     {
         tracing::error!("Server error: {}", err);

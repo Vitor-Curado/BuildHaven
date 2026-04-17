@@ -15,9 +15,15 @@ pub enum AppError {
     #[error("Resource not found")]
     NotFound,
 
+    #[error("Authentication error: unauthorized")]
+    Unauthorized,
+
     #[error("Internal server error")]
-    Internal,
+    Internal
 }
+
+// Type alias for convenience
+pub type AppResult<T> = Result<T, AppError>;
 
 impl IntoResponse for AppError {
     fn into_response(self) -> Response {
@@ -25,6 +31,7 @@ impl IntoResponse for AppError {
             AppError::Database(_) => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::Template(_) => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::NotFound => StatusCode::NOT_FOUND,
+            AppError::Unauthorized => StatusCode::UNAUTHORIZED,
             AppError::Internal => StatusCode::INTERNAL_SERVER_ERROR,
         };
 

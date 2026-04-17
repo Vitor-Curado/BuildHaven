@@ -1,7 +1,4 @@
-use crate::{
-    assets::Assets,
-    models::{Food},
-};
+use crate::{assets::Assets, models::Food};
 
 use std::sync::Arc;
 
