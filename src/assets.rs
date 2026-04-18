@@ -1,3 +1,9 @@
+// Note: we are explicitly not minifying.
+// This is because the CSS/JS content is already
+// very small and minification would not save much space,
+// but it would add unnecessary complexity.
+// Also: cleaning dist is a design choice.
+
 use crate::error::AppError;
 use serde::Serialize;
 use sha2::{Digest, Sha256};
@@ -20,17 +26,15 @@ pub fn build_assets() -> std::io::Result<()> {
 
     // CSS
     let css = bundle_css()?;
-    let css_minified = &css;
-    let css_hash = hash_content(&css_minified);
+    let css_hash = hash_content(&css);
     let css_filename = format!("index-{}.css", &css_hash[..12]);
-    fs::write(format!("static/dist/{css_filename}"), css_minified)?;
+    fs::write(format!("static/dist/{css_filename}"), css)?;
 
     // JS
     let js = bundle_js()?;
-    let js_minified = &js;
-    let js_hash = hash_content(&js_minified);
+    let js_hash = hash_content(&js);
     let js_filename = format!("app-{}.js", &js_hash[..12]);
-    fs::write(format!("static/dist/{}", js_filename), js_minified)?;
+    fs::write(format!("static/dist/{}", js_filename), js)?;
 
     // Manifest
     let mut manifest = HashMap::new();

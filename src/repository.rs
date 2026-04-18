@@ -35,6 +35,26 @@ pub async fn get_all_posts(pool: &PgPool) -> Result<Vec<Post>, sqlx::Error> {
     .await
 }
 
+pub async fn get_posts_paginated(
+    pool: &PgPool,
+    limit: i64,
+    offset: i64,
+) -> Result<Vec<Post>, sqlx::Error> {
+    sqlx::query_as!(
+        Post,
+        r#"
+        SELECT id, title, content, created_at
+        FROM posts
+        ORDER BY created_at DESC
+        LIMIT $1 OFFSET $2
+        "#,
+        limit,
+        offset
+    )
+    .fetch_all(pool)
+    .await
+}
+
 pub async fn get_post_by_id(pool: &PgPool, post_id: Uuid) -> Result<Option<Post>, sqlx::Error> {
     let post = sqlx::query_as!(
         Post,

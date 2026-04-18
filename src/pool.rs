@@ -1,7 +1,7 @@
 use sqlx::{PgPool, postgres::PgPoolOptions};
 use std::time::Duration;
 
-pub async fn create_pool(database_url: &str) -> PgPool {
+pub async fn create_pool(database_url: &str) -> Result<PgPool, sqlx::Error> {
     PgPoolOptions::new()
         .max_connections(20)
         .min_connections(5)
@@ -9,5 +9,4 @@ pub async fn create_pool(database_url: &str) -> PgPool {
         .acquire_timeout(Duration::from_secs(5))
         .connect(database_url)
         .await
-        .expect("Failed to create database connection pool")
 }

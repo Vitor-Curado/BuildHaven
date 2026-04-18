@@ -1,6 +1,7 @@
 use crate::{auth::AuthService, models::Post, repository};
 use sqlx::PgPool;
 
+#[derive(Clone)]
 pub struct Services {
     pub db: PgPool,
     pub auth: AuthService,

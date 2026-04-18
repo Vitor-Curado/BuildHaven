@@ -2,6 +2,7 @@ use crate::{assets::Assets, models::Food};
 
 use std::sync::Arc;
 
+#[derive(Clone)]
 pub struct Content {
     //pub posts: Vec<Post>,
     pub assets: Arc<Assets>,

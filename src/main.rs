@@ -7,7 +7,7 @@ use tokio::net::TcpListener;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
 
     tracing_subscriber::registry()
@@ -16,7 +16,7 @@ async fn main() {
         .init();
 
     let config = Config::from_env();
-    let db_pool = create_pool(&config.database_url).await;
+    let db_pool = create_pool(&config.database_url).await?;
     let state = AppState::new(db_pool, config).expect("Failed to initialize AppState");
 
     let port = state.ctx.config.port;
@@ -39,4 +39,6 @@ async fn main() {
     }
 
     tracing::info!("Server stopped");
+
+    Ok(())
 }

@@ -8,7 +8,7 @@ pub fn apply_security_headers(router: Router) -> Router {
     router
         .layer(SetResponseHeaderLayer::if_not_present(
             HeaderName::from_static("cache-control"),
-            HeaderValue::from_static("public, max-age=86400"),
+            HeaderValue::from_static("public, max-age=31536000, immutable"),
         ))
         .layer(SetResponseHeaderLayer::if_not_present(
             HeaderName::from_static("x-frame-options"),

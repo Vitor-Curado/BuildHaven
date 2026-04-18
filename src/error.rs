@@ -19,7 +19,7 @@ pub enum AppError {
     Unauthorized,
 
     #[error("Internal server error")]
-    Internal
+    Internal,
 }
 
 // Type alias for convenience

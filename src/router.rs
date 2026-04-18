@@ -14,10 +14,10 @@ pub fn app(state: AppState) -> Router {
         .nest("/", public_routes())
         .nest_service("/static", static_service)
         .layer(CompressionLayer::new().br(true).gzip(true).deflate(true))
-        .with_state(state);
+        .with_state(state.clone());
 
     let router = apply_security_headers(router);
     let router = apply_logging(router);
-    let router = apply_cors(router);
+    let router = apply_cors(router, &state.ctx.config);
     apply_rate_limiting(router)
 }

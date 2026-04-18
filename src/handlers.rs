@@ -21,10 +21,17 @@ use axum::{
 
 use askama::Template;
 use axum_extra::extract::cookie::{Cookie, CookieJar, SameSite};
+use std::time::Instant;
 
 #[allow(clippy::needless_pass_by_value)]
 pub fn render_template<T: Template>(t: T) -> AppResult<Response> {
-    let html = t.render()?;
+    // Timing instrumentation to measure render cost
+    let start = Instant::now();
+    let html = t.render().map_err(|e| {
+        tracing::error!("Template render failed {:?}", e);
+        e
+    })?;
+    tracing::debug!("Template render took {:?}", start.elapsed());
     Ok(Html(html).into_response())
 }
 
@@ -101,7 +108,8 @@ pub async fn login_user(
         .path("/")
         .http_only(true)
         .secure(true)
-        .same_site(SameSite::Lax)
+        .same_site(SameSite::Strict)
+        .domain("buildhaven.cc")
         .max_age(time::Duration::hours(24))
         .build();
 

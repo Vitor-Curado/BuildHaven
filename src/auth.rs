@@ -1,5 +1,7 @@
 use crate::{
     error::{AppError, AppResult},
+    repository::find_user_by_id,
+    session::get_session_by_id,
     state::AppState,
 };
 
@@ -11,6 +13,7 @@ use axum::{body::Body, extract::State, http::Request, middleware::Next, response
 use axum_extra::extract::cookie::CookieJar;
 use rand_core::OsRng;
 
+#[derive(Clone)]
 pub struct AuthService {
     argon2: Argon2<'static>,
 }
@@ -46,19 +49,22 @@ impl AuthService {
 pub async fn require_auth(
     State(state): State<AppState>,
     jar: CookieJar,
-    request: Request<Body>,
+    mut request: Request<Body>,
     next: Next,
 ) -> AppResult<Response> {
-    if let Some(token) = jar.get("auth_token") {
-        if state
-            .ctx
-            .services
-            .auth
-            .verify_password(token.value(), "expected_hash")
-        {
-            return Ok(next.run(request).await);
-        }
-    }
+    let cookie = jar.get("session_id").ok_or(AppError::Unauthorized)?;
 
-    Err(AppError::Unauthorized)
+    let session_id = cookie.value().parse().map_err(|_| AppError::Unauthorized)?;
+
+    let session = get_session_by_id(&state.ctx.services.db, session_id)
+        .await?
+        .ok_or(AppError::Unauthorized)?;
+
+    let user = find_user_by_id(&state.ctx.services.db, session.user_id)
+        .await?
+        .ok_or(AppError::Unauthorized)?;
+
+    request.extensions_mut().insert(user);
+
+    Ok(next.run(request).await)
 }
