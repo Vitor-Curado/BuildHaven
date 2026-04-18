@@ -36,6 +36,7 @@ password-hash = "0.5"
 rand_core = "0.6"
 time = "0.3.47"
 validator = "0.20.0"
+num_cpus = "1.17.0"
 
 [dev-dependencies]
 tower = { version = "0.4", features = ["util"] }
