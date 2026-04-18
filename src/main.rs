@@ -16,19 +16,25 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .init();
 
     let config = Config::from_env();
+    println!("Resolved environment: {:?}", &config.environment);
     let db_pool = create_pool(&config).await?;
     let state = AppState::new(db_pool, config).expect("Failed to initialize AppState");
 
     let port = state.ctx.config.port;
 
     let app = app(state);
+    println!("APP_ENV raw: {:?}", std::env::var("APP_ENV"));
 
     let listener = TcpListener::bind(("0.0.0.0", port))
         .await
         .expect("Failed to bind TCP listener");
+
+    let addr = listener.local_addr().expect("Failed to get local address");
+
     tracing::info!(
-        "Server listening on {}",
-        listener.local_addr().expect("Failed to get local address")
+        port = %port,
+        %addr,
+        "Server listening"
     );
 
     if let Err(err) = axum::serve(listener, app)

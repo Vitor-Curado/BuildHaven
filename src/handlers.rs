@@ -1,15 +1,8 @@
 use crate::{
-    api::HealthResponse,
-    error::{AppError, AppResult},
-    models::{LoginForm, NewUser, RegisterForm},
-    repository::{create_user, find_user_by_email},
-    services::list_posts,
-    session::create_session,
-    state::AppState,
-    templates::{
+    api::HealthResponse, config::Environment, error::{AppError, AppResult}, models::{LoginForm, NewUser, RegisterForm}, repository::{create_user, find_user_by_email}, services::list_posts, session::create_session, state::AppState, templates::{
         AssetsTemplate, BlogTemplate, ContactTemplate, FoodDetailTemplate, FoodTemplate,
         IndexTemplate, LoginTemplate, RegisterTemplate, ResumeTemplate,
-    },
+    }
 };
 
 use axum::{
@@ -107,9 +100,9 @@ pub async fn login_user(
     let cookie = Cookie::build(("session_id", session.id.to_string()))
         .path("/")
         .http_only(true)
-        .secure(true)
+        .secure(matches!(state.ctx.config.environment, Environment::Production))
         .same_site(SameSite::Strict)
-        .domain("buildhaven.cc")
+        .domain(state.ctx.config.cookie_domain.clone())
         .max_age(time::Duration::hours(24))
         .build();
 

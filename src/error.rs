@@ -35,7 +35,7 @@ impl IntoResponse for AppError {
             AppError::Internal => StatusCode::INTERNAL_SERVER_ERROR,
         };
 
-        tracing::error!("Application error: {:?}", self);
+        tracing::error!("Application error: {}", self);
 
         let message = match self {
             AppError::NotFound => "Not found",

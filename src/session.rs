@@ -41,3 +41,41 @@ pub async fn get_session_by_id(
 
     Ok(record)
 }
+
+pub async fn delete_session(pool: &PgPool, session_id: Uuid) -> Result<(), sqlx::Error> {
+    sqlx::query!("DELETE FROM sessions WHERE id = $1", session_id)
+        .execute(pool)
+        .await?;
+
+    Ok(())
+}
+
+pub async fn delete_sessions_by_user_id(pool: &PgPool, user_id: Uuid) -> Result<(), sqlx::Error> {
+    sqlx::query!("DELETE FROM sessions WHERE user_id = $1", user_id)
+        .execute(pool)
+        .await?;
+
+    Ok(())
+}
+
+pub async fn delete_expired_sessions(pool: &PgPool) -> Result<(), sqlx::Error> {
+    sqlx::query!("DELETE FROM sessions WHERE expires_at < NOW()")
+        .execute(pool)
+        .await?;
+
+    Ok(())
+}
+
+pub async fn refresh_session_expiry(pool: &PgPool, session_id: Uuid) -> Result<(), sqlx::Error> {
+    let new_expires_at = Utc::now() + Duration::hours(24);
+
+    sqlx::query!(
+        "UPDATE sessions SET expires_at = $1 WHERE id = $2",
+        new_expires_at,
+        session_id
+    )
+    .execute(pool)
+    .await?;
+
+    Ok(())
+}
