@@ -13,7 +13,7 @@ serde_json = "1.0"
 tower-http = { version = "0.6.8", features = ["fs", "trace", "set-header", "compression-gzip", "cors", "limit", "compression-br", "compression-deflate"] }
 tower_governor = { version = "0.3", features = ["axum"] }
 tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 tokio = { version = "1", features = ["full"] }
 pulldown-cmark = "0.13.0"
 sha2 = "0.10.9"

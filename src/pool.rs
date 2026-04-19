@@ -4,11 +4,11 @@ use std::time::Duration;
 
 pub async fn create_pool(config: &Config) -> Result<PgPool, sqlx::Error> {
     PgPoolOptions::new()
-        .max_connections(config.db_max_connections)
-        .min_connections(config.db_min_connections)
-        .idle_timeout(Duration::from_secs(300))
-        .acquire_timeout(Duration::from_secs(5))
-        .max_lifetime(Duration::from_secs(1800))
-        .connect(&config.database_url)
+        .max_connections(config.database.max_connections)
+        .min_connections(config.database.min_connections)
+        .idle_timeout(Duration::from_secs(config.database.idle_timeout_secs))
+        .acquire_timeout(Duration::from_secs(config.database.acquire_timeout_secs))
+        .max_lifetime(Duration::from_secs(config.database.max_lifetime_secs))
+        .connect(&config.database.url)
         .await
 }

@@ -1,26 +1,22 @@
 use buildhaven::{
     config::Config, pool::create_pool, router::app, shutdown::graceful_shutdown_signal,
-    state::AppState,
+    state::AppState, telemetry::init_tracing,
 };
 use dotenvy::dotenv;
 use tokio::net::TcpListener;
-use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
 
-    tracing_subscriber::registry()
-        .with(tracing_subscriber::EnvFilter::from_default_env())
-        .with(tracing_subscriber::fmt::layer())
-        .init();
+    init_tracing();
 
     let config = Config::from_env();
-    println!("Resolved environment: {:?}", &config.environment);
+    println!("Resolved environment: {:?}", &config.app.environment);
     let db_pool = create_pool(&config).await?;
     let state = AppState::new(db_pool, config).expect("Failed to initialize AppState");
 
-    let port = state.ctx.config.port;
+    let port = state.ctx.config.app.port;
 
     let app = app(state);
     println!("APP_ENV raw: {:?}", std::env::var("APP_ENV"));

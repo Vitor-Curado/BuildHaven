@@ -109,11 +109,11 @@ pub async fn login_user(
         .path("/")
         .http_only(true)
         .secure(matches!(
-            state.ctx.config.environment,
+            state.ctx.config.app.environment,
             Environment::Production
         ))
         .same_site(SameSite::Strict)
-        .domain(state.ctx.config.cookie_domain.clone())
+        .domain(state.ctx.config.app.cookie_domain.clone())
         .max_age(time::Duration::hours(24))
         .build();
 

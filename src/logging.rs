@@ -7,13 +7,13 @@ use tower_http::{
 use tracing::Level;
 
 pub fn apply_logging(router: Router, config: &Config) -> Router {
-    let level = match config.environment {
+    let level = match config.app.environment {
         Environment::Development => Level::DEBUG,
         Environment::Production => Level::INFO,
         Environment::Benchmark => Level::ERROR,
     };
     router
-        .layer(RequestBodyLimitLayer::new(config.max_request_body_size))
+        .layer(RequestBodyLimitLayer::new(config.app.max_request_body_size))
         .layer(
             TraceLayer::new_for_http()
                 .on_request(DefaultOnRequest::new().level(level))

@@ -1,14 +1,21 @@
+use crate::config::Config;
 use axum::{
     Router,
     http::header::{HeaderName, HeaderValue},
 };
 use tower_http::set_header::SetResponseHeaderLayer;
 
-pub fn apply_security_headers(router: Router) -> Router {
-    router
+pub fn apply_security_headers(router: Router, config: &Config) -> Router {
+    let cache_control = HeaderValue::from_str(&config.security.cache_control)
+        .expect("Invalid CACHE_CONTROL header");
+
+    let csp = HeaderValue::from_str(&config.security.content_security_policy)
+        .expect("Invalid CONTENT_SECURITY_POLICY header");
+
+    let mut router = router
         .layer(SetResponseHeaderLayer::if_not_present(
             HeaderName::from_static("cache-control"),
-            HeaderValue::from_static("public, max-age=31536000, immutable"),
+            cache_control,
         ))
         .layer(SetResponseHeaderLayer::if_not_present(
             HeaderName::from_static("x-frame-options"),
@@ -24,13 +31,7 @@ pub fn apply_security_headers(router: Router) -> Router {
         ))
         .layer(SetResponseHeaderLayer::if_not_present(
             HeaderName::from_static("content-security-policy"),
-            HeaderValue::from_static(
-                "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self';"
-            ),
-        ))
-        .layer(SetResponseHeaderLayer::if_not_present(
-            HeaderName::from_static("strict-transport-security"),
-            HeaderValue::from_static("max-age=31536000; includeSubDomains"),
+            csp,
         ))
         .layer(SetResponseHeaderLayer::if_not_present(
             HeaderName::from_static("permissions-policy"),
@@ -45,5 +46,15 @@ pub fn apply_security_headers(router: Router) -> Router {
         .layer(SetResponseHeaderLayer::if_not_present(
             HeaderName::from_static("x-xss-protection"),
             HeaderValue::from_static("1; mode=block"),
-        ))
+        ));
+
+    // HSTS only when enabled
+    if config.security.hsts_enabled {
+        router = router.layer(SetResponseHeaderLayer::if_not_present(
+            HeaderName::from_static("strict-transport-security"),
+            HeaderValue::from_static("max-age=31536000; includeSubDomains"),
+        ));
+    }
+
+    router
 }
