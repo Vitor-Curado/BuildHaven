@@ -1,6 +1,7 @@
 pub mod api;
 pub mod assets;
 pub mod auth;
+pub mod bootstrap;
 pub mod config;
 pub mod content;
 pub mod context;

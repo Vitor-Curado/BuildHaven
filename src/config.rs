@@ -189,11 +189,28 @@ impl SecurityConfig {
 }
 
 #[derive(Clone)]
+pub struct SessionConfig {
+    pub duration_hours: i64,
+}
+
+impl SessionConfig {
+    pub fn from_env() -> Self {
+        let duration_hours = std::env::var("SESSION_DURATION_HOURS")
+            .ok()
+            .and_then(|v| v.parse().ok())
+            .unwrap_or(24);
+
+        Self { duration_hours }
+    }
+}
+
+#[derive(Clone)]
 pub struct Config {
     pub app: AppConfig,
     pub database: DatabaseConfig,
     pub cors: CorsConfig,
     pub rate_limit: RateLimitConfig,
+    pub session: SessionConfig,
     pub security: SecurityConfig,
 }
 
@@ -212,6 +229,7 @@ impl Config {
             database: DatabaseConfig::from_env(&app.environment),
             cors: CorsConfig::from_env(),
             rate_limit: RateLimitConfig::from_env(),
+            session: SessionConfig::from_env(),
             security: SecurityConfig::from_env(),
             app,
         }
