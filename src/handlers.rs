@@ -29,7 +29,10 @@ pub fn render_template<T: Template>(t: T) -> AppResult<Response> {
     // Timing instrumentation to measure render cost
     let start = Instant::now();
     let html = t.render().map_err(|e| {
-        tracing::error!("Template render failed {:?}", e);
+        tracing::error!(
+            error = ?e,
+            template = std::any::type_name::<T>(),
+            "Template render failed");
         e
     })?;
     tracing::debug!("Template render took {:?}", start.elapsed());
@@ -97,7 +100,7 @@ pub async fn login_user(
     }
 
     // If correct → create session
-    let session = match create_session(&state.ctx.services.db, user.id).await {
+    let session = match create_session(&state.ctx.services.db, user.id, &state.ctx.config).await {
         Ok(session) => session,
         Err(_) => {
             return (jar, Redirect::to("/login"));

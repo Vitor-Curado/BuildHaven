@@ -12,6 +12,15 @@ pub enum AppError {
     #[error("Template error")]
     Template(#[from] askama::Error),
 
+    #[error("I/O error")]
+    Io(#[from] std::io::Error),
+
+    #[error("Generic error")]
+    Other(#[from] Box<dyn std::error::Error + Send + Sync>),
+
+    //#[error("Server error")]
+    //Hyper(#[from] hyper::Error),
+
     #[error("Resource not found")]
     NotFound,
 
@@ -28,17 +37,21 @@ pub type AppResult<T> = Result<T, AppError>;
 impl IntoResponse for AppError {
     fn into_response(self) -> Response {
         let status = match self {
-            AppError::Database(_) => StatusCode::INTERNAL_SERVER_ERROR,
-            AppError::Template(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            AppError::Database(_)
+            | AppError::Template(_)
+            | AppError::Io(_)
+            | AppError::Other(_)
+            | AppError::Internal => StatusCode::INTERNAL_SERVER_ERROR,
+
             AppError::NotFound => StatusCode::NOT_FOUND,
             AppError::Unauthorized => StatusCode::UNAUTHORIZED,
-            AppError::Internal => StatusCode::INTERNAL_SERVER_ERROR,
         };
 
         tracing::error!("Application error: {}", self);
 
         let message = match self {
             AppError::NotFound => "Not found",
+            AppError::Unauthorized => "Unauthorized",
             _ => "Internal server error",
         };
 

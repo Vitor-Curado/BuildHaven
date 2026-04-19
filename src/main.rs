@@ -1,13 +1,11 @@
 use buildhaven::{
-    bootstrap::build_listener_and_app,
-    shutdown::graceful_shutdown_signal,
-    telemetry::init_tracing,
+    bootstrap::build_listener_and_app, error::AppError, shutdown::graceful_shutdown_signal, telemetry::init_tracing
 };
 
 use dotenvy::dotenv;
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() -> Result<(), AppError> {
     dotenv().ok();
 
     init_tracing();
