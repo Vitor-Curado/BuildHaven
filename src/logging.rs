@@ -1,6 +1,9 @@
 use crate::config::{Config, Environment};
 use axum::Router;
-use tower_http::{limit::RequestBodyLimitLayer, trace::{DefaultOnRequest, DefaultOnResponse, TraceLayer}};
+use tower_http::{
+    limit::RequestBodyLimitLayer,
+    trace::{DefaultOnRequest, DefaultOnResponse, TraceLayer},
+};
 use tracing::Level;
 
 pub fn apply_logging(router: Router, config: &Config) -> Router {

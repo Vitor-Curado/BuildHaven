@@ -29,6 +29,7 @@ rand_core = "0.6"
 time = "0.3.47"
 validator = "0.20.0"
 num_cpus = "1.17.0"
+tower = "0.4"
 
 [dev-dependencies]
 tower = { version = "0.4", features = ["util"] }

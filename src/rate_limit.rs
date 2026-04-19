@@ -2,6 +2,7 @@ use crate::config::{Config, Environment};
 use axum::Router;
 
 pub fn apply_rate_limiting(router: Router, config: &Config) -> Router {
+    // Box::leak() is required to satisfy 'static lifetime
     match config.environment {
         Environment::Production => {
             use tower_governor::{
@@ -27,7 +28,6 @@ pub fn apply_rate_limiting(router: Router, config: &Config) -> Router {
                 GovernorLayer, governor::GovernorConfigBuilder, key_extractor::GlobalKeyExtractor,
             };
 
-            // required to satisfy 'static lifetime
             let governor_config = Box::leak(Box::new(
                 GovernorConfigBuilder::default()
                     .per_second(20)
