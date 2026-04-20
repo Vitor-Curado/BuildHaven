@@ -79,3 +79,5 @@ pub async fn refresh_session_expiry(pool: &PgPool, session_id: Uuid) -> Result<(
 
     Ok(())
 }
+
+// Todo: Add functions for session management, such as refreshing expiry, deleting sessions by user ID, etc.

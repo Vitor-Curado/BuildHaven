@@ -22,3 +22,8 @@ pub fn public_routes() -> Router<AppState> {
         .route("/food/:slug", get(food_detail))
         .route("/assets", get(assets))
 }
+
+// Todo: Add authenticated routes here in the future
+pub fn protected_routes() -> Router<AppState> {
+    Router::new()
+}
