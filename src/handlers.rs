@@ -8,7 +8,8 @@ use crate::{
     session::create_session,
     state::AppState,
     templates::{
-        AssetsTemplate, BaseTemplateContext, BlogTemplate, ContactTemplate, FoodDetailTemplate, FoodTemplate, IndexTemplate, LoginTemplate, RegisterTemplate, ResumeTemplate
+        AssetsTemplate, BaseTemplateContext, BlogTemplate, ContactTemplate, FoodDetailTemplate,
+        FoodTemplate, IndexTemplate, LoginTemplate, RegisterTemplate, ResumeTemplate,
     },
 };
 
@@ -75,7 +76,11 @@ pub async fn register_user(
 
 pub async fn register_page(State(state): State<AppState>) -> AppResult<Response> {
     render_template(RegisterTemplate {
-        base: BaseTemplateContext::new("Register", "register-icon.png", state.ctx.content.assets.clone())
+        base: BaseTemplateContext::new(
+            "Register",
+            "register-icon.png",
+            state.ctx.content.assets.clone(),
+        ),
     })
 }
 
@@ -85,10 +90,10 @@ pub async fn login_user(
     Form(form): Form<LoginForm>,
 ) -> impl IntoResponse {
     // Find user in DB
-    let user = find_user_by_email(
-        &state.ctx.services.db, 
-        &form.email
-    ).await.ok().flatten();
+    let user = find_user_by_email(&state.ctx.services.db, &form.email)
+        .await
+        .ok()
+        .flatten();
 
     let hash = user
         .as_ref()
@@ -102,7 +107,7 @@ pub async fn login_user(
         .auth
         .verify_password(&form.password, hash);
 
-    if !valid || user.is_none(){
+    if !valid || user.is_none() {
         return (jar, Redirect::to("/login"));
     }
 
@@ -116,9 +121,7 @@ pub async fn login_user(
             let elapsed = start.elapsed();
 
             if elapsed < Duration::from_millis(150) {
-                tokio::time::sleep(
-                    Duration::from_millis(150) - elapsed
-                ).await;
+                tokio::time::sleep(Duration::from_millis(150) - elapsed).await;
             }
             return (jar, Redirect::to("/login"));
         }
@@ -146,11 +149,7 @@ pub async fn login_user(
 
 pub async fn login_page(State(state): State<AppState>) -> impl IntoResponse {
     render_template(LoginTemplate {
-        base: BaseTemplateContext::new(
-            "Login",
-            "login-icon.png",
-            state.ctx.content.assets.clone(),
-        )
+        base: BaseTemplateContext::new("Login", "login-icon.png", state.ctx.content.assets.clone()),
     })
 }
 
@@ -200,7 +199,7 @@ pub async fn resume(State(app_state): State<AppState>) -> AppResult<Response> {
             "Resume",
             "resume-icon.png",
             app_state.ctx.content.assets.clone(),
-        )
+        ),
     })
 }
 
@@ -240,7 +239,7 @@ pub async fn contact(State(app_state): State<AppState>) -> AppResult<Response> {
             "Contact",
             "contact-icon.png",
             app_state.ctx.content.assets.clone(),
-        )
+        ),
     })
 }
 
@@ -253,6 +252,6 @@ pub async fn assets(State(app_state): State<AppState>) -> AppResult<Response> {
             "Assets",
             "assets-icon.png",
             app_state.ctx.content.assets.clone(),
-        )
+        ),
     })
 }

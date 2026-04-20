@@ -13,11 +13,7 @@ pub struct BaseTemplateContext {
 }
 
 impl BaseTemplateContext {
-    pub fn new(
-        title: impl Into<String>,
-        favicon: &'static str,
-        assets: Arc<Assets>,
-    ) -> Self {
+    pub fn new(title: impl Into<String>, favicon: &'static str, assets: Arc<Assets>) -> Self {
         Self {
             title: title.into(),
             favicon,
@@ -30,25 +26,25 @@ impl BaseTemplateContext {
 #[template(path = "pages/index.html", escape = "none")]
 pub struct IndexTemplate {
     pub base: BaseTemplateContext,
-    pub readme_html: Arc<String>
+    pub readme_html: Arc<String>,
 }
 
 #[derive(Template)]
 #[template(path = "pages/register.html")]
 pub struct RegisterTemplate {
-    pub base: BaseTemplateContext
+    pub base: BaseTemplateContext,
 }
 
 #[derive(Template)]
 #[template(path = "pages/login.html")]
 pub struct LoginTemplate {
-    pub base: BaseTemplateContext
+    pub base: BaseTemplateContext,
 }
 
 #[derive(Template)]
 #[template(path = "pages/resume.html")]
 pub struct ResumeTemplate {
-    pub base: BaseTemplateContext
+    pub base: BaseTemplateContext,
 }
 
 #[derive(Template)]

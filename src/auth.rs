@@ -68,3 +68,9 @@ pub async fn require_auth(
 
     Ok(next.run(request).await)
 }
+
+impl Default for AuthService {
+    fn default() -> Self {
+        Self::new()
+    }
+}

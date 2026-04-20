@@ -1,0 +1,24 @@
+==============================
+Benchmark Timestamp: 2026-04-20_09-13-54
+URL: http://127.0.0.1:3000/
+Threads: 4
+Connections: 1000
+Duration: 30s
+==============================
+
+Running 30s test @ http://127.0.0.1:3000/
+  4 threads and 1000 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    26.04ms   66.75ms   1.74s    99.10%
+    Req/Sec    12.02k     1.91k   16.39k    74.50%
+  Latency Distribution
+     50%   18.76ms
+     75%   29.97ms
+     90%   40.38ms
+     99%   82.09ms
+  1436787 requests in 30.07s, 10.74GB read
+Requests/sec:  47776.54
+Transfer/sec:    365.83MB
+
+==============================
+

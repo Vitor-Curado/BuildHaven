@@ -11,7 +11,6 @@ use crate::{
 use axum::Router;
 use tower_http::{compression::CompressionLayer, services::ServeDir};
 
-#[must_use]
 pub fn app(state: AppState) -> Router {
     let config = &state.ctx.config;
     let static_service = ServeDir::new("static")
@@ -37,6 +36,6 @@ pub fn app(state: AppState) -> Router {
         router = apply_rate_limiting(router, config);
     }
 
-    let router = apply_cors(router, config);
+    router = apply_cors(router, config);
     router
 }

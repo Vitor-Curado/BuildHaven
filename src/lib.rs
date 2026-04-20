@@ -8,9 +8,11 @@ pub mod context;
 pub mod cors;
 pub mod error;
 pub mod handlers;
+pub mod jobs;
 // lib.rs
 pub mod logging;
 // main.rs
+pub mod metrics;
 pub mod middleware;
 pub mod models;
 pub mod pool;

@@ -4,8 +4,8 @@ set -euo pipefail
 
 URL="${1:-http://127.0.0.1:3000/}"
 DURATION="${DURATION:-30s}"
-THREADS="${THREADS:-4}"
-CONNECTIONS="${CONNECTIONS:-100}"
+THREADS="${THREADS:-16}"
+CONNECTIONS="${CONNECTIONS:-1000}"
 
 TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
 

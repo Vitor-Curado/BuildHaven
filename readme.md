@@ -1,7 +1,7 @@
 # 📘 Victor's Personal Website
 
-**Version:** 0.4.1  
-**Last updated:** March 30, 2026  
+**Version:** 0.4.2  
+**Last updated:** April 20, 2026  
 
 A containerized Rust web application serving a personal website with server-side rendering, persistent storage, and a custom asset pipeline.
 
@@ -14,10 +14,16 @@ Built using modern Rust tooling and deployed on a Fedora Linux server behind Ngi
 - **Language:** Rust
 - **Framework:** Axum
 - **Templates:** Askama
+- **Reactivity:** Leptos (planned)
 - **Database:** PostgreSQL (SQLx)
 - **Runtime:** Tokio
 - **Deployment:** Podman + systemd
+- **CI/CD:** Local woodpecker agent + server managed by systemd, tunneled to a static IP link via Cloudfare Tunnel
 - **Reverse Proxy:** Nginx
+- **Observability:** Prometheus (current, to be replaced by VictoriaMetrics) / Grafana
+- **Caching:** Dragonfly (to be implemented)
+- **Object storage:** Cloudfare R2 (planned)
+- **Content Delivery Network:** Cloudfare CDN (planned)
 
 ---
 

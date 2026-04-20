@@ -20,7 +20,6 @@ pub enum AppError {
 
     //#[error("Server error")]
     //Hyper(#[from] hyper::Error),
-
     #[error("Resource not found")]
     NotFound,
 

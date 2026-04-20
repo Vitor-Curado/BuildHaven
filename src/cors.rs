@@ -6,7 +6,6 @@ use axum::{
 use std::time::Duration;
 use tower_http::cors::CorsLayer;
 
-#[must_use]
 pub fn apply_cors(router: Router, config: &Config) -> Router {
     let cors = CorsLayer::new()
         .allow_origin(
