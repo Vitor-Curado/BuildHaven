@@ -8,8 +8,7 @@ use crate::{
     session::create_session,
     state::AppState,
     templates::{
-        AssetsTemplate, BlogTemplate, ContactTemplate, FoodDetailTemplate, FoodTemplate,
-        IndexTemplate, LoginTemplate, RegisterTemplate, ResumeTemplate,
+        AssetsTemplate, BaseTemplateContext, BlogTemplate, ContactTemplate, FoodDetailTemplate, FoodTemplate, IndexTemplate, LoginTemplate, RegisterTemplate, ResumeTemplate
     },
 };
 
@@ -22,7 +21,10 @@ use axum::{
 
 use askama::Template;
 use axum_extra::extract::cookie::{Cookie, CookieJar, SameSite};
-use std::time::Instant;
+use std::time::{Duration, Instant};
+
+const DUMMY_HASH: &str =
+    "$argon2id$v=19$m=19456,t=2,p=1$c29tZXNhbHQ$C5Z8YlH9l5k6n6u5W1zvQ8FJ5m0e3M3G7pT9oXk2c9Q";
 
 #[allow(clippy::needless_pass_by_value)]
 pub fn render_template<T: Template>(t: T) -> AppResult<Response> {
@@ -41,10 +43,12 @@ pub fn render_template<T: Template>(t: T) -> AppResult<Response> {
 
 pub async fn home(State(app_state): State<AppState>) -> Result<Response, AppError> {
     render_template(IndexTemplate {
-        title: "BuildHaven",
-        favicon: "home-icon.png",
+        base: BaseTemplateContext::new(
+            "BuildHaven",
+            "home-icon.png",
+            app_state.ctx.content.assets.clone(),
+        ),
         readme_html: app_state.ctx.content.readme_html.clone(),
-        assets: app_state.ctx.content.assets.clone(),
     })
 }
 
@@ -71,9 +75,7 @@ pub async fn register_user(
 
 pub async fn register_page(State(state): State<AppState>) -> AppResult<Response> {
     render_template(RegisterTemplate {
-        title: "Register",
-        favicon: "register-icon.png",
-        assets: state.ctx.content.assets.clone(),
+        base: BaseTemplateContext::new("Register", "register-icon.png", state.ctx.content.assets.clone())
     })
 }
 
@@ -83,26 +85,41 @@ pub async fn login_user(
     Form(form): Form<LoginForm>,
 ) -> impl IntoResponse {
     // Find user in DB
-    let user = match find_user_by_email(&state.ctx.services.db, &form.email).await {
-        Ok(Some(user)) => user,
-        _ => return (jar, Redirect::to("/login")),
-    };
+    let user = find_user_by_email(
+        &state.ctx.services.db, 
+        &form.email
+    ).await.ok().flatten();
+
+    let hash = user
+        .as_ref()
+        .map(|u| u.password_hash.as_str())
+        .unwrap_or(DUMMY_HASH);
 
     // Verify password
     let valid = state
         .ctx
         .services
         .auth
-        .verify_password(&form.password, &user.password_hash);
+        .verify_password(&form.password, hash);
 
-    if !valid {
+    if !valid || user.is_none(){
         return (jar, Redirect::to("/login"));
     }
+
+    let user = user.unwrap();
+    let start = Instant::now();
 
     // If correct → create session
     let session = match create_session(&state.ctx.services.db, user.id, &state.ctx.config).await {
         Ok(session) => session,
         Err(_) => {
+            let elapsed = start.elapsed();
+
+            if elapsed < Duration::from_millis(150) {
+                tokio::time::sleep(
+                    Duration::from_millis(150) - elapsed
+                ).await;
+            }
             return (jar, Redirect::to("/login"));
         }
     };
@@ -129,9 +146,11 @@ pub async fn login_user(
 
 pub async fn login_page(State(state): State<AppState>) -> impl IntoResponse {
     render_template(LoginTemplate {
-        title: "Login",
-        favicon: "login-icon.png",
-        assets: state.ctx.content.assets.clone(),
+        base: BaseTemplateContext::new(
+            "Login",
+            "login-icon.png",
+            state.ctx.content.assets.clone(),
+        )
     })
 }
 
@@ -141,10 +160,12 @@ pub async fn login_page(State(state): State<AppState>) -> impl IntoResponse {
 /// This function will panic if the template rendering fails.
 pub async fn food(State(app_state): State<AppState>) -> AppResult<Response> {
     render_template(FoodTemplate {
-        title: "Food",
-        favicon: "food-icon.png",
+        base: BaseTemplateContext::new(
+            "Food",
+            "food-icon.png",
+            app_state.ctx.content.assets.clone(),
+        ),
         foods: &app_state.ctx.content.food_data,
-        assets: app_state.ctx.content.assets.clone(),
     })
 }
 
@@ -161,10 +182,12 @@ pub async fn food_detail(
         .ok_or(AppError::NotFound)?;
 
     render_template(FoodDetailTemplate {
-        title: food.title.to_string(),
-        favicon: "food-detail-icon.png",
+        base: BaseTemplateContext::new(
+            food.title,
+            "food-icon.png",
+            state.ctx.content.assets.clone(),
+        ),
         food,
-        assets: state.ctx.content.assets.clone(),
     })
 }
 
@@ -173,9 +196,11 @@ pub async fn food_detail(
 /// This function will panic if the template rendering fails.
 pub async fn resume(State(app_state): State<AppState>) -> AppResult<Response> {
     render_template(ResumeTemplate {
-        title: "Resume",
-        favicon: "resume-icon.png",
-        assets: app_state.ctx.content.assets.clone(),
+        base: BaseTemplateContext::new(
+            "Resume",
+            "resume-icon.png",
+            app_state.ctx.content.assets.clone(),
+        )
     })
 }
 
@@ -197,9 +222,11 @@ pub async fn blog(State(app_state): State<AppState>) -> AppResult<Response> {
     let posts = list_posts(&app_state.ctx.services.db).await?;
 
     render_template(BlogTemplate {
-        title: "Blog",
-        favicon: "blog-icon.png",
-        assets: app_state.ctx.content.assets.clone(),
+        base: BaseTemplateContext::new(
+            "Blog",
+            "blog-icon.png",
+            app_state.ctx.content.assets.clone(),
+        ),
         posts,
     })
 }
@@ -209,9 +236,11 @@ pub async fn blog(State(app_state): State<AppState>) -> AppResult<Response> {
 /// This function will panic if the template rendering fails.
 pub async fn contact(State(app_state): State<AppState>) -> AppResult<Response> {
     render_template(ContactTemplate {
-        title: "Contact",
-        favicon: "contact-icon.png",
-        assets: app_state.ctx.content.assets.clone(),
+        base: BaseTemplateContext::new(
+            "Contact",
+            "contact-icon.png",
+            app_state.ctx.content.assets.clone(),
+        )
     })
 }
 
@@ -220,8 +249,10 @@ pub async fn contact(State(app_state): State<AppState>) -> AppResult<Response> {
 /// This function will panic if the template rendering fails.
 pub async fn assets(State(app_state): State<AppState>) -> AppResult<Response> {
     render_template(AssetsTemplate {
-        title: "Assets",
-        favicon: "assets-icon.png",
-        assets: app_state.ctx.content.assets.clone(),
+        base: BaseTemplateContext::new(
+            "Assets",
+            "assets-icon.png",
+            app_state.ctx.content.assets.clone(),
+        )
     })
 }

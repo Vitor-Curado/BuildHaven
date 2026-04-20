@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
+    <title>{{ base.title }}</title>
 
-    <link rel="icon" type="image/png" href="/static/media/icons/{{ favicon }}">
+    <link rel="icon" type="image/png" href="/static/media/icons/{{ base.favicon }}">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="/static/dist/{{ assets.css }}">
+    <link rel="stylesheet" href="/static/dist/{{ base.assets.css }}">
     {% block styles %}{% endblock %}
 </head>
 
@@ -19,6 +19,6 @@
         {% block content %}{% endblock %}
     </main>
     {% include "partials/footer.html" %}
-    <script src="/static/dist/{{ assets.js }}"></script>
+    <script src="/static/dist/{{ base.assets.js }}"></script>
 </body>
 </html>
