@@ -1,6 +1,7 @@
 use crate::{
     api::HealthResponse,
     config::Environment,
+    constants::constants::icons,
     error::{AppError, AppResult},
     models::{LoginForm, NewUser, RegisterForm},
     repository::{create_user, find_user_by_email},
@@ -197,7 +198,7 @@ pub async fn resume(State(app_state): State<AppState>) -> AppResult<Response> {
     render_template(ResumeTemplate {
         base: BaseTemplateContext::new(
             "Resume",
-            "resume-icon.png",
+            icons::RESUME,
             app_state.ctx.content.assets.clone(),
         ),
     })
@@ -223,7 +224,7 @@ pub async fn blog(State(app_state): State<AppState>) -> AppResult<Response> {
     render_template(BlogTemplate {
         base: BaseTemplateContext::new(
             "Blog",
-            "blog-icon.png",
+            icons::BLOG,
             app_state.ctx.content.assets.clone(),
         ),
         posts,
@@ -237,7 +238,7 @@ pub async fn contact(State(app_state): State<AppState>) -> AppResult<Response> {
     render_template(ContactTemplate {
         base: BaseTemplateContext::new(
             "Contact",
-            "contact-icon.png",
+            icons::CONTACT,
             app_state.ctx.content.assets.clone(),
         ),
     })

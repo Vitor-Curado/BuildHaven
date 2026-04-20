@@ -23,7 +23,7 @@ impl Assets {
         Ok(Self {
             css: manifest
                 .get("index.css")
-                .expect("missing css bundle")
+                .ok_or(AppError::Internal)?
                 .clone(),
 
             js: manifest.get("app.js").ok_or(AppError::Internal)?.clone(),

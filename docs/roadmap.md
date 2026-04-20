@@ -2,8 +2,9 @@
 
 Planned improvements:
 
-* Implement authentication and user accounts
-* Add post creation and editing interface
-* Introduce role-based authorization
-* Expand API endpoints
-* Improve CI/CD automation and observability
+* Migrate from Prometheus to VictoriaMetrics
+* Cache static pages for better performance
+* Revisit neglected frontend
+* Add dragonfly (caching)
+* Make sure system is not falling apart
+* Tighten the bolts around auth, session and background jobs

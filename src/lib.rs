@@ -3,6 +3,7 @@ pub mod assets;
 pub mod auth;
 pub mod bootstrap;
 pub mod config;
+pub mod constants;
 pub mod content;
 pub mod context;
 pub mod cors;
