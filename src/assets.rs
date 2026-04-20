@@ -15,6 +15,22 @@ pub struct Assets {
     pub js: String,
 }
 
+impl Assets {
+    pub fn new() -> Result<Self, AppError> {
+        // Load assets manifest
+        let manifest = load_manifest()?;
+
+        Ok(Self {
+            css: manifest
+                .get("index.css")
+                .expect("missing css bundle")
+                .clone(),
+
+            js: manifest.get("app.js").ok_or(AppError::Internal)?.clone(),
+        })
+    }
+}
+
 /// # Errors
 /// Returns an error if file writing fails.
 pub fn build_assets() -> std::io::Result<()> {

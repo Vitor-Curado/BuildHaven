@@ -18,12 +18,15 @@ Built using modern Rust tooling and deployed on a Fedora Linux server behind Ngi
 - **Database:** PostgreSQL (SQLx)
 - **Runtime:** Tokio
 - **Deployment:** Podman + systemd
-- **CI/CD:** Local woodpecker agent + server managed by systemd, tunneled to a static IP link via Cloudfare Tunnel
+- **CI/CD:** Woodpecker
 - **Reverse Proxy:** Nginx
 - **Observability:** Prometheus (current, to be replaced by VictoriaMetrics) / Grafana
 - **Caching:** Dragonfly (to be implemented)
 - **Object storage:** Cloudfare R2 (planned)
 - **Content Delivery Network:** Cloudfare CDN (planned)
+- **Authentication:** OAuth2 (planned)
+- **Tracing:** OpenTelemetry (planned)
+- **Queueing:** NATS (JetStream)
 
 ---
 

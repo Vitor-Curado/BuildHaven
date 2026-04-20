@@ -6,3 +6,13 @@ pub struct AppContext {
     pub content: Content,
     pub services: Services,
 }
+
+impl AppContext {
+    pub fn new(config: Config, content: Content, services: Services) -> Self {
+        Self {
+            config,
+            content,
+            services,
+        }
+    }
+}

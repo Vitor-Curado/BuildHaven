@@ -1,5 +1,6 @@
 use crate::{
-    config::Config, error::AppResult, jobs::JobRunner, metrics::init_build_info, pool::create_pool, router::app, state::AppState
+    config::Config, error::AppResult, jobs::JobRunner, metrics::init_build_info, pool::create_pool,
+    router::app, state::AppState,
 };
 
 use tokio::net::TcpListener;

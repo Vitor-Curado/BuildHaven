@@ -7,6 +7,15 @@ pub struct Services {
     pub auth: AuthService,
 }
 
+impl Services {
+    pub fn new(db: PgPool) -> Self {
+        Self {
+            db,
+            auth: AuthService::new(),
+        }
+    }
+}
+
 pub async fn list_posts(pool: &PgPool) -> Result<Vec<Post>, sqlx::Error> {
     let posts = repository::get_all_posts(pool).await?;
 

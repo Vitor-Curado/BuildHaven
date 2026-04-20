@@ -1,9 +1,7 @@
 // Consider: switching to VictoriaMetrics
 
 use once_cell::sync::Lazy;
-use prometheus::{
-    Encoder, HistogramVec, IntCounterVec, IntGaugeVec, Opts, Registry, TextEncoder,
-};
+use prometheus::{Encoder, HistogramVec, IntCounterVec, IntGaugeVec, Opts, Registry, TextEncoder};
 
 pub static REGISTRY: Lazy<Registry> = Lazy::new(Registry::new);
 
@@ -72,7 +70,8 @@ pub static HTTP_ERRORS: Lazy<IntCounterVec> = Lazy::new(|| {
 });
 
 pub static BUILD_INFO: Lazy<IntGaugeVec> = Lazy::new(|| {
-    let gauge = IntGaugeVec::new(Opts::new("build_info", "Build information"), &["version"]).unwrap();
+    let gauge =
+        IntGaugeVec::new(Opts::new("build_info", "Build information"), &["version"]).unwrap();
 
     REGISTRY.register(Box::new(gauge.clone())).unwrap();
 
@@ -80,12 +79,9 @@ pub static BUILD_INFO: Lazy<IntGaugeVec> = Lazy::new(|| {
 });
 
 pub fn init_build_info() {
-    let version =
-        env!("CARGO_PKG_VERSION");
+    let version = env!("CARGO_PKG_VERSION");
 
-    BUILD_INFO
-        .with_label_values(&[version])
-        .set(1);
+    BUILD_INFO.with_label_values(&[version]).set(1);
 }
 
 pub fn normalize_path(path: &str) -> String {

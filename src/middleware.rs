@@ -9,7 +9,9 @@ pub async fn latency_middleware(req: Request, next: Next) -> Response {
     let method = req.method().to_string();
     let path = normalize_path(req.uri().path());
 
-    HTTP_INFLIGHT.with_label_values(&[method.as_str(), path.as_str()]).inc();
+    HTTP_INFLIGHT
+        .with_label_values(&[method.as_str(), path.as_str()])
+        .inc();
 
     let start = Instant::now();
 
@@ -35,7 +37,9 @@ pub async fn latency_middleware(req: Request, next: Next) -> Response {
             .inc();
     }
 
-    HTTP_INFLIGHT.with_label_values(&[method.as_str(), path.as_str()]).dec();
+    HTTP_INFLIGHT
+        .with_label_values(&[method.as_str(), path.as_str()])
+        .dec();
 
     tracing::info!(
         method = %method,
