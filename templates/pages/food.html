@@ -1,13 +1,10 @@
 {% extends "base.html" %}
-
-{% block styles %} <link rel="stylesheet" href="/static/css/pages/food.css"> {% endblock %}
-
 {% block content %}
 
 <section>
-    <ul id="food-list">
+    <ul class="grid grid-auto">
         {% for food in foods %}
-        <li class="food-card">
+        <li class="card">
             <img src="/static/media/food/{{ food.image_gallery[0] }}" alt="{{ food.title }}" width="300" height="300"><br>
             <a href="/food/{{ food.slug }}"> <strong> {{ food.title }} </strong> </a>
         </li>

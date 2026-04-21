@@ -1,5 +1,4 @@
 use crate::{
-    assets::{Assets},
     config::Config,
     content::Content,
     context::AppContext,
@@ -17,8 +16,7 @@ pub struct AppState {
 
 impl AppState {
     pub fn new(db: PgPool, config: Config) -> Result<Self, AppError> {
-        let assets = Assets::new()?;
-        let content = Content::new(assets);
+        let content = Content::new();
         let services = Services::new(db);
         let ctx = AppContext::new(config, content, services);
 

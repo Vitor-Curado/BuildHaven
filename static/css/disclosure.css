@@ -1,0 +1,25 @@
+.disclosure {
+  background: var(--color-summary);
+
+  border: 2px solid var(--color-border);
+
+  border-radius: var(--radius-medium);
+
+  padding: var(--spacing-medium);
+}
+
+.disclosure-summary {
+  font-weight: 700;
+
+  font-size: var(--font-size-medium);
+
+  cursor: pointer;
+}
+
+.disclosure-summary::marker {
+  color: var(--color-accent);
+}
+
+details[open] {
+  background: var(--color-surface);
+}

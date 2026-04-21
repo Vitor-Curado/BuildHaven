@@ -1,0 +1,24 @@
+.stats-list {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: var(--spacing-small);
+
+  padding: 0;
+
+  list-style: none;
+
+  width: 100%;
+}
+
+.stats-item {
+  background: var(--color-surface-hover);
+
+  border-radius: var(--radius-small);
+
+  padding:
+    var(--spacing-extra-small)
+    var(--spacing-small);
+
+  font-size: var(--font-size-extra-small);
+}

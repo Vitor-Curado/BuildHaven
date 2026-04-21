@@ -31,19 +31,34 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* DROPDOWN TOGGLE */
-    const dropdown = document.querySelector(".dropdown");
-    const dropdownButton =
-        document.querySelector(".dropdown-button");
+    const dropdowns =
+        document.querySelectorAll(".dropdown");
 
-    dropdownButton.addEventListener("click", () => {
-        dropdown.classList.toggle("open");
+    dropdowns.forEach(dropdown => {
+
+        const button =
+            dropdown.querySelector(".dropdown-button");
+
+        button.addEventListener("click", event => {
+
+            event.stopPropagation();
+            dropdown.classList.toggle("open");
+        });
     });
 
     /* CLOSE WHEN CLICKING OUTSIDE */
-    document.addEventListener("click", (event) => {
-
-        if (!dropdown.contains(event.target)) {
+    document.addEventListener("click", () => {
+        dropdowns.forEach(dropdown => {
             dropdown.classList.remove("open");
+        });
+
+    });
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+            dropdowns.forEach(dropdown => {
+                dropdown.classList.remove("open");
+            });
         }
     });
 });

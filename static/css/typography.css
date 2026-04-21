@@ -1,16 +1,25 @@
-h1 {
-    font-size: var(--font-size-title);
-    margin-bottom: var(--spacing-medium);
+.text-extra-large {
+    font-size: var(--font-size-extra-large);
 }
 
-h2 {
+.text-large {
     font-size: var(--font-size-large);
-    margin-bottom: var(--spacing-medium);
 }
 
-p {
+.text-extra-medium {
+    font-size: var(--font-size-extra-medium);
+}
+
+.text-medium {
     font-size: var(--font-size-medium);
-    margin-bottom: var(--spacing-medium);
+}
+
+.text-small {
+    font-size: var(--font-size-small);
+}
+
+.text-extra-small {
+    font-size: var(--font-size-extra-small);
 }
 
 h1, h2, h3 {
@@ -19,5 +28,5 @@ h1, h2, h3 {
 }
 
 p {
-  color: var(--color-muted-text);
+  color: var(--color-text-muted);
 }

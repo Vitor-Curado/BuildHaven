@@ -21,3 +21,15 @@
 .button:hover {
   background: var(--color-accent-hover);
 }
+
+.button-ghost {
+
+  background: none;
+
+  color: var(--color-accent);
+
+}
+
+.button-ghost:hover {
+  color: var(--color-accent-hover);
+}

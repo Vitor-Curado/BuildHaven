@@ -18,7 +18,7 @@ pub fn app(state: AppState) -> Router {
         .precompressed_gzip();
 
     let mut router = Router::new()
-        .nest("/", public_routes())
+        .merge(public_routes())
         .nest_service("/static", static_service)
         .layer(CompressionLayer::new().br(true).gzip(true).deflate(true))
         .with_state(state.clone());

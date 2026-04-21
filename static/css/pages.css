@@ -23,3 +23,19 @@
 .contact-link:hover {
   color: var(--color-accent);
 }
+
+input {
+  padding: var(--spacing-small);
+
+  border-radius: var(--radius-small);
+
+  border: 1px solid var(--color-border);
+
+  background: var(--color-surface);
+
+  color: var(--color-text);
+}
+
+input:focus {
+  border-color: var(--color-focus);
+}

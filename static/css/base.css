@@ -1,5 +1,8 @@
-body {
+*, *::before, *::after {
+  box-sizing: border-box;
+}
 
+body {
   background-color: var(--color-background);
   color: var(--color-text);
 
@@ -8,21 +11,49 @@ body {
   margin: 0;
 }
 
-
-/* =========================
-   Main content container
-   ========================= */
-
 main {
-
   background-color: var(--color-surface);
-
-  width: 95vw;
-  margin: var(--spacing-medium);
-  padding: var(--spacing-medium);
-
   border-radius: var(--radius-medium);
-
   box-shadow: var(--shadow-soft);
-  
+}
+
+img,
+picture,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+
+  padding: 0;
+  margin: -1px;
+
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+
+  white-space: nowrap;
+  border: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
 }

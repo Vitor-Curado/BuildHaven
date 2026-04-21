@@ -1,5 +1,16 @@
-<form method="post" action="/login">
-    <input name="email" />
-    <input name="password" type="password" />
-    <button type="submit">Login</button>
+{% extends "base.html" %}
+
+{% block content %}
+<header class="page-header">
+    <h1 class="page-title">
+        Login
+    </h1>
+</header>
+
+<form method="post" action="/login" class="container-narrow stack surface">
+    <label for="email"> Email </label>
+    <input name="email" type="email" required>
+    <input name="password" type="password" required>
+    <button type="submit" class="button"> Login </button>
 </form>
+{% endblock %}

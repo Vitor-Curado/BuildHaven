@@ -3,35 +3,55 @@
 ```
 ├── docs
 │   ├── architecture.md
+│   ├── assets.md
 │   ├── backend.md
 │   ├── ci_cd.md
+│   ├── dependencies.md
 │   ├── deployment.md
+│   ├── diagrams.md
 │   ├── features.md
 │   ├── frontend.md
 │   ├── glossary.md
+│   ├── infrastructure.md
 │   ├── modules.md
+│   ├── principles.md
 │   ├── roadmap.md
+│   ├── security.md
 │   ├── structure.md
 │   └── testing.md
 │
 ├── scripts
+│   ├── benchmark.sh
 │   ├── check.sh
 │   ├── deploy.sh
-│   └── inspect.sh
+│   ├── grafana.sh
+│   ├── inspect.sh
+│   ├── prometheus.sh
+│   ├── start-observability.sh
+│   └── stop-observability.sh
 │
 ├── src
 │   ├── bin
-│   │   └── assets.rs
+│   │   ├── assets.rs
+│   │   └── indexer.rs
 │   │
 │   ├── api.rs
 │   ├── assets.rs
+│   ├── auth.rs
+│   ├── bootstrap.rs
 │   ├── config.rs
+│   ├── constants.rs
+│   ├── content.rs
+│   ├── context.rs
 │   ├── cors.rs
 │   ├── error.rs
 │   ├── handlers.rs
+│   ├── jobs.rs
 │   ├── lib.rs
 │   ├── logging.rs
 │   ├── main.rs
+│   ├── metrics.rs
+│   ├── middleware.rs
 │   ├── models.rs
 │   ├── pool.rs
 │   ├── rate_limit.rs
@@ -40,7 +60,10 @@
 │   ├── routes.rs
 │   ├── security.rs
 │   ├── services.rs
+│   ├── session.rs
+│   ├── shutdown.rs
 │   ├── state.rs
+│   ├── telemetry.rs
 │   ├── templates.rs
 │   └── utils.rs
 │
@@ -92,6 +115,7 @@
 │   │   └── resume.html
 │   │
 │   ├── partials
+│   │   ├── footer.html
 │   │   └── navbar.html
 │   │
 │   └── base.html
@@ -100,11 +124,13 @@
 │   └── tests.rs
 │
 ├── .dockerignore
+├── .env
 ├── .gitignore
+├── .index.txt
 ├── .woodpecker.yml
 ├── Cargo.lock
 ├── Cargo.toml
-├── docker-compose.yml
 ├── Dockerfile
+├── Prometheus.yml
 └── readme.md
 ```

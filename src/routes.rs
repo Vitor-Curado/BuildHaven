@@ -21,7 +21,7 @@ pub fn public_routes() -> Router<AppState> {
         .route("/blog", get(blog))
         .route("/contact", get(contact))
         .route("/food", get(food))
-        .route("/food/:slug", get(food_detail))
+        .route("/food/{slug}", get(food_detail))
         .route("/assets", get(assets))
 }
 

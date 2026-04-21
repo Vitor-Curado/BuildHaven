@@ -6,7 +6,24 @@
 
    /* Text */
    --color-text: var(--color-900);
-   --color-muted-text: var(--color-700);
+   --color-text-muted: var(--color-700);
+
+   /* Semantic colors */
+   --color-surface-alt: var(--color-100);
+   --color-card-border: var(--color-border);
+   --color-highlight: var(--color-accent);
+   --color-highlight-soft: var(--color-surface-hover);
+
+   --color-article: var(--color-surface);
+   --color-summary: var(--color-surface-hover);
+
+   --color-button-text: white;
+
+   /* To do: fill these. */
+   --color-success: #22c55e;
+   --color-warning: #eab308;
+   --color-danger: #ef4444;
+   --color-info: #3b82f6;
 
    /* Accents */
    --color-accent: var(--color-500);
@@ -28,26 +45,33 @@
 
 
    /* Border radius */
-
    --radius-small: 4px;
    --radius-medium: 8px;
    --radius-large: 12px;
 
 
    /* Shadows */
-
+   --shadow-none: none;
    --shadow-soft: 0 2px 6px rgba(0,0,0,0.08);
    --shadow-medium: 0 4px 12px rgba(0,0,0,0.12);
+   --shadow-large: 0 8px 24px rgba(0,0,0,0.18);
 
    /* Font sizes */
-
-   --font-size-small: 0.875rem;
-   --font-size-medium: 1rem;
-   --font-size-large: 1.25rem;
-   --font-size-title: 1.5rem;
+   --font-size-extra-small: 0.875rem;
+   --font-size-small: 1rem;
+   --font-size-medium: 1.25rem;
+   --font-size-extra-medium: 1.5rem;
+   --font-size-large: clamp(1.5rem, 2vw, 2rem);
+   --font-size-extra-large: 2.5rem;
 
    /* Transition */
-
-   --transition-fast: 0.15s ease;
+   --transition-bounce: 0.2s cubic-bezier(.34,1.56,.64,1);
+   --transition-slow: 0.4s ease;
    --transition-medium: 0.25s ease;
+   --transition-fast: 0.15s ease;
+   
+   /* Width */
+   --content-width-narrow: clamp(45ch, 60vw, 65ch);
+   --content-width-medium: clamp(60ch, 75vw, 85ch);
+   --content-width-wide: clamp(75ch, 90vw, 1200px);
 }

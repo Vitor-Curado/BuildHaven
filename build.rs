@@ -1,12 +1,8 @@
-use std::collections::HashMap;
-use std::fs;
-use std::fs::File;
-use std::io::Write;
-use std::path::Path;
-
+use std::{collections::HashMap, fs, io::Write, fs::File, path::Path};
 use walkdir::WalkDir;
 
 fn main() {
+    println!("cargo:rerun-if-changed=.");
     let project_root = Path::new(".");
 
     let mut total_lines = 0usize;
@@ -14,8 +10,8 @@ fn main() {
 
     // Change here according to taste
     // Possibilities: rs, html, sql, toml, js, css, md, etc.
-    //let allowed = ["rs", "html", "sql", "toml", "js", "css", "md"];
-    let allowed = ["rs"];
+    //let allowed = ["rs", "html", "css", "js", "md", "sql", "toml"];
+    let allowed = ["html", "css", "js"];
 
     let mut output = File::create(".index.txt").expect("Failed to create output file");
 
@@ -74,7 +70,7 @@ fn main() {
     }
 
     // Summary
-    println!("====================");
+    println!("Index invoked");
     writeln!(output, "====================").unwrap();
     writeln!(output, "Total lines: {}", total_lines).unwrap();
 

@@ -48,7 +48,6 @@ pub async fn home(State(app_state): State<AppState>) -> Result<Response, AppErro
         base: BaseTemplateContext::new(
             "BuildHaven",
             "home-icon.png",
-            app_state.ctx.content.assets.clone(),
         ),
         readme_html: app_state.ctx.content.readme_html.clone(),
     })
@@ -75,12 +74,11 @@ pub async fn register_user(
     }
 }
 
-pub async fn register_page(State(state): State<AppState>) -> AppResult<Response> {
+pub async fn register_page() -> AppResult<Response> {
     render_template(RegisterTemplate {
         base: BaseTemplateContext::new(
             "Register",
             "register-icon.png",
-            state.ctx.content.assets.clone(),
         ),
     })
 }
@@ -148,9 +146,9 @@ pub async fn login_user(
     (jar, Redirect::to("/"))
 }
 
-pub async fn login_page(State(state): State<AppState>) -> impl IntoResponse {
+pub async fn login_page() -> impl IntoResponse {
     render_template(LoginTemplate {
-        base: BaseTemplateContext::new("Login", "login-icon.png", state.ctx.content.assets.clone()),
+        base: BaseTemplateContext::new("Login", "login-icon.png"),
     })
 }
 
@@ -163,7 +161,6 @@ pub async fn food(State(app_state): State<AppState>) -> AppResult<Response> {
         base: BaseTemplateContext::new(
             "Food",
             "food-icon.png",
-            app_state.ctx.content.assets.clone(),
         ),
         foods: &app_state.ctx.content.food_data,
     })
@@ -184,8 +181,7 @@ pub async fn food_detail(
     render_template(FoodDetailTemplate {
         base: BaseTemplateContext::new(
             food.title,
-            "food-icon.png",
-            state.ctx.content.assets.clone(),
+            "food-icon.png"
         ),
         food,
     })
@@ -194,12 +190,11 @@ pub async fn food_detail(
 /// Renders the resume page.
 /// # Panics
 /// This function will panic if the template rendering fails.
-pub async fn resume(State(app_state): State<AppState>) -> AppResult<Response> {
+pub async fn resume() -> AppResult<Response> {
     render_template(ResumeTemplate {
         base: BaseTemplateContext::new(
             "Resume",
             icons::RESUME,
-            app_state.ctx.content.assets.clone(),
         ),
     })
 }
@@ -225,7 +220,6 @@ pub async fn blog(State(app_state): State<AppState>) -> AppResult<Response> {
         base: BaseTemplateContext::new(
             "Blog",
             icons::BLOG,
-            app_state.ctx.content.assets.clone(),
         ),
         posts,
     })
@@ -234,12 +228,11 @@ pub async fn blog(State(app_state): State<AppState>) -> AppResult<Response> {
 /// Renders the contact page.
 /// # Panics
 /// This function will panic if the template rendering fails.
-pub async fn contact(State(app_state): State<AppState>) -> AppResult<Response> {
+pub async fn contact() -> AppResult<Response> {
     render_template(ContactTemplate {
         base: BaseTemplateContext::new(
             "Contact",
             icons::CONTACT,
-            app_state.ctx.content.assets.clone(),
         ),
     })
 }
@@ -247,12 +240,11 @@ pub async fn contact(State(app_state): State<AppState>) -> AppResult<Response> {
 /// Renders the assets page.
 /// # Panics
 /// This function will panic if the template rendering fails.
-pub async fn assets(State(app_state): State<AppState>) -> AppResult<Response> {
+pub async fn assets() -> AppResult<Response> {
     render_template(AssetsTemplate {
         base: BaseTemplateContext::new(
             "Assets",
             "assets-icon.png",
-            app_state.ctx.content.assets.clone(),
         ),
     })
 }

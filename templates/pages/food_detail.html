@@ -2,27 +2,24 @@
 
 {% block title %} {{ food.title }} {% endblock %}
 
-{% block styles %} <link rel="stylesheet" href="/static/pages/food-detail.css"> {% endblock %}
-
-
 {% block content %}
 
-  <a href="/food" class="back-button" aria-label="Go back">
-    Back
+  <a href="/food" class="button button-ghost" aria-label="Go back">
+    ← Back
   </a>
 
-  <header>
-    <h1> {{ food.title }} </h1>
+  <header class="page-header">
+    <h1 class="page-title"> {{ food.title }} </h1>
     
-    <figure>
-      <img src="/static/media/{{ food.image_gallery[0] }}" alt="{{ food.title }}">
-      <figcaption> Image of {{ food.title }} </figcaption>
+    <figure class="media">
+      <img class="media-image" src="/static/media/{{ food.image_gallery[0] }}" alt="{{ food.title }}">
+      <figcaption class="media-caption"> Image of {{ food.title }} </figcaption>
     </figure>
   </header>
 
-  <article>
-    <details>
-      <summary> Equipment required </summary>
+  <article class="content-card surface">
+    <details class="disclosure">
+      <summary class="disclosure-summary"> Equipment required </summary>
       <ul>
         {% for item in food.equipment %}
           <li> {{ item }} </li>
@@ -30,8 +27,8 @@
       </ul>
     </details>
 
-    <details>
-      <summary> Ingredients </summary>
+    <details class="disclosure">
+      <summary class="disclosure-summary"> Ingredients </summary>
       <ul>
         {% for ingredient in food.main_ingredients %}
           <li> {{ ingredient }} </li>
@@ -39,8 +36,8 @@
       </ul>
     </details>
 
-    <details>
-      <summary> Preparation Steps </summary>
+    <details class="disclosure">
+      <summary class="disclosure-summary"> Preparation Steps </summary>
       <ol>
         {% for step in food.cooking_instructions %}
           <li> {{ step }} </li>

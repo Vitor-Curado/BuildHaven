@@ -5,13 +5,11 @@
 }
 
 /* Layout */
-
 .footer-grid {
     margin-bottom: var(--spacing-large);
 }
 
 /* Sections */
-
 .footer-section {
     display: flex;
     flex-direction: column;
@@ -19,19 +17,16 @@
 }
 
 /* Titles */
-
 .footer-title {
     font-size: var(--font-size-large);
 }
 
 /* Text */
-
 .footer-text {
     color: var(--color-muted-text);
 }
 
 /* Links */
-
 .footer-links {
     list-style: none;
     padding: 0;
