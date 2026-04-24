@@ -1,4 +1,5 @@
 pub mod api;
+pub mod assets;
 pub mod auth;
 pub mod bootstrap;
 pub mod config;
@@ -9,7 +10,6 @@ pub mod cors;
 pub mod error;
 pub mod handlers;
 pub mod jobs;
-pub mod leptos;
 // lib.rs
 pub mod logging;
 // main.rs

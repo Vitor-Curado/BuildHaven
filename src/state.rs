@@ -1,9 +1,6 @@
 use crate::{
-    config::Config,
-    content::Content,
-    context::AppContext,
-    error::AppError,
-    services::Services
+    assets::Assets, config::Config, content::Content, context::AppContext, error::AppError,
+    services::Services,
 };
 
 use sqlx::PgPool;
@@ -15,8 +12,8 @@ pub struct AppState {
 }
 
 impl AppState {
-    pub fn new(db: PgPool, config: Config) -> Result<Self, AppError> {
-        let content = Content::new();
+    pub fn new(db: PgPool, config: Arc<Config>, assets: Assets) -> Result<Self, AppError> {
+        let content = Content::new(assets);
         let services = Services::new(db);
         let ctx = AppContext::new(config, content, services);
 

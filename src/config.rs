@@ -1,3 +1,5 @@
+use crate::error::{AppError, AppResult};
+
 #[derive(Clone)]
 pub struct AppConfig {
     pub port: u16,
@@ -7,21 +9,13 @@ pub struct AppConfig {
 }
 
 impl AppConfig {
-    pub fn from_env() -> Self {
+    pub fn from_env() -> AppResult<Self> {
         let port = std::env::var("PORT")
             .unwrap_or_else(|_| "3000".to_string())
             .parse()
-            .expect("PORT must be a number");
+            .map_err(|_| AppError::Internal)?;
 
-        let environment = match std::env::var("APP_ENV")
-            .unwrap_or_else(|_| "development".to_string())
-            .as_str()
-        {
-            "production" => Environment::Production,
-            "benchmark" => Environment::Benchmark,
-            "development" => Environment::Development,
-            _ => Environment::Development,
-        };
+        let environment = Environment::from_env();
 
         let max_request_body_size = std::env::var("MAX_REQUEST_BODY_SIZE")
             .ok()
@@ -31,12 +25,12 @@ impl AppConfig {
         let cookie_domain =
             std::env::var("COOKIE_DOMAIN").unwrap_or_else(|_| "localhost".to_string());
 
-        Self {
+        Ok(Self {
             port,
             environment,
             max_request_body_size,
             cookie_domain,
-        }
+        })
     }
 
     fn default_request_body_size(env: &Environment) -> usize {
@@ -59,8 +53,8 @@ pub struct DatabaseConfig {
 }
 
 impl DatabaseConfig {
-    pub fn from_env(env: &Environment) -> Self {
-        let url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    pub fn from_env(env: &Environment) -> AppResult<Self> {
+        let url = std::env::var("DATABASE_URL").map_err(|_| AppError::Internal)?;
 
         let min_connections = std::env::var("DB_MIN_CONNECTIONS")
             .ok()
@@ -87,14 +81,14 @@ impl DatabaseConfig {
             .and_then(|v| v.parse().ok())
             .unwrap_or(1800);
 
-        Self {
+        Ok(Self {
             url,
             min_connections,
             max_connections,
             idle_timeout_secs,
             acquire_timeout_secs,
             max_lifetime_secs,
-        }
+        })
     }
 
     fn default_max_connections(env: &Environment) -> u32 {
@@ -214,6 +208,20 @@ pub struct Config {
     pub security: SecurityConfig,
 }
 
+impl Config {
+    pub fn from_env() -> AppResult<Self> {
+        let app = AppConfig::from_env()?;
+        Ok(Self {
+            database: DatabaseConfig::from_env(&app.environment)?,
+            cors: CorsConfig::from_env(),
+            rate_limit: RateLimitConfig::from_env(),
+            session: SessionConfig::from_env(),
+            security: SecurityConfig::from_env(),
+            app,
+        })
+    }
+}
+
 #[derive(Clone, Debug)]
 pub enum Environment {
     Development,
@@ -221,17 +229,16 @@ pub enum Environment {
     Benchmark,
 }
 
-impl Config {
-    #[must_use]
-    pub fn from_env() -> Self {
-        let app = AppConfig::from_env();
-        Self {
-            database: DatabaseConfig::from_env(&app.environment),
-            cors: CorsConfig::from_env(),
-            rate_limit: RateLimitConfig::from_env(),
-            session: SessionConfig::from_env(),
-            security: SecurityConfig::from_env(),
-            app,
+impl Environment {
+    fn from_env() -> Self {
+        match std::env::var("APP_ENV")
+            .unwrap_or_else(|_| "development".to_string())
+            .to_lowercase()
+            .as_str()
+        {
+            "production" => Self::Production,
+            "benchmark" => Self::Benchmark,
+            _ => Self::Development,
         }
     }
 }

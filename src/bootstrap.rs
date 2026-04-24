@@ -1,16 +1,17 @@
+use std::sync::Arc;
+
 use crate::{
-    config::Config, error::AppResult, jobs::JobRunner, metrics::init_build_info, pool::create_pool,
-    router::app, state::AppState,
+    assets::Assets, config::Config, error::AppResult, jobs::JobRunner, metrics::init_build_info,
+    pool::create_pool, router::app, state::AppState,
 };
 
 use tokio::net::TcpListener;
 
 pub async fn build_listener_and_app() -> AppResult<(TcpListener, axum::Router)> {
-    let config = Config::from_env();
-
+    let config = Arc::new(Config::from_env()?);
     let db_pool = create_pool(&config).await?;
-
-    let state = AppState::new(db_pool, config)?;
+    let assets = Assets::build()?;
+    let state = AppState::new(db_pool, config, assets)?;
 
     init_build_info();
 

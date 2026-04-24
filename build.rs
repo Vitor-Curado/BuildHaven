@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fs, io::Write, fs::File, path::Path};
+use std::{collections::HashMap, fs, fs::File, io::Write, path::Path};
 use walkdir::WalkDir;
 
 fn main() {
@@ -11,7 +11,7 @@ fn main() {
     // Change here according to taste
     // Possibilities: rs, html, sql, toml, js, css, md, etc.
     //let allowed = ["rs", "html", "css", "js", "md", "sql", "toml"];
-    let allowed = ["html", "css", "js"];
+    let allowed = ["rs"];
 
     let mut output = File::create(".index.txt").expect("Failed to create output file");
 

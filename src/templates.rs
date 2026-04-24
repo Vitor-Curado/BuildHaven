@@ -1,4 +1,5 @@
 use crate::{
+    assets::Assets,
     models::{Food, Post},
 };
 use askama::Template;
@@ -8,13 +9,15 @@ use std::sync::Arc;
 pub struct BaseTemplateContext {
     pub title: String,
     pub favicon: &'static str,
+    pub assets: Arc<Assets>,
 }
 
 impl BaseTemplateContext {
-    pub fn new(title: impl Into<String>, favicon: &'static str) -> Self {
+    pub fn new(title: impl Into<String>, favicon: &'static str, assets: Arc<Assets>) -> Self {
         Self {
             title: title.into(),
             favicon,
+            assets,
         }
     }
 }
