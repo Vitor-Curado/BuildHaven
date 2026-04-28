@@ -1,3 +1,4 @@
+use crate::constants::errors;
 use axum::{
     http::StatusCode,
     response::{IntoResponse, Response},
@@ -14,6 +15,9 @@ pub enum AppError {
 
     #[error("I/O error: {0}")]
     Io(#[from] std::io::Error),
+
+    #[error("Serialization error: {0}")]
+    Serialization(#[from] serde_json::Error),
 
     #[error("Configuration error: {0}")]
     Config(String),
@@ -58,15 +62,16 @@ impl AppError {
             AppError::Template(_) => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::Io(_) => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::Internal => StatusCode::INTERNAL_SERVER_ERROR,
+            AppError::Serialization(_) => StatusCode::INTERNAL_SERVER_ERROR,
             _ => StatusCode::INTERNAL_SERVER_ERROR,
         }
     }
 
     fn client_message(&self) -> &'static str {
         match self {
-            AppError::NotFound => "Not found",
-            AppError::Unauthorized => "Unauthorized",
-            _ => "Internal server error",
+            AppError::NotFound => errors::NOT_FOUND,
+            AppError::Unauthorized => errors::UNAUTHORIZED,
+            _ => errors::INTERNAL,
         }
     }
 }

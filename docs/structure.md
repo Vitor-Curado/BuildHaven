@@ -31,10 +31,6 @@
 │   └── stop-observability.sh
 │
 ├── src
-│   ├── bin
-│   │   ├── assets.rs
-│   │   └── indexer.rs
-│   │
 │   ├── api.rs
 │   ├── assets.rs
 │   ├── auth.rs
@@ -69,27 +65,28 @@
 │
 ├── static
 │   ├── css
-│   │   ├── components
-│   │   │   ├── buttons.css
-│   │   │   ├── cards.css
-│   │   │   ├── containers.css
-│   │   │   ├── dropdown.css
-│   │   │   ├── grids.css
-│   │   │   └── navbar.css
-│   │   │
-│   │   ├── pages
-│   │   │   ├── contact.css
-│   │   │   ├── food-detail.css
-│   │   │   └── food.css
-│   │   │
+│   │   ├── aspect.css
 │   │   ├── base.css
+│   │   ├── buttons.css
+│   │   ├── cards.css
+│   │   ├── containers.css
+│   │   ├── disclosure.css
+│   │   ├── dropdown.css
+│   │   ├── footer.css
+│   │   ├── grids.css
 │   │   ├── layout.css
+│   │   ├── media.css
 │   │   ├── navbar.css
+│   │   ├── page-header.css
+│   │   ├── pages.css
+│   │   ├── posts.css
+│   │   ├── stats.css
 │   │   ├── themes.css
 │   │   ├── typography.css
 │   │   └── variables.css
 │   │
 │   ├── dist
+│   │   ├── icons
 │   │   ├── app-[sha256].js
 │   │   ├── index-[sha256].css
 │   │   └── manifest.json
@@ -128,9 +125,10 @@
 ├── .gitignore
 ├── .index.txt
 ├── .woodpecker.yml
+├── build.rs
 ├── Cargo.lock
 ├── Cargo.toml
 ├── Dockerfile
-├── Prometheus.yml
+├── prometheus.yml
 └── readme.md
 ```

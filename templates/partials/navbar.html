@@ -2,35 +2,35 @@
     <ul class="navbar-group navbar-left">
         <li>
             <a href="/" class="navbar-link">
-                <img src="/static/media/icons/home-icon.png" alt="BuildHaven" class="navbar-icon">
+                <img src="/static/dist/icons/{{ base.assets.icon(crate::constants::icons::HOME) }}" alt="BuildHaven" class="navbar-icon">
                 Home
             </a>
         </li>
 
         <li>
             <a href="/blog" class="navbar-link">
-                <img src="/static/media/icons/blog-icon.png" alt="Blog" class="navbar-icon">
+                <img src="/static/dist/icons/{{ base.assets.icon(crate::constants::icons::BLOG) }}" alt="Blog" class="navbar-icon">
                 Blog
             </a>
         </li>
 
         <li>
             <a href="/resume" class="navbar-link">
-                <img src="/static/media/icons/resume-icon.png" alt="Resume" class="navbar-icon">
+                <img src="/static/dist/icons/{{ base.assets.icon(crate::constants::icons::RESUME) }}" alt="Resume" class="navbar-icon">
                 Resume
             </a>
         </li>
 
         <li>
             <a href="/food" class="navbar-link">
-                <img src="/static/media/icons/food-icon.png" alt="Food" class="navbar-icon">
+                <img src="/static/dist/icons/{{ base.assets.icon(crate::constants::icons::FOOD) }}" alt="Food" class="navbar-icon">
                 Food
             </a>
         </li>
 
         <li>
             <a href="/contact" class="navbar-link">
-                <img src="/static/media/icons/contact-icon.png" alt="Contact" class="navbar-icon">
+                <img src="/static/dist/icons/{{ base.assets.icon(crate::constants::icons::CONTACT) }}" alt="Contact" class="navbar-icon">
                 Contact
             </a>
         </li>
@@ -40,13 +40,13 @@
         <!-- Login / Register -->
         <li>
             <a href="/login" class="navbar-link util-icon">
-                <img src="/static/media/icons/login-icon.png" alt="Login" class="navbar-icon">
+                <img src="/static/dist/icons/{{ base.assets.icon(crate::constants::icons::LOGIN) }}" alt="Login" class="navbar-icon">
             </a>
         </li>
 
         <li class="dropdown">
             <button class="dropdown-button util-icon">
-                <img src="/static/media/icons/language-icon.png" alt="Language" class="navbar-icon">
+                <img src="/static/dist/icons/{{ base.assets.icon(crate::constants::icons::LANGUAGE) }}" alt="Language" class="navbar-icon">
             </button>
 
             <ul class="dropdown-menu">
@@ -67,7 +67,7 @@
         <!-- Theme -->
         <li class="dropdown">
             <button class="dropdown-button util-icon">
-                <img src="/static/media/icons/theme-icon.png" alt="Theme" class="navbar-icon">
+                <img src="/static/dist/icons/{{ base.assets.icon(crate::constants::icons::THEME) }}" alt="Theme" class="navbar-icon">
             </button>
 
             <ul class="dropdown-menu">
@@ -99,87 +99,4 @@
             </ul>
         </li>
     </ul>
-
-    <!-- 
-    <ul class="navbar-list">
-        <li class="navbar-item">
-            <a class="navbar-link" href="/">
-                <img class="navbar-icon" src="/static/media/icons/home-icon.png" alt="">
-                Home
-            </a>
-        </li>
-        <li class="navbar-item dropdown">
-            <button class="dropdown-button">
-                <img class="navbar-icon" src="/static/media/icons/leisure-icon.png" alt="">
-                Leisure
-            </button>
-            <ul class="dropdown-menu">
-                <li>
-                    <button class="dropdown-link" data-theme="sunset">
-                        <img src="/static/media/themes/sun-theme.png" alt="" class="navbar-icon">
-                        Sunset
-                    </button>
-                </li>
-                <li>
-                    <button class="dropdown-link" data-theme="night">
-                        <img src="/static/media/themes/night-theme.png" alt="" class="navbar-icon">
-                        Night
-                    </button>
-                </li>
-                <li>
-                    <button class="dropdown-link" data-theme="ocean">
-                        <img class="navbar-icon" src="/static/media/themes/ocean-theme.png" alt="">
-                        Ocean
-                    </button>
-                </li>
-
-                <li>
-                    <button class="dropdown-link" data-theme="forest">
-                        <img class="navbar-icon" src="/static/media/themes/forest-theme.png" alt="">
-                        Forest
-                    </button>
-                </li>
-            </ul>
-        </li>
-        <li class="navbar-item">
-            <a href="/blog" class="navbar-link">
-                <img src="/static/media/icons/blog-icon.png" alt="" class="navbar-icon">
-                Blog
-            </a>
-        </li>
-        <li class="navbar-item">
-            <a class="navbar-link" href="/resume">
-                <img class="navbar-icon" src="/static/media/icons/resume-icon.png" alt="">
-                Resume
-            </a>
-        </li>
-        <li class="navbar-item">
-            <a class="navbar-link" href="/food">
-                <img class="navbar-icon" src="/static/media/icons/food-icon.png" alt="">
-                Food
-            </a>
-        </li>
-
-        <li class="navbar-item">
-            <a href="/login" class="navbar-link"> 
-                <img class="navbar-icon" src="/static/media/icons/login-icon.png" alt="">
-                Login 
-            </a>
-        </li>
-
-        <li class="navbar-item">
-            <a href="/register" class="navbar-link"> 
-                <img class="navbar-icon" src="/static/media/icons/software-icon.png" alt="">
-                Register 
-            </a>
-        </li>
-
-        <li class="navbar-item">
-            <a class="navbar-link" href="/contact">
-                <img class="navbar-icon" src="/static/media/icons/contact-icon.png" alt="">
-                Contact me
-            </a>
-        </li>
-    </ul>
-    -->
 </nav>
