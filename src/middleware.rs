@@ -53,7 +53,7 @@ pub async fn latency_middleware(req: Request, next: Next) -> Response {
 }
 
 pub async fn request_id_middleware(mut req: Request, next: Next) -> Response {
-    let request_id = Uuid::new_v4();
+    let request_id = Uuid::now_v7();
     let method = req.method().clone();
     let uri = req.uri().clone();
 

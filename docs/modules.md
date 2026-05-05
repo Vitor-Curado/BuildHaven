@@ -102,3 +102,60 @@ Build-time searchable file index generator.
 
 **tests.rs**  
 Integration tests.
+
+---
+
+## Authentication & Sessions
+
+**auth.rs**  
+Authentication logic and credential validation.
+
+**session.rs**  
+Session lifecycle management and cookie handling.
+
+---
+
+## Application Lifecycle
+
+**bootstrap.rs**  
+Startup initialization routines.
+
+**shutdown.rs**  
+Graceful shutdown handling.
+
+---
+
+## Background Processing
+
+**jobs.rs**  
+Background task execution and scheduling.
+
+---
+
+## Observability
+
+**metrics.rs**  
+Prometheus metrics definitions.
+
+**telemetry.rs**  
+Tracing and OpenTelemetry integration.
+
+---
+
+## Middleware Composition
+
+**middleware.rs**  
+Centralized middleware configuration.
+
+---
+
+## Core Context
+
+**context.rs**  
+Request-scoped context utilities.
+
+**constants.rs**  
+Shared application constants.
+
+**content.rs**  
+Content loading and parsing logic.

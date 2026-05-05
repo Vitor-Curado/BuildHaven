@@ -20,10 +20,12 @@ RUN cargo chef cook --release --recipe-path recipe.json
 
 COPY . .
 RUN cargo build --release
-RUN cargo run --bin assets
+#RUN cargo run --bin assets
 
 # ---------- Runtime stage ----------
-FROM gcr.io/distroless/cc-debian12
+FROM debian:bookworm-slim
+# For later:
+#FROM gcr.io/distroless/cc-debian12
 
 WORKDIR /app
 
@@ -33,7 +35,9 @@ COPY templates ./templates
 COPY static ./static
 COPY readme.md ./readme.md
 
-USER nonroot:nonroot
+RUN useradd -m nonroot
+USER nonroot
+#USER nonroot:nonroot
 
 EXPOSE 3000
 

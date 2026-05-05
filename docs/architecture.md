@@ -1,6 +1,69 @@
-# 📐 Architecture Overview
+# 📐 Architecture overview
 
-## 🧠 Core Application
+The application followed a layered service architecture designed for clarity, performance and maintainability.
+
+It combines:
+
+- Request driven HTTP execution
+- Shared application state
+- Background job processing
+- Structured observability
+- Preloaded runtime content
+
+---
+
+## 🧠 Core runtime model
+
+The application is initialized once and then serves requests using shared state.
+
+Core execution layers:
+
+```
+Browser
+↓
+Nginx
+↓
+Axum Router
+↓
+Middleware Stack
+↓
+Handlers
+↓
+AppState
+↓
+Service Layer
+↓
+Repository Layer
+↓
+PostgreSQL
+↓
+Askama Templates
+↓
+HTML Response
+```
+
+Each layer has a strict responibility boundary.
+
+---
+
+## 🧩 Application state model
+
+All runtime dependencies are grouped into a single shared structure:
+
+AppState
+└── AppContext
+    ├── Config
+    ├── Content
+    └── Services
+
+This ensures:
+
+- minimal handler overhead
+- predictable dependency injection
+- efficient memory usage
+- thread-safe shared access
+
+## 🧠 Core application
 
 - **Language:** Rust
 - **Web Framework:** Axum

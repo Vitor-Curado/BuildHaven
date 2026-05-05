@@ -5,6 +5,12 @@ use axum::{
 };
 use thiserror::Error;
 
+#[derive(serde::Serialize)]
+struct ErrorResponse {
+    code: &'static str,
+    message: &'static str,
+}
+
 #[derive(Debug, Error)]
 pub enum AppError {
     #[error("Database error: {0}")]
@@ -22,8 +28,15 @@ pub enum AppError {
     #[error("Configuration error: {0}")]
     Config(String),
 
+    #[error("Bad request: {0}")]
+    BadRequest(String),
+
     #[error("Generic error")]
-    Other(#[from] Box<dyn std::error::Error + Send + Sync>),
+    Other {
+        message: &'static str,
+        #[source]
+        source: Box<dyn std::error::Error + Send + Sync>,
+    },
 
     #[error("Resource not found")]
     NotFound,
@@ -41,14 +54,19 @@ pub type AppResult<T> = Result<T, AppError>;
 impl IntoResponse for AppError {
     fn into_response(self) -> Response {
         let status = self.status_code();
+        let body = ErrorResponse {
+            code: self.code(),
+            message: self.client_message(),
+        };
 
         tracing::error!(
-            error = %self,
+            error.display = %self,
+            error.debug = ?self,
             status = %status,
             "Application error"
         );
 
-        (status, self.client_message()).into_response()
+        (status, axum::Json(body)).into_response()
     }
 }
 
@@ -57,13 +75,15 @@ impl AppError {
         match self {
             AppError::NotFound => StatusCode::NOT_FOUND,
             AppError::Unauthorized => StatusCode::UNAUTHORIZED,
-            AppError::Config(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            AppError::BadRequest(_) => StatusCode::BAD_REQUEST,
+            AppError::Serialization(_) => StatusCode::BAD_REQUEST,
+
             AppError::Database(_) => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::Template(_) => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::Io(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            AppError::Config(_) => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::Internal => StatusCode::INTERNAL_SERVER_ERROR,
-            AppError::Serialization(_) => StatusCode::INTERNAL_SERVER_ERROR,
-            _ => StatusCode::INTERNAL_SERVER_ERROR,
+            AppError::Other { .. } => StatusCode::INTERNAL_SERVER_ERROR,
         }
     }
 
@@ -71,7 +91,23 @@ impl AppError {
         match self {
             AppError::NotFound => errors::NOT_FOUND,
             AppError::Unauthorized => errors::UNAUTHORIZED,
+            AppError::BadRequest(_) => errors::BAD_REQUEST,
             _ => errors::INTERNAL,
+        }
+    }
+
+    fn code(&self) -> &'static str {
+        match self {
+            AppError::NotFound => "NOT_FOUND",
+            AppError::Unauthorized => "UNAUTHORIZED",
+            AppError::Database(_) => "DB_ERROR",
+            AppError::Template(_) => "TEMPLATE_ERROR",
+            AppError::Io(_) => "IO_ERROR",
+            AppError::Serialization(_) => "SERDE_ERROR",
+            AppError::BadRequest(_) => "BAD_REQUEST",
+            AppError::Config(_) => "CONFIG_ERROR",
+            AppError::Internal => "INTERNAL",
+            AppError::Other { .. } => "UNKNOWN",
         }
     }
 }

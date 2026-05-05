@@ -2,6 +2,7 @@
 /static/dist/manifest.json
 /static/dist/
 .env
+.reminder.txt
 .index.txt
 benchmarks/results/*.raw
 /src/bin/indexer.rs

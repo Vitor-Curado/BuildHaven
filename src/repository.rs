@@ -3,7 +3,7 @@ use sqlx::PgPool;
 use uuid::Uuid;
 
 pub async fn create_post(pool: &PgPool, new_post: &NewPost) -> Result<Post, sqlx::Error> {
-    let id = Uuid::new_v4();
+    let id = Uuid::now_v7();
 
     let post = sqlx::query_as!(
         Post,

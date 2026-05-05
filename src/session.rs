@@ -9,7 +9,7 @@ pub async fn create_session(
     user_id: Uuid,
     config: &Config,
 ) -> Result<Session, sqlx::Error> {
-    let session_id = Uuid::new_v4();
+    let session_id = Uuid::now_v7();
     let now = Utc::now();
     let expires_at = now + Duration::hours(config.session.duration_hours); // Session valid for 24 hours
 

@@ -31,7 +31,7 @@ These headers reduce risks such as:
 
 Authentication is implemented using:
 
-- Secure password hashing (Argon2)
+- Current: Secure password hashing (Argon2) | Planned: OAuth2 providers
 - Unique salts per password
 - Session-based authentication
 - HTTP-only cookies

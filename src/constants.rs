@@ -35,6 +35,7 @@ pub mod paths {
 }
 
 pub mod errors {
+    pub const BAD_REQUEST: &str = "Bad request";
     pub const NOT_FOUND: &str = "Not found";
     pub const UNAUTHORIZED: &str = "Unauthorized";
     pub const INTERNAL: &str = "Internal server error";

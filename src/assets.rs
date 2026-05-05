@@ -156,10 +156,7 @@ fn process_images(manifest: &mut HashMap<String, String>) -> AppResult<()> {
 
             fs::write(dest_path, &optimized_bytes)?;
 
-            manifest.insert(
-                format!("icons/{}.{}", filename, extension),
-                hashed_filename,
-            );
+            manifest.insert(format!("icons/{}.{}", filename, extension), hashed_filename);
         }
     }
 
@@ -168,13 +165,19 @@ fn process_images(manifest: &mut HashMap<String, String>) -> AppResult<()> {
 
 fn optimize_svg(content: &[u8]) -> AppResult<Vec<u8>> {
     // Convert bytes → UTF-8 string
-    let svg_str = std::str::from_utf8(content).map_err(|e| AppError::Other(Box::new(e)))?;
+    let svg_str = std::str::from_utf8(content).map_err(|e| AppError::Other {
+        message: "Invalid UTF-8 in SVG",
+        source: Box::new(e),
+    })?;
 
     // Default options
     let options = Options::default();
 
     // Parse SVG
-    let tree = Tree::from_str(svg_str, &options).map_err(|e| AppError::Other(Box::new(e)))?;
+    let tree = Tree::from_str(svg_str, &options).map_err(|e| AppError::Other {
+        message: "Failed to parse SVG",
+        source: Box::new(e),
+    })?;
 
     // Serialize optimized SVG
     let write_options = WriteOptions::default();

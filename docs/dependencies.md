@@ -1,6 +1,30 @@
-# Dependencies
+# Payments
 
-* **Payments:** Neo Financial (Canadian), OFX (Canadian), Stripe, PayPal, Braintree, Square, Adyen, Paddle, Lemon Squeezy, Helcim
-* **Mail service:** PostageApp(Canadian), Mailgun, SendGrid, Postmark, Amazon SES
-* **Auth:** Google OAuth, GitHub OAuth
-* **Object storage:** DigitalOcean Spaces, Amazon S3, Cloudflare R2, Backblaze B2, MinIO, Google Cloud Storage
+- Neo Financial (CA);
+- Stripe;
+- Paddle
+- Lemon Squeezy
+- Adyen
+- Square
+- Braintree
+- PayPal
+
+## Email Delivery
+
+- Postmark
+- SendGrid
+- Mailgun
+- Amazon SES
+- PostageApp (CA)
+
+## Authentication Providers
+
+- Google OAuth
+- GitHub OAuth
+
+## Object Storage
+
+- Cloudflare R2 (preferred)
+- Backblaze B2
+- MinIO
+- S3-compatible providers

@@ -20,7 +20,7 @@ Built using modern Rust tooling and deployed on a Fedora Linux server behind Ngi
 - **CI/CD:** Woodpecker
 - **Reverse Proxy:** Nginx
 - **Benchmarking:** wrk
-- **Observability:** Prometheus (current, to be replaced by VictoriaMetrics) / Grafana
+- **Observability:** Prometheus (current) — migrating to VictoriaMetrics (planned) + Grafana
 - **Caching:** Dragonfly (planned)
 - **Object storage:** Cloudfare R2 (planned)
 - **Content Delivery Network:** Cloudfare CDN (planned)
