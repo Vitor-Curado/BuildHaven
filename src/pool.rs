@@ -1,16 +1,16 @@
 use crate::config::Config;
-use sqlx::{PgPool, Connection, postgres::PgPoolOptions};
+use sqlx::{Connection, PgPool, postgres::PgPoolOptions};
 use tokio::time::Duration;
 
 async fn wait_for_db(url: &str) {
-    for attempt in 1..=20 {
+    for attempt in 1..=40 {
         match sqlx::postgres::PgConnection::connect(url).await {
             Ok(mut conn) => {
                 let _ = sqlx::query("SELECT 1").execute(&mut conn).await;
                 return;
             }
             Err(e) => {
-                eprintln!("DB not ready ({attempt}/20): {e:#}");
+                eprintln!("DB not ready ({attempt}/40): {e:#}");
                 tokio::time::sleep(Duration::from_secs(1)).await;
             }
         }

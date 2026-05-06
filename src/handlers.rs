@@ -3,6 +3,7 @@ use crate::{
     config::Environment,
     constants::{cookies, icons, service, titles},
     error::{AppError, AppResult},
+    metrics::uptime_seconds,
     models::{LoginForm, NewUser, RegisterForm},
     repository::{create_user, find_user_by_email},
     services::list_posts,
@@ -204,7 +205,7 @@ pub async fn health() -> Json<HealthResponse> {
         status: ServiceStatus::Ok,
         service: service::NAME,
         version: env!("CARGO_PKG_VERSION"),
-        uptime_seconds: 0,
+        uptime_seconds: uptime_seconds(),
     })
 }
 

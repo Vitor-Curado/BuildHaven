@@ -33,6 +33,8 @@ prometheus = "0.14.0"
 once_cell = "1.21.4"
 hex = "0.4.3"
 usvg = "0.47"
+async-trait = "0.1.89"
+futures-util = "0.3.32"
 
 [build-dependencies]
 walkdir = "2"

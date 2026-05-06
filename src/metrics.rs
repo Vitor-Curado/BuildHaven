@@ -2,8 +2,10 @@
 
 use once_cell::sync::Lazy;
 use prometheus::{Encoder, HistogramVec, IntCounterVec, IntGaugeVec, Opts, Registry, TextEncoder};
+use std::{sync::OnceLock, time::Instant};
 
 pub static REGISTRY: Lazy<Registry> = Lazy::new(Registry::new);
+pub static START_TIME: OnceLock<Instant> = OnceLock::new();
 
 pub static HTTP_REQUESTS: Lazy<IntCounterVec> = Lazy::new(|| {
     let counter = IntCounterVec::new(
@@ -90,4 +92,15 @@ pub fn normalize_path(path: &str) -> String {
     } else {
         path.into()
     }
+}
+
+pub fn init_start_time() {
+    START_TIME.set(Instant::now()).ok();
+}
+
+pub fn uptime_seconds() -> u64 {
+    START_TIME
+        .get()
+        .map(|start| start.elapsed().as_secs())
+        .unwrap_or(0)
 }

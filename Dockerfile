@@ -36,7 +36,7 @@ COPY static ./static
 COPY readme.md ./readme.md
 
 RUN useradd -m nonroot
-USER nonroot
+USER root
 #USER nonroot:nonroot
 
 EXPOSE 3000

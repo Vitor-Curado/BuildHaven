@@ -1,8 +1,14 @@
 use std::sync::Arc;
 
 use crate::{
-    assets::Assets, config::Config, error::AppResult, jobs::JobRunner, metrics::init_build_info,
-    pool::create_pool, router::app, state::AppState,
+    assets::Assets,
+    config::Config,
+    error::AppResult,
+    jobs::{CacheWarmupJob, JobRunner, SessionCleanupJob},
+    metrics::init_build_info,
+    pool::create_pool,
+    router::app,
+    state::AppState,
 };
 
 use tokio::net::TcpListener;
@@ -15,8 +21,12 @@ pub async fn build_listener_and_app() -> AppResult<(TcpListener, axum::Router)> 
 
     init_build_info();
 
-    let job_runner = JobRunner::new(state.clone());
-    job_runner.start();
+    let mut runner = JobRunner::new();
+
+    runner.register(SessionCleanupJob::new(state.clone()));
+    runner.register(CacheWarmupJob::new(state.clone()));
+
+    runner.start();
 
     let port = state.ctx.config.app.port;
 

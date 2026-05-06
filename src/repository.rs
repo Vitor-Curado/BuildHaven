@@ -135,6 +135,19 @@ pub async fn find_user_by_id(pool: &PgPool, user_id: Uuid) -> Result<Option<User
     Ok(user)
 }
 
+pub async fn delete_expired_sessions(pool: &PgPool) -> Result<u64, sqlx::Error> {
+    let result = sqlx::query!(
+        r#"
+        DELETE FROM sessions
+        WHERE expires_at < NOW()
+        "#
+    )
+    .execute(pool)
+    .await?;
+
+    Ok(result.rows_affected())
+}
+
 #[allow(clippy::too_many_lines)]
 #[must_use]
 pub fn mock_food_data() -> Vec<Food> {

@@ -17,8 +17,8 @@ services:
       POSTGRES_PASSWORD: VioletteSzabo2147$
       POSTGRES_DB: buildhaven
     volumes:
-      #- postgres_data:/var/lib/postgresql/18/data
-      - postgres_data:/var/lib/postgresql/data:Z
+      - postgres_data:/var/lib/postgresql/18/data # works
+      #- postgres_data:/var/lib/postgresql/data:Z (doesn't work)
     ports: []
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
@@ -34,10 +34,12 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:Z
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
     restart: always
+    networks:
+      - backend
 
   victoriametrics:
     image: victoriametrics/victoria-metrics
