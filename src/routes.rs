@@ -1,6 +1,6 @@
 use crate::{
     handlers::{
-        assets, blog, contact, food, food_detail, health, home, login_page, login_user,
+        assets, blog, contact, docs, food, food_detail, health, home, login_page, login_user,
         register_page, register_user, resume,
     },
     metrics::gather_metrics,
@@ -11,6 +11,7 @@ use axum::{Router, response::IntoResponse, routing::get};
 pub fn public_routes() -> Router<AppState> {
     Router::new()
         .route("/", get(home))
+        .route("/docs/{slug}", get(docs))
         .route("/health", get(health))
         .route("/metrics", get(metrics))
         // Register

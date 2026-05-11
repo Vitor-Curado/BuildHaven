@@ -1,38 +1,33 @@
 <nav class="navbar">
     <ul class="navbar-group navbar-left">
+        {% for item in base.nav_items %}
         <li>
-            <a href="/" class="navbar-link">
-                <img src="/static/dist/icons/{{ base.assets.icon(crate::constants::icons::HOME) }}" alt="BuildHaven" class="navbar-icon">
-                Home
+            <a href="{{ item.href }}" class="navbar-link">
+                <img
+                    src="/static/dist/icons/{{ base.assets.icon(item.icon) }}"
+                    alt="{{ item.title }}"
+                    class="navbar-icon"
+                >
+                {{ item.title }}
             </a>
         </li>
+        {% endfor %}
 
-        <li>
-            <a href="/blog" class="navbar-link">
-                <img src="/static/dist/icons/{{ base.assets.icon(crate::constants::icons::BLOG) }}" alt="Blog" class="navbar-icon">
-                Blog
-            </a>
-        </li>
+        <li class="dropdown">
+            <button class="dropdown-button util-icon">
+                <img src="/static/dist/icons/{{ base.assets.icon(crate::constants::icons::SOFTWARE) }}" alt="More" class="navbar-icon">
+                Docs
+            </button>
 
-        <li>
-            <a href="/resume" class="navbar-link">
-                <img src="/static/dist/icons/{{ base.assets.icon(crate::constants::icons::RESUME) }}" alt="Resume" class="navbar-icon">
-                Resume
-            </a>
-        </li>
-
-        <li>
-            <a href="/food" class="navbar-link">
-                <img src="/static/dist/icons/{{ base.assets.icon(crate::constants::icons::FOOD) }}" alt="Food" class="navbar-icon">
-                Food
-            </a>
-        </li>
-
-        <li>
-            <a href="/contact" class="navbar-link">
-                <img src="/static/dist/icons/{{ base.assets.icon(crate::constants::icons::CONTACT) }}" alt="Contact" class="navbar-icon">
-                Contact
-            </a>
+            <ul class="dropdown-menu">
+                {% for doc in base.docs %}
+                <li>
+                    <a href="/docs/{{ doc.slug }}" class="dropdown-link">
+                        {{ doc.title }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
         </li>
     </ul>
 
@@ -50,17 +45,22 @@
             </button>
 
             <ul class="dropdown-menu">
+                {% for language in base.languages %}
                 <li>
-                    <button class="dropdown-link">
-                        English
-                    </button>
-                </li>
+                    <button
+                        class="dropdown-link"
+                        data-language="{{ language.code }}"
+                    >
+                        <img
+                            src="/static/media/languages/{{ language.icon }}"
+                            alt="{{ language.label }}"
+                            class="navbar-icon"
+                        >
 
-                <li>
-                    <button class="dropdown-link">
-                        Français
+                        {{ language.label }}
                     </button>
                 </li>
+                {% endfor %}
             </ul>
         </li>
 
@@ -71,31 +71,22 @@
             </button>
 
             <ul class="dropdown-menu">
+                {% for theme in base.themes %}
                 <li>
-                    <button class="dropdown-link" data-theme="sunset">
-                        <img src="/static/media/themes/sun-theme.png" alt="" class="navbar-icon">
-                        Sunset
-                    </button>
-                </li>
-                <li>
-                    <button class="dropdown-link" data-theme="night">
-                        <img src="/static/media/themes/night-theme.png" alt="" class="navbar-icon">
-                        Night
-                    </button>
-                </li>
-                <li>
-                    <button class="dropdown-link" data-theme="ocean">
-                        <img class="navbar-icon" src="/static/media/themes/ocean-theme.png" alt="">
-                        Ocean
-                    </button>
-                </li>
+                    <button
+                        class="dropdown-link"
+                        data-theme="{{ theme.id }}"
+                    >
+                        <img
+                            src="/static/media/themes/{{ theme.icon }}"
+                            alt="{{ theme.name }}"
+                            class="navbar-icon"
+                        >
 
-                <li>
-                    <button class="dropdown-link" data-theme="forest">
-                        <img class="navbar-icon" src="/static/media/themes/forest-theme.png" alt="">
-                        Forest
+                        {{ theme.name }}
                     </button>
                 </li>
+                {% endfor %}
             </ul>
         </li>
     </ul>

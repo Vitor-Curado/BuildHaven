@@ -1,6 +1,9 @@
+// src/templates.rs
 use crate::{
     assets::Assets,
     models::{Food, Post},
+    navbar::{DocItem, LANGUAGES, Language, NAV_ITEMS, NavItem, THEMES, Theme, DOCS},
+    state::AppState,
 };
 use askama::Template;
 use std::sync::Arc;
@@ -10,15 +13,43 @@ pub struct BaseTemplateContext {
     pub title: String,
     pub favicon: &'static str,
     pub assets: Arc<Assets>,
+
+    pub nav_items: &'static [NavItem],
+    pub themes: &'static [Theme],
+    pub languages: &'static [Language],
+
+    pub docs: &'static [DocItem],
 }
 
 impl BaseTemplateContext {
-    pub fn new(title: impl Into<String>, favicon: &'static str, assets: Arc<Assets>) -> Self {
+    pub fn new(
+        title: impl Into<String>,
+        favicon: &'static str,
+        assets: Arc<Assets>,
+        docs: &'static [DocItem],
+    ) -> Self {
         Self {
             title: title.into(),
             favicon,
             assets,
+            nav_items: NAV_ITEMS,
+            themes: THEMES,
+            languages: LANGUAGES,
+            docs,
         }
+    }
+
+    pub fn build_base_context(
+        state: &AppState,
+        title: impl Into<String>,
+        favicon: &'static str,
+    ) -> BaseTemplateContext {
+        BaseTemplateContext::new(
+            title,
+            favicon,
+            state.ctx.content.assets.clone(),
+            DOCS,
+        )
     }
 }
 
@@ -52,6 +83,14 @@ pub struct ResumeTemplate {
 pub struct BlogTemplate {
     pub base: BaseTemplateContext,
     pub posts: Vec<Post>,
+}
+
+#[derive(Template)]
+#[template(path = "pages/docs.html", escape = "none")]
+pub struct DocsTemplate {
+    pub base: BaseTemplateContext,
+    pub title: &'static str,
+    pub content_html: String,
 }
 
 #[derive(Template)]

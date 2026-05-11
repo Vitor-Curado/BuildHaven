@@ -1,3 +1,4 @@
+// src/constants.rs
 // Ordered alphabetically
 
 pub mod icons {
@@ -5,6 +6,7 @@ pub mod icons {
     pub const BLOG: &str = "blog.png";
     pub const BOARDGAME: &str = "boardgames.svg";
     pub const CONTACT: &str = "contact.svg";
+    pub const DOCS: &str = "blog.png";
     pub const EMAIL: &str = "email.png";
     pub const FOOD: &str = "food.svg";
     pub const HOME: &str = "home.svg";
@@ -19,6 +21,7 @@ pub mod titles {
     pub const ASSETS: &str = "Assets";
     pub const BLOG: &str = "Blog";
     pub const CONTACT: &str = "Contact";
+    pub const DOCS: &str = "Documentation";
     pub const FOOD: &str = "Food";
     pub const HOME: &str = "BuildHaven";
     pub const LOGIN: &str = "Login";

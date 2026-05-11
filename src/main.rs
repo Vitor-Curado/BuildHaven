@@ -1,3 +1,4 @@
+// src/main.rs
 use buildhaven::{
     bootstrap::build_listener_and_app, error::AppError, metrics::init_start_time,
     shutdown::graceful_shutdown_signal, telemetry::init_tracing,

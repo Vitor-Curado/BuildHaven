@@ -1,3 +1,4 @@
+// src/assets.rs
 // Note: we are explicitly not minifying.
 // This is because the CSS/JS content is already
 // very small and minification would not save much space,

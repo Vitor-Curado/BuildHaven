@@ -1,7 +1,7 @@
 use crate::{repository::delete_expired_sessions, services::list_posts, state::AppState};
-use std::{sync::Arc, time::Duration, panic::AssertUnwindSafe};
 use async_trait::async_trait;
 use futures_util::FutureExt;
+use std::{panic::AssertUnwindSafe, sync::Arc, time::Duration};
 use tokio::task::JoinHandle;
 
 pub struct JobRunner {
@@ -16,6 +16,12 @@ pub trait Job: Send + Sync + 'static {
     fn interval(&self) -> Duration;
 
     async fn run(&self);
+}
+
+impl Default for JobRunner {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl JobRunner {
@@ -137,19 +143,15 @@ impl Job for SessionMetricsJob {
 
         let db = &self.state.ctx.services.db;
 
-        let active: i64 = query_scalar(
-            "SELECT COUNT(*) FROM sessions WHERE expires_at > NOW()"
-        )
-        .fetch_one(db)
-        .await
-        .unwrap_or(0);
+        let active: i64 = query_scalar("SELECT COUNT(*) FROM sessions WHERE expires_at > NOW()")
+            .fetch_one(db)
+            .await
+            .unwrap_or(0);
 
-        let expired: i64 = query_scalar(
-            "SELECT COUNT(*) FROM sessions WHERE expires_at <= NOW()"
-        )
-        .fetch_one(db)
-        .await
-        .unwrap_or(0);
+        let expired: i64 = query_scalar("SELECT COUNT(*) FROM sessions WHERE expires_at <= NOW()")
+            .fetch_one(db)
+            .await
+            .unwrap_or(0);
 
         tracing::info!(
             active_sessions = active,

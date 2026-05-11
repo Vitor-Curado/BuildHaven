@@ -1,3 +1,4 @@
+// src/state.rs
 use crate::{
     assets::Assets, config::Config, content::Content, context::AppContext, error::AppError,
     services::Services,

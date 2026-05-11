@@ -1,3 +1,4 @@
+// src/content.rs
 use crate::{
     assets::Assets,
     models::Food,
@@ -19,11 +20,9 @@ impl Content {
     pub fn new(assets: Assets) -> Self {
         // Load README
         let readme_md = load_readme();
-        let readme_html = markdown_to_html(&readme_md);
-
         Self {
             assets: Arc::new(assets),
-            readme_html: Arc::new(readme_html),
+            readme_html: Arc::new(markdown_to_html(&readme_md)),
             food_data: Arc::new(mock_food_data()),
         }
     }

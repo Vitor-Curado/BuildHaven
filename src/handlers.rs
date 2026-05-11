@@ -1,3 +1,4 @@
+// src/handlers.rs
 use crate::{
     api::{HealthResponse, ServiceStatus},
     config::Environment,
@@ -5,14 +6,16 @@ use crate::{
     error::{AppError, AppResult},
     metrics::uptime_seconds,
     models::{LoginForm, NewUser, RegisterForm},
+    navbar::DOCS,
     repository::{create_user, find_user_by_email},
     services::list_posts,
     session::create_session,
     state::AppState,
     templates::{
-        AssetsTemplate, BaseTemplateContext, BlogTemplate, ContactTemplate, FoodDetailTemplate,
+        AssetsTemplate, BaseTemplateContext, BlogTemplate, ContactTemplate, DocsTemplate, FoodDetailTemplate,
         FoodTemplate, IndexTemplate, LoginTemplate, RegisterTemplate, ResumeTemplate,
     },
+    utils::markdown_to_html
 };
 
 use axum::{
@@ -46,7 +49,7 @@ pub fn render_template<T: Template>(t: T) -> AppResult<Response> {
 
 pub async fn home(State(state): State<AppState>) -> Result<Response, AppError> {
     render_template(IndexTemplate {
-        base: BaseTemplateContext::new(titles::HOME, icons::HOME, state.ctx.content.assets.clone()),
+        base: BaseTemplateContext::build_base_context(&state, titles::HOME, icons::HOME),
         readme_html: state.ctx.content.readme_html.clone(),
     })
 }
@@ -74,11 +77,7 @@ pub async fn register_user(
 
 pub async fn register_page(State(state): State<AppState>) -> AppResult<Response> {
     render_template(RegisterTemplate {
-        base: BaseTemplateContext::new(
-            titles::REGISTER,
-            icons::LOGIN,
-            state.ctx.content.assets.clone(),
-        ),
+        base: BaseTemplateContext::build_base_context(&state, titles::REGISTER, icons::LOGIN),
     })
 }
 
@@ -147,11 +146,7 @@ pub async fn login_user(
 
 pub async fn login_page(State(state): State<AppState>) -> impl IntoResponse {
     render_template(LoginTemplate {
-        base: BaseTemplateContext::new(
-            titles::LOGIN,
-            icons::LOGIN,
-            state.ctx.content.assets.clone(),
-        ),
+        base: BaseTemplateContext::build_base_context(&state, titles::LOGIN, icons::LOGIN),
     })
 }
 
@@ -161,7 +156,7 @@ pub async fn login_page(State(state): State<AppState>) -> impl IntoResponse {
 /// This function will panic if the template rendering fails.
 pub async fn food(State(state): State<AppState>) -> AppResult<Response> {
     render_template(FoodTemplate {
-        base: BaseTemplateContext::new(titles::FOOD, icons::FOOD, state.ctx.content.assets.clone()),
+        base: BaseTemplateContext::build_base_context(&state, titles::FOOD, icons::FOOD),
         foods: &state.ctx.content.food_data,
     })
 }
@@ -179,7 +174,7 @@ pub async fn food_detail(
         .ok_or(AppError::NotFound)?;
 
     render_template(FoodDetailTemplate {
-        base: BaseTemplateContext::new(food.title, icons::FOOD, state.ctx.content.assets.clone()),
+        base: BaseTemplateContext::build_base_context(&state, food.title, icons::FOOD),
         food,
     })
 }
@@ -189,11 +184,7 @@ pub async fn food_detail(
 /// This function will panic if the template rendering fails.
 pub async fn resume(State(state): State<AppState>) -> AppResult<Response> {
     render_template(ResumeTemplate {
-        base: BaseTemplateContext::new(
-            titles::RESUME,
-            icons::RESUME,
-            state.ctx.content.assets.clone(),
-        ),
+        base: BaseTemplateContext::build_base_context(&state, titles::RESUME, icons::RESUME),
     })
 }
 
@@ -216,8 +207,31 @@ pub async fn blog(State(state): State<AppState>) -> AppResult<Response> {
     let posts = list_posts(&state.ctx.services.db).await?;
 
     render_template(BlogTemplate {
-        base: BaseTemplateContext::new(titles::BLOG, icons::BLOG, state.ctx.content.assets.clone()),
+        base: BaseTemplateContext::build_base_context(&state, titles::BLOG, icons::BLOG),
         posts,
+    })
+}
+
+pub async fn docs(
+    Path(slug): Path<String>,
+    State(state): State<AppState>,
+) -> AppResult<Response> {
+    let doc = DOCS
+        .iter()
+        .find(|d| d.slug == slug)
+        .ok_or(AppError::NotFound)?;
+
+    let html = markdown_to_html(doc.markdown);
+
+    render_template(DocsTemplate {
+        base: BaseTemplateContext::build_base_context(
+            &state,
+            doc.title,
+            icons::DOCS,
+        ),
+
+        title: doc.title,
+        content_html: html,
     })
 }
 
@@ -226,11 +240,7 @@ pub async fn blog(State(state): State<AppState>) -> AppResult<Response> {
 /// This function will panic if the template rendering fails.
 pub async fn contact(State(state): State<AppState>) -> AppResult<Response> {
     render_template(ContactTemplate {
-        base: BaseTemplateContext::new(
-            titles::CONTACT,
-            icons::CONTACT,
-            state.ctx.content.assets.clone(),
-        ),
+        base: BaseTemplateContext::build_base_context(&state, titles::CONTACT, icons::CONTACT),
     })
 }
 
@@ -239,10 +249,6 @@ pub async fn contact(State(state): State<AppState>) -> AppResult<Response> {
 /// This function will panic if the template rendering fails.
 pub async fn assets(State(state): State<AppState>) -> AppResult<Response> {
     render_template(AssetsTemplate {
-        base: BaseTemplateContext::new(
-            titles::ASSETS,
-            "assets-icon.png",
-            state.ctx.content.assets.clone(),
-        ),
+        base: BaseTemplateContext::build_base_context(&state, titles::ASSETS, "assets-icon.png"),
     })
 }

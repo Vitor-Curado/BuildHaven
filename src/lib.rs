@@ -16,6 +16,7 @@ pub mod logging;
 pub mod metrics;
 pub mod middleware;
 pub mod models;
+pub mod navbar;
 pub mod pool;
 pub mod rate_limit;
 pub mod repository;

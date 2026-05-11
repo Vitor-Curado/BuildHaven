@@ -1,6 +1,11 @@
 # 📁 Project Structure
 
-```
+```text
+├── Benchmarks
+│   ├── [timestamp].txt
+│   ├── ...
+│   └── curl-format.txt
+│
 ├── docs
 │   ├── architecture.md
 │   ├── assets.md
@@ -20,15 +25,20 @@
 │   ├── structure.md
 │   └── testing.md
 │
+├── migrations
+│   └── 20260402022251_create_posts_table.sql
+│
 ├── scripts
 │   ├── benchmark.sh
 │   ├── check.sh
 │   ├── deploy.sh
-│   ├── grafana.sh
-│   ├── inspect.sh
-│   ├── prometheus.sh
-│   ├── start-observability.sh
-│   └── stop-observability.sh
+│   └── inspect.sh
+│
+├── sql 
+│   ├── 001_resume_core.sql
+│   ├── 002_education_experience.sql
+│   ├── 003_skills_certifications.sql
+│   └── indexes.sql
 │
 ├── src
 │   ├── api.rs
