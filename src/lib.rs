@@ -10,8 +10,6 @@ pub mod handlers;
 // lib.rs
 pub mod logging;
 // main.rs
-pub mod metrics;
-pub mod middleware;
 pub mod models;
 pub mod navbar;
 pub mod pool;

@@ -28,18 +28,14 @@ impl AppConfig {
         let mut config: Self = envy::from_env().map_err(|_| AppError::Internal)?;
 
         if config.max_request_body_size.is_none() {
-            config.max_request_body_size = Some(Self::default_request_body_size(&config.environment));
+            config.max_request_body_size = Some(Self::default_request_body_size());
         }
 
         Ok(config)
     }
 
-    fn default_request_body_size(env: &Environment) -> usize {
-        match env {
-            Environment::Development => 10 * 1024 * 1024, // 10 MB
-            Environment::Benchmark => 50 * 1024 * 1024,   // 50 MB
-            Environment::Production => 2 * 1024 * 1024,   // 2 MB
-        }
+    fn default_request_body_size() -> usize {
+        2 * 1024 * 1024 // 2 MB
     }
 }
 

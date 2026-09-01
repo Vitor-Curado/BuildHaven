@@ -4,7 +4,6 @@ use crate::{
     assets::Assets,
     config::Config,
     error::AppResult,
-    metrics::init_build_info,
     pool::create_pool,
     router::app,
     state::AppState,
@@ -17,8 +16,6 @@ pub async fn build_listener_and_app() -> AppResult<(TcpListener, axum::Router)> 
     let db_pool = create_pool(&config).await?;
     let assets = Arc::new(Assets::build()?);
     let state = AppState::new(db_pool, config, assets)?;
-
-    init_build_info();
 
     let port = state.config.app.port;
 

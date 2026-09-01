@@ -55,11 +55,11 @@ pub async fn require_auth(
 
     let session_id = cookie.value().parse().map_err(|_| AppError::Unauthorized)?;
 
-    let session = get_session_by_id(&state.ctx.services.db, session_id)
+    let session = get_session_by_id(&state.db, session_id)
         .await?
         .ok_or(AppError::Unauthorized)?;
 
-    let user = find_user_by_id(&state.ctx.services.db, session.user_id)
+    let user = find_user_by_id(&state.db, session.user_id)
         .await?
         .ok_or(AppError::Unauthorized)?;
 

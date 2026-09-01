@@ -1,5 +1,5 @@
 use crate::{
-    api::{HealthResponse, ServiceStatus}, constants::{cookies, icons, service, titles}, error::{AppError, AppResult}, metrics::uptime_seconds, models::{LoginForm, NewUser, RegisterForm}, navbar::DOCS, repository::{create_user, find_user_by_email, get_all_posts}, session::create_session, state::AppState, templates::{
+    api::{HealthResponse, ServiceStatus}, constants::{cookies, icons, service, titles}, error::{AppError, AppResult}, models::{LoginForm, NewUser, RegisterForm}, navbar::DOCS, repository::{create_user, find_user_by_email, get_all_posts}, session::create_session, state::AppState, templates::{
         AssetsTemplate, BaseTemplateContext, BlogTemplate, ContactTemplate, DocsTemplate,
         FoodDetailTemplate, FoodTemplate, IndexTemplate, LoginTemplate, RegisterTemplate,
         ResumeTemplate,
@@ -38,7 +38,6 @@ pub fn render_template<T: Template>(t: T) -> AppResult<Response> {
 pub async fn home(State(state): State<AppState>) -> Result<Response, AppError> {
     render_template(IndexTemplate {
         base: BaseTemplateContext::build_base_context(&state, titles::HOME, icons::HOME),
-        readme_html: state.ctx.content.readme_html.clone(),
     })
 }
 
@@ -46,7 +45,7 @@ pub async fn register_user(
     State(state): State<AppState>,
     Form(form): Form<RegisterForm>,
 ) -> impl IntoResponse {
-    let hashed = state.ctx.services.auth.hash_password(&form.password);
+    let hashed = state.auth.hash_password(&form.password);
 
     let new_user = NewUser {
         username: form.username,
@@ -54,7 +53,7 @@ pub async fn register_user(
         password_hash: hashed,
     };
 
-    match create_user(&state.ctx.services.db, new_user).await {
+    match create_user(&state.db, new_user).await {
         Ok(_) => Redirect::to("/login").into_response(),
         Err(e) => {
             tracing::error!("User creation failed: {:?}", e);
@@ -75,7 +74,7 @@ pub async fn login_user(
     Form(form): Form<LoginForm>,
 ) -> impl IntoResponse {
     // Find user in DB
-    let user = find_user_by_email(&state.ctx.services.db, &form.email)
+    let user = find_user_by_email(&state.db, &form.email)
         .await
         .ok()
         .flatten();
@@ -100,7 +99,7 @@ pub async fn login_user(
     let start = Instant::now();
 
     // If correct → create session
-    let session = match create_session(&state.ctx.services.db, user.id, &state.ctx.config).await {
+    let session = match create_session(&state.db, user.id, &state.config).await {
         Ok(session) => session,
         Err(_) => {
             let elapsed = start.elapsed();
@@ -192,7 +191,7 @@ pub async fn health() -> Json<HealthResponse> {
 /// # Panics
 /// This function will panic if the template rendering fails.
 pub async fn blog(State(state): State<AppState>) -> AppResult<Response> {
-    let posts = get_all_posts(&state.ctx.services.db).await?;
+    let posts = get_all_posts(&state.db).await?;
 
     render_template(BlogTemplate {
         base: BaseTemplateContext::build_base_context(&state, titles::BLOG, icons::BLOG),

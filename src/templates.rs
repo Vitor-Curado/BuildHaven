@@ -44,7 +44,7 @@ impl BaseTemplateContext {
         title: impl Into<String>,
         favicon: &'static str,
     ) -> BaseTemplateContext {
-        BaseTemplateContext::new(title, favicon, state.ctx.content.assets.clone(), DOCS)
+        BaseTemplateContext::new(title, favicon, state.assets.clone(), DOCS)
     }
 }
 
@@ -52,7 +52,6 @@ impl BaseTemplateContext {
 #[template(path = "pages/index.html", escape = "none")]
 pub struct IndexTemplate {
     pub base: BaseTemplateContext,
-    pub readme_html: Arc<String>,
 }
 
 #[derive(Template)]

@@ -1,5 +1,5 @@
 use crate::{
-    cors::apply_cors, logging::apply_logging, middleware::latency_middleware,
+    cors::apply_cors, logging::apply_logging,
     routes::public_routes, security::apply_security_headers,
     state::AppState,
 };
@@ -20,7 +20,6 @@ pub fn app(state: AppState) -> Router {
         .merge(public_routes())
         .nest_service("/static", static_service)
         .layer(CompressionLayer::new().br(true).gzip(true).deflate(true))
-        .layer(axum::middleware::from_fn(latency_middleware))
         .layer(SetRequestIdLayer::x_request_id(MakeRequestUuid))
         .layer(PropagateRequestIdLayer::x_request_id())
         .with_state(state.clone());

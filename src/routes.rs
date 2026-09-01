@@ -3,7 +3,6 @@ use crate::{
         assets, blog, contact, docs, food, food_detail, health, home, login_page, login_user,
         register_page, register_user, resume,
     },
-    metrics::gather_metrics,
     state::AppState,
 };
 use axum::{Router, response::IntoResponse, routing::get};
@@ -34,6 +33,5 @@ pub fn protected_routes() -> Router<AppState> {
 async fn metrics() -> impl IntoResponse {
     (
         [("Content-Type", "text/plain; version=0.0.4")],
-        gather_metrics().into_response(),
     )
 }
