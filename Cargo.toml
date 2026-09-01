@@ -10,31 +10,71 @@ axum-extra = { version = "0.12.6", features = ["cookie"] }
 askama = "0.16.0"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1.0"
-tower-http = { version = "0.6.10", features = ["fs", "trace", "set-header", "compression-gzip", "cors", "limit", "compression-br", "compression-deflate"] }
+tower = "0.5.3"
+tower-http = { version = "0.6.10", features = ["fs", "trace", "set-header", "compression-gzip", "cors", "limit", "compression-br", "compression-deflate", "request-id"] }
 tower_governor = { version = "0.8.0", features = ["axum"] }
+tokio = { version = "1.52.2", features = ["full"] }
 tracing = "0.1.44"
 tracing-subscriber = { version = "0.3.23", features = ["env-filter", "json"] }
-tokio = { version = "1.52.2", features = ["full"] }
 pulldown-cmark = "0.13.3"
-sha2 = "0.11.0"
 sqlx = { version = "0.8.6", features = ["postgres", "runtime-tokio-rustls", "uuid", "chrono", "macros"] }
 dotenvy = "0.15.7"
+envy = "0.4"
 uuid = {version = "1.23.1", features = ["serde", "v7"]}
-chrono = "0.4.44"
 thiserror = "2.0.18"
 argon2 = "0.5"
+time = "0.3.47"
+validator = "0.20.0" # Gotta use this (forgot)
+prometheus = "0.14.0"
+usvg = "0.47"
+
+# Chopping block
+num_cpus = "1.17.0"
+once_cell = "1.21.4"
+async-trait = "0.1.89"
+chrono = "0.4.44"
+futures-util = "0.3.32"
+
+# Investigate
+hex = "0.4.3"
 password-hash = "0.6.1"
 rand_core = "0.10.1"
-time = "0.3.47"
-validator = "0.20.0"
-num_cpus = "1.17.0"
-tower = "0.5.3"
-prometheus = "0.14.0"
-once_cell = "1.21.4"
-hex = "0.4.3"
-usvg = "0.47"
-async-trait = "0.1.89"
-futures-util = "0.3.32"
+sha2 = "0.11.0"
+
+# --- Investigate / potentially add ---
+
+# Sessions / authentication
+# tower-sessions
+# axum-oidc / openidconnect
+
+# Observability
+# opentelemetry
+# tracing-opentelemetry
+# opentelemetry-prometheus
+
+# API
+# utoipa
+
+# Validation
+# axum-valid
+
+# Authorization — only if custom RBAC gets complicated
+# casbin
+
+# Background jobs — only if you need a job system
+# apalis / fang
+
+# Caching — only if you need application-level caching
+# moka
+
+# Email — only if you send email
+# lettre
+
+# Configuration — probably unnecessary unless config gets complicated
+# figment / config
+
+# CSRF — only if you're doing cookie-based browser auth
+# tower-csrf
 
 [build-dependencies]
 walkdir = "2"

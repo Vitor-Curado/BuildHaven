@@ -1,36 +1,37 @@
 use crate::error::{AppError, AppResult};
+use serde::Deserialize;
 
-#[derive(Clone)]
+#[derive(Clone, Deserialize)]
 pub struct AppConfig {
+    #[serde(default = "default_port")]
     pub port: u16,
+
+    #[serde(default)]
     pub environment: Environment,
-    pub max_request_body_size: usize,
+
+    pub max_request_body_size: Option<usize>,
+
+    #[serde(default = "default_cookie_domain")]
     pub cookie_domain: String,
 }
 
+    fn default_port() -> u16 {
+        3000
+    }
+
+    fn default_cookie_domain() -> String {
+        "localhost".to_string()
+    }
+
 impl AppConfig {
     pub fn from_env() -> AppResult<Self> {
-        let port = std::env::var("PORT")
-            .unwrap_or_else(|_| "3000".to_string())
-            .parse()
-            .map_err(|_| AppError::Internal)?;
+        let mut config: Self = envy::from_env().map_err(|_| AppError::Internal)?;
 
-        let environment = Environment::from_env();
+        if config.max_request_body_size.is_none() {
+            config.max_request_body_size = Some(Self::default_request_body_size(&config.environment));
+        }
 
-        let max_request_body_size = std::env::var("MAX_REQUEST_BODY_SIZE")
-            .ok()
-            .and_then(|v| v.parse().ok())
-            .unwrap_or_else(|| Self::default_request_body_size(&environment));
-
-        let cookie_domain =
-            std::env::var("COOKIE_DOMAIN").unwrap_or_else(|_| "localhost".to_string());
-
-        Ok(Self {
-            port,
-            environment,
-            max_request_body_size,
-            cookie_domain,
-        })
+        Ok(config)
     }
 
     fn default_request_body_size(env: &Environment) -> usize {
@@ -42,14 +43,39 @@ impl AppConfig {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Deserialize)]
 pub struct DatabaseConfig {
     pub url: String,
+
+    #[serde(default = "default_db_min_connections")]
     pub min_connections: u32,
-    pub max_connections: u32,
+    
+    pub max_connections: Option<u32>,
+
+    #[serde(default = "default_db_idle_timeout_secs")]
     pub idle_timeout_secs: u64,
+
+    #[serde(default = "default_db_acquire_timeout_secs")]
     pub acquire_timeout_secs: u64,
+
+    #[serde(default = "default_db_max_lifetime_secs")]
     pub max_lifetime_secs: u64,
+}
+
+fn default_db_min_connections() -> u32 {
+    1
+}
+
+fn default_db_idle_timeout_secs() -> u64 {
+    300
+}
+
+fn default_db_acquire_timeout_secs() -> u64 {
+    30
+}
+
+fn default_db_max_lifetime_secs() -> u64 {
+    1800
 }
 
 impl DatabaseConfig {
@@ -131,31 +157,6 @@ impl CorsConfig {
 }
 
 #[derive(Clone)]
-pub struct RateLimitConfig {
-    pub per_second: u64,
-    pub burst_size: u32,
-}
-
-impl RateLimitConfig {
-    pub fn from_env() -> Self {
-        let per_second = std::env::var("RATE_LIMIT_PER_SECOND")
-            .ok()
-            .and_then(|v| v.parse().ok())
-            .unwrap_or(10);
-
-        let burst_size = std::env::var("RATE_LIMIT_BURST_SIZE")
-            .ok()
-            .and_then(|v| v.parse().ok())
-            .unwrap_or(100);
-
-        Self {
-            per_second,
-            burst_size,
-        }
-    }
-}
-
-#[derive(Clone)]
 pub struct SecurityConfig {
     pub cache_control: String,
     pub content_security_policy: String,
@@ -203,7 +204,6 @@ pub struct Config {
     pub app: AppConfig,
     pub database: DatabaseConfig,
     pub cors: CorsConfig,
-    pub rate_limit: RateLimitConfig,
     pub session: SessionConfig,
     pub security: SecurityConfig,
 }
@@ -214,31 +214,9 @@ impl Config {
         Ok(Self {
             database: DatabaseConfig::from_env(&app.environment)?,
             cors: CorsConfig::from_env(),
-            rate_limit: RateLimitConfig::from_env(),
             session: SessionConfig::from_env(),
             security: SecurityConfig::from_env(),
             app,
         })
-    }
-}
-
-#[derive(Clone, Debug)]
-pub enum Environment {
-    Development,
-    Production,
-    Benchmark,
-}
-
-impl Environment {
-    fn from_env() -> Self {
-        match std::env::var("APP_ENV")
-            .unwrap_or_else(|_| "development".to_string())
-            .to_lowercase()
-            .as_str()
-        {
-            "production" => Self::Production,
-            "benchmark" => Self::Benchmark,
-            _ => Self::Development,
-        }
     }
 }

@@ -234,5 +234,5 @@ pub const DOCS: &[DocItem] = &[
         title: "Testing",
         slug: "testing",
         markdown: include_str!("../docs/testing.md"),
-    }
+    },
 ];

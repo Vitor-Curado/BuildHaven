@@ -2,7 +2,7 @@
 use crate::{
     assets::Assets,
     models::{Food, Post},
-    navbar::{DocItem, LANGUAGES, Language, NAV_ITEMS, NavItem, THEMES, Theme, DOCS},
+    navbar::{DOCS, DocItem, LANGUAGES, Language, NAV_ITEMS, NavItem, THEMES, Theme},
     state::AppState,
 };
 use askama::Template;
@@ -44,12 +44,7 @@ impl BaseTemplateContext {
         title: impl Into<String>,
         favicon: &'static str,
     ) -> BaseTemplateContext {
-        BaseTemplateContext::new(
-            title,
-            favicon,
-            state.ctx.content.assets.clone(),
-            DOCS,
-        )
+        BaseTemplateContext::new(title, favicon, state.ctx.content.assets.clone(), DOCS)
     }
 }
 

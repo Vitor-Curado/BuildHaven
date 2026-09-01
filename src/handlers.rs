@@ -1,21 +1,9 @@
-// src/handlers.rs
 use crate::{
-    api::{HealthResponse, ServiceStatus},
-    config::Environment,
-    constants::{cookies, icons, service, titles},
-    error::{AppError, AppResult},
-    metrics::uptime_seconds,
-    models::{LoginForm, NewUser, RegisterForm},
-    navbar::DOCS,
-    repository::{create_user, find_user_by_email},
-    services::list_posts,
-    session::create_session,
-    state::AppState,
-    templates::{
-        AssetsTemplate, BaseTemplateContext, BlogTemplate, ContactTemplate, DocsTemplate, FoodDetailTemplate,
-        FoodTemplate, IndexTemplate, LoginTemplate, RegisterTemplate, ResumeTemplate,
-    },
-    utils::markdown_to_html
+    api::{HealthResponse, ServiceStatus}, constants::{cookies, icons, service, titles}, error::{AppError, AppResult}, metrics::uptime_seconds, models::{LoginForm, NewUser, RegisterForm}, navbar::DOCS, repository::{create_user, find_user_by_email, get_all_posts}, session::create_session, state::AppState, templates::{
+        AssetsTemplate, BaseTemplateContext, BlogTemplate, ContactTemplate, DocsTemplate,
+        FoodDetailTemplate, FoodTemplate, IndexTemplate, LoginTemplate, RegisterTemplate,
+        ResumeTemplate,
+    }, utils::markdown_to_html,
 };
 
 use axum::{
@@ -204,7 +192,7 @@ pub async fn health() -> Json<HealthResponse> {
 /// # Panics
 /// This function will panic if the template rendering fails.
 pub async fn blog(State(state): State<AppState>) -> AppResult<Response> {
-    let posts = list_posts(&state.ctx.services.db).await?;
+    let posts = get_all_posts(&state.ctx.services.db).await?;
 
     render_template(BlogTemplate {
         base: BaseTemplateContext::build_base_context(&state, titles::BLOG, icons::BLOG),
@@ -212,10 +200,7 @@ pub async fn blog(State(state): State<AppState>) -> AppResult<Response> {
     })
 }
 
-pub async fn docs(
-    Path(slug): Path<String>,
-    State(state): State<AppState>,
-) -> AppResult<Response> {
+pub async fn docs(Path(slug): Path<String>, State(state): State<AppState>) -> AppResult<Response> {
     let doc = DOCS
         .iter()
         .find(|d| d.slug == slug)
@@ -224,11 +209,7 @@ pub async fn docs(
     let html = markdown_to_html(doc.markdown);
 
     render_template(DocsTemplate {
-        base: BaseTemplateContext::build_base_context(
-            &state,
-            doc.title,
-            icons::DOCS,
-        ),
+        base: BaseTemplateContext::build_base_context(&state, doc.title, icons::DOCS),
 
         title: doc.title,
         content_html: html,

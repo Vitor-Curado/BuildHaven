@@ -1,3 +1,8 @@
+// Ideas:
+// #1: Generate a compile-time project manifest
+// #2: become a dependency auditor
+// #3: Generate a compile-time assets manifest/metadata
+
 use std::{collections::HashMap, fs, fs::File, io::Write, path::Path};
 use walkdir::WalkDir;
 
@@ -11,7 +16,8 @@ fn main() {
     // Change here according to taste
     // Possibilities: rs, html, sql, toml, js, css, md, etc.
     //let allowed = ["rs", "html", "css", "js", "md", "sql", "toml"];
-    let allowed = ["yml", "sh", "env"];
+    //let allowed = ["yml", "sh", "env"];
+    let allowed = ["rs"];
 
     let mut output = File::create(".index.txt").expect("Failed to create output file");
 

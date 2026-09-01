@@ -1,4 +1,3 @@
-// src/constants.rs
 // Ordered alphabetically
 
 pub mod icons {
