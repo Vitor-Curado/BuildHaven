@@ -7,42 +7,20 @@ use crate::{
 
 use argon2::{
     Argon2,
-    password_hash::{PasswordHash, PasswordHasher, PasswordVerifier, SaltString, rand_core::OsRng},
+    password_hash::{PasswordHash, PasswordVerifier},
 };
 use axum::{body::Body, extract::State, http::Request, middleware::Next, response::Response};
 use axum_extra::extract::cookie::CookieJar;
 
-#[derive(Clone)]
-pub struct AuthService {
-    argon2: Argon2<'static>,
-}
+pub fn verify_password(password: &str, hash: &str) -> bool {
+    let parsed_hash = match PasswordHash::new(hash) {
+        Ok(h) => h,
+        Err(_) => return false,
+    };
 
-impl AuthService {
-    pub fn new() -> Self {
-        Self {
-            argon2: Argon2::default(),
-        }
-    }
-
-    pub fn hash_password(&self, password: &str) -> String {
-        let salt = SaltString::generate(&mut OsRng);
-
-        self.argon2
-            .hash_password(password.as_bytes(), &salt)
-            .expect("argon2 hashing failed")
-            .to_string()
-    }
-
-    pub fn verify_password(&self, password: &str, hash: &str) -> bool {
-        let parsed_hash = match PasswordHash::new(hash) {
-            Ok(h) => h,
-            Err(_) => return false,
-        };
-
-        self.argon2
-            .verify_password(password.as_bytes(), &parsed_hash)
-            .is_ok()
-    }
+    Argon2::default()
+        .verify_password(password.as_bytes(), &parsed_hash)
+        .is_ok()
 }
 
 pub async fn require_auth(
@@ -66,10 +44,4 @@ pub async fn require_auth(
     request.extensions_mut().insert(user);
 
     Ok(next.run(request).await)
-}
-
-impl Default for AuthService {
-    fn default() -> Self {
-        Self::new()
-    }
 }

@@ -1,4 +1,4 @@
-use crate::models::{NewPost, NewUser, Post, User};
+use crate::models::{NewPost, Post, User};
 use sqlx::PgPool;
 use uuid::Uuid;
 
@@ -83,24 +83,6 @@ pub async fn delete_post(pool: &PgPool, post_id: Uuid) -> Result<bool, sqlx::Err
     .await?;
 
     Ok(result.rows_affected() > 0)
-}
-
-pub async fn create_user(pool: &PgPool, new_user: NewUser) -> Result<User, sqlx::Error> {
-    let user = sqlx::query_as!(
-        User,
-        r#"
-        INSERT INTO users (username, email, password_hash)
-        VALUES ($1, $2, $3)
-        RETURNING id, username, email, password_hash, created_at
-        "#,
-        new_user.username,
-        new_user.email,
-        new_user.password_hash
-    )
-    .fetch_one(pool)
-    .await?;
-
-    Ok(user)
 }
 
 pub async fn find_user_by_email(pool: &PgPool, email: &str) -> Result<Option<User>, sqlx::Error> {

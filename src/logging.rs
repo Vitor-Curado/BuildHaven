@@ -1,4 +1,4 @@
-use crate::config::{Config};
+use crate::config::Config;
 use axum::Router;
 use tower_http::{
     limit::RequestBodyLimitLayer,
@@ -7,7 +7,7 @@ use tower_http::{
 use tracing::Level;
 
 pub fn apply_logging(router: Router, config: &Config) -> Router {
-    let level =  Level::INFO;
+    let level = Level::INFO;
 
     router
         .layer(RequestBodyLimitLayer::new(config.app.max_request_body_size))

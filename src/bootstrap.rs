@@ -1,11 +1,7 @@
 use std::sync::Arc;
 
 use crate::{
-    assets::Assets,
-    config::Config,
-    error::AppResult,
-    pool::create_pool,
-    router::app,
+    assets::Assets, config::Config, error::AppResult, pool::create_pool, router::app,
     state::AppState,
 };
 
@@ -15,7 +11,7 @@ pub async fn build_listener_and_app() -> AppResult<(TcpListener, axum::Router)> 
     let config = Arc::new(Config::from_env()?);
     let db_pool = create_pool(&config).await?;
     let assets = Arc::new(Assets::build()?);
-    let state = AppState::new(db_pool, config, assets)?;
+    let state = AppState::new(db_pool, config, assets);
 
     let port = state.config.app.port;
 

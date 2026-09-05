@@ -1,15 +1,22 @@
 use crate::{
-    api::{HealthResponse, ServiceStatus}, constants::{cookies, icons, service, titles}, error::{AppError, AppResult}, models::{LoginForm, NewUser, RegisterForm}, navbar::DOCS, repository::{create_user, find_user_by_email, get_all_posts}, session::create_session, state::AppState, templates::{
-        AssetsTemplate, BaseTemplateContext, BlogTemplate, ContactTemplate, DocsTemplate,
-        FoodDetailTemplate, FoodTemplate, IndexTemplate, LoginTemplate, RegisterTemplate,
-        ResumeTemplate,
-    }, utils::markdown_to_html,
+    auth::{verify_password},
+    constants::{cookies, icons, titles},
+    error::{AppError, AppResult},
+    models::LoginForm,
+    navbar::DOCS,
+    repository::{find_user_by_email, get_all_posts},
+    session::create_session,
+    state::AppState,
+    templates::{
+        BaseTemplateContext, BlogTemplate, ContactTemplate, DocsTemplate, IndexTemplate,
+        LoginTemplate, ResumeTemplate,
+    },
+    utils::markdown_to_html,
 };
 
 use axum::{
-    Form, Json,
+    Form,
     extract::{Path, State},
-    http::StatusCode,
     response::{Html, IntoResponse, Redirect, Response},
 };
 
@@ -41,33 +48,6 @@ pub async fn home(State(state): State<AppState>) -> Result<Response, AppError> {
     })
 }
 
-pub async fn register_user(
-    State(state): State<AppState>,
-    Form(form): Form<RegisterForm>,
-) -> impl IntoResponse {
-    let hashed = state.auth.hash_password(&form.password);
-
-    let new_user = NewUser {
-        username: form.username,
-        email: form.email,
-        password_hash: hashed,
-    };
-
-    match create_user(&state.db, new_user).await {
-        Ok(_) => Redirect::to("/login").into_response(),
-        Err(e) => {
-            tracing::error!("User creation failed: {:?}", e);
-            StatusCode::INTERNAL_SERVER_ERROR.into_response()
-        }
-    }
-}
-
-pub async fn register_page(State(state): State<AppState>) -> AppResult<Response> {
-    render_template(RegisterTemplate {
-        base: BaseTemplateContext::build_base_context(&state, titles::REGISTER, icons::LOGIN),
-    })
-}
-
 pub async fn login_user(
     State(state): State<AppState>,
     jar: CookieJar,
@@ -85,11 +65,7 @@ pub async fn login_user(
         .unwrap_or(DUMMY_HASH);
 
     // Verify password
-    let valid = state
-        .ctx
-        .services
-        .auth
-        .verify_password(&form.password, hash);
+    let valid = verify_password(&form.password, hash);
 
     if !valid || user.is_none() {
         return (jar, Redirect::to("/login"));
@@ -115,12 +91,9 @@ pub async fn login_user(
     let cookie = Cookie::build((cookies::SESSION_ID, session.id.to_string()))
         .path("/")
         .http_only(true)
-        .secure(matches!(
-            state.ctx.config.app.environment,
-            Environment::Production
-        ))
+        .secure(state.config.app.cookie_secure)
         .same_site(SameSite::Strict)
-        .domain(state.ctx.config.app.cookie_domain.clone())
+        .domain(state.config.app.cookie_domain.clone())
         .max_age(time::Duration::hours(24))
         .build();
 
@@ -137,53 +110,12 @@ pub async fn login_page(State(state): State<AppState>) -> impl IntoResponse {
     })
 }
 
-/// Renders the food page.
-///
-/// # Panics
-/// This function will panic if the template rendering fails.
-pub async fn food(State(state): State<AppState>) -> AppResult<Response> {
-    render_template(FoodTemplate {
-        base: BaseTemplateContext::build_base_context(&state, titles::FOOD, icons::FOOD),
-        foods: &state.ctx.content.food_data,
-    })
-}
-
-pub async fn food_detail(
-    Path(slug): Path<String>,
-    State(state): State<AppState>,
-) -> AppResult<Response> {
-    let food = state
-        .ctx
-        .content
-        .food_data
-        .iter()
-        .find(|f| f.slug == slug)
-        .ok_or(AppError::NotFound)?;
-
-    render_template(FoodDetailTemplate {
-        base: BaseTemplateContext::build_base_context(&state, food.title, icons::FOOD),
-        food,
-    })
-}
-
 /// Renders the resume page.
 /// # Panics
 /// This function will panic if the template rendering fails.
 pub async fn resume(State(state): State<AppState>) -> AppResult<Response> {
     render_template(ResumeTemplate {
         base: BaseTemplateContext::build_base_context(&state, titles::RESUME, icons::RESUME),
-    })
-}
-
-/// Returns a JSON response indicating the health status of the application.
-/// # Panics
-/// This function will panic if the template rendering fails.
-pub async fn health() -> Json<HealthResponse> {
-    Json(HealthResponse {
-        status: ServiceStatus::Ok,
-        service: service::NAME,
-        version: env!("CARGO_PKG_VERSION"),
-        uptime_seconds: uptime_seconds(),
     })
 }
 
@@ -221,14 +153,5 @@ pub async fn docs(Path(slug): Path<String>, State(state): State<AppState>) -> Ap
 pub async fn contact(State(state): State<AppState>) -> AppResult<Response> {
     render_template(ContactTemplate {
         base: BaseTemplateContext::build_base_context(&state, titles::CONTACT, icons::CONTACT),
-    })
-}
-
-/// Renders the assets page.
-/// # Panics
-/// This function will panic if the template rendering fails.
-pub async fn assets(State(state): State<AppState>) -> AppResult<Response> {
-    render_template(AssetsTemplate {
-        base: BaseTemplateContext::build_base_context(&state, titles::ASSETS, "assets-icon.png"),
     })
 }

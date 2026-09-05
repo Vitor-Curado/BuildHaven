@@ -3,126 +3,60 @@ use serde::Deserialize;
 
 #[derive(Clone, Deserialize)]
 pub struct AppConfig {
-    #[serde(default = "default_port")]
     pub port: u16,
-
-    #[serde(default)]
-    pub environment: Environment,
-
-    pub max_request_body_size: Option<usize>,
-
-    #[serde(default = "default_cookie_domain")]
+    pub max_request_body_size: usize,
     pub cookie_domain: String,
+    pub cookie_secure: bool,
 }
-
-    fn default_port() -> u16 {
-        3000
-    }
-
-    fn default_cookie_domain() -> String {
-        "localhost".to_string()
-    }
 
 impl AppConfig {
     pub fn from_env() -> AppResult<Self> {
-        let mut config: Self = envy::from_env().map_err(|_| AppError::Internal)?;
-
-        if config.max_request_body_size.is_none() {
-            config.max_request_body_size = Some(Self::default_request_body_size());
-        }
-
-        Ok(config)
-    }
-
-    fn default_request_body_size() -> usize {
-        2 * 1024 * 1024 // 2 MB
+        envy::from_env().map_err(|_| AppError::Internal)
     }
 }
 
 #[derive(Clone, Deserialize)]
 pub struct DatabaseConfig {
     pub url: String,
-
-    #[serde(default = "default_db_min_connections")]
     pub min_connections: u32,
-    
-    pub max_connections: Option<u32>,
-
-    #[serde(default = "default_db_idle_timeout_secs")]
+    pub max_connections: u32,
     pub idle_timeout_secs: u64,
-
-    #[serde(default = "default_db_acquire_timeout_secs")]
     pub acquire_timeout_secs: u64,
-
-    #[serde(default = "default_db_max_lifetime_secs")]
     pub max_lifetime_secs: u64,
 }
 
-fn default_db_min_connections() -> u32 {
-    1
-}
-
-fn default_db_idle_timeout_secs() -> u64 {
-    300
-}
-
-fn default_db_acquire_timeout_secs() -> u64 {
-    30
-}
-
-fn default_db_max_lifetime_secs() -> u64 {
-    1800
-}
-
 impl DatabaseConfig {
-    pub fn from_env(env: &Environment) -> AppResult<Self> {
+    pub fn from_env() -> AppResult<Self> {
         let url = std::env::var("DATABASE_URL").map_err(|_| AppError::Internal)?;
-
-        let min_connections = std::env::var("DB_MIN_CONNECTIONS")
-            .ok()
-            .and_then(|v| v.parse().ok())
-            .unwrap_or(1);
-
-        let max_connections = std::env::var("DB_MAX_CONNECTIONS")
-            .ok()
-            .and_then(|v| v.parse().ok())
-            .unwrap_or_else(|| Self::default_max_connections(env));
-
-        let idle_timeout_secs = std::env::var("DB_IDLE_TIMEOUT_SECS")
-            .ok()
-            .and_then(|v| v.parse().ok())
-            .unwrap_or(300);
-
-        let acquire_timeout_secs = std::env::var("DB_ACQUIRE_TIMEOUT_SECS")
-            .ok()
-            .and_then(|v| v.parse().ok())
-            .unwrap_or(30);
-
-        let max_lifetime_secs = std::env::var("DB_MAX_LIFETIME_SECS")
-            .ok()
-            .and_then(|v| v.parse().ok())
-            .unwrap_or(1800);
 
         Ok(Self {
             url,
-            min_connections,
-            max_connections,
-            idle_timeout_secs,
-            acquire_timeout_secs,
-            max_lifetime_secs,
+            min_connections: Self::default_db_min_connections(),
+            max_connections: Self::default_db_max_connections(),
+            idle_timeout_secs: Self::default_db_idle_timeout_secs(),
+            acquire_timeout_secs: Self::default_db_acquire_timeout_secs(),
+            max_lifetime_secs: Self::default_db_max_lifetime_secs(),
         })
     }
 
-    fn default_max_connections(env: &Environment) -> u32 {
-        match env {
-            Environment::Development => 5,
-            Environment::Benchmark => 20,
-            Environment::Production => {
-                let cores = num_cpus::get();
-                let calc = (cores * 2) as u32;
-                calc.clamp(2, 10)
-            }
-        }
+    fn default_db_min_connections() -> u32 {
+        1
+    }
+
+    fn default_db_max_connections() -> u32 {
+        10
+    }
+
+    fn default_db_idle_timeout_secs() -> u64 {
+        300
+    }
+
+    fn default_db_acquire_timeout_secs() -> u64 {
+        30
+    }
+
+    fn default_db_max_lifetime_secs() -> u64 {
+        1800
     }
 }
 
@@ -208,7 +142,7 @@ impl Config {
     pub fn from_env() -> AppResult<Self> {
         let app = AppConfig::from_env()?;
         Ok(Self {
-            database: DatabaseConfig::from_env(&app.environment)?,
+            database: DatabaseConfig::from_env()?,
             cors: CorsConfig::from_env(),
             session: SessionConfig::from_env(),
             security: SecurityConfig::from_env(),

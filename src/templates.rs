@@ -1,7 +1,6 @@
-// src/templates.rs
 use crate::{
     assets::Assets,
-    models::{Food, Post},
+    models::Post,
     navbar::{DOCS, DocItem, LANGUAGES, Language, NAV_ITEMS, NavItem, THEMES, Theme},
     state::AppState,
 };
@@ -55,12 +54,6 @@ pub struct IndexTemplate {
 }
 
 #[derive(Template)]
-#[template(path = "pages/register.html")]
-pub struct RegisterTemplate {
-    pub base: BaseTemplateContext,
-}
-
-#[derive(Template)]
 #[template(path = "pages/login.html")]
 pub struct LoginTemplate {
     pub base: BaseTemplateContext,
@@ -90,25 +83,5 @@ pub struct DocsTemplate {
 #[derive(Template)]
 #[template(path = "pages/contact_me.html")]
 pub struct ContactTemplate {
-    pub base: BaseTemplateContext,
-}
-
-#[derive(Template)]
-#[template(path = "pages/food.html")]
-pub struct FoodTemplate<'a> {
-    pub base: BaseTemplateContext,
-    pub foods: &'a [Food],
-}
-
-#[derive(Template)]
-#[template(path = "pages/food_detail.html")]
-pub struct FoodDetailTemplate<'a> {
-    pub base: BaseTemplateContext,
-    pub food: &'a Food,
-}
-
-#[derive(Template)]
-#[template(path = "pages/assets.html")]
-pub struct AssetsTemplate {
     pub base: BaseTemplateContext,
 }

@@ -1,5 +1,5 @@
 use buildhaven::{
-    bootstrap::build_listener_and_app, error::AppError, metrics::init_start_time,
+    bootstrap::build_listener_and_app, error::AppError,
     shutdown::graceful_shutdown_signal, telemetry::init_tracing,
 };
 
@@ -7,7 +7,6 @@ use dotenvy::dotenv;
 
 #[tokio::main]
 async fn main() -> Result<(), AppError> {
-    init_start_time();
     dotenv().ok();
     init_tracing();
 

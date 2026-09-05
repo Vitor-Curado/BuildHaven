@@ -1,7 +1,6 @@
 use crate::{
-    cors::apply_cors, logging::apply_logging,
-    routes::public_routes, security::apply_security_headers,
-    state::AppState,
+    cors::apply_cors, logging::apply_logging, routes::public_routes,
+    security::apply_security_headers, state::AppState,
 };
 use axum::Router;
 use tower_http::{
