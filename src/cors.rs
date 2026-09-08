@@ -8,14 +8,7 @@ use tower_http::cors::CorsLayer;
 
 pub fn apply_cors(router: Router, config: &Config) -> Router {
     let cors = CorsLayer::new()
-        .allow_origin(
-            config
-                .cors
-                .allowed_origins
-                .iter()
-                .map(|o| HeaderValue::from_str(o).unwrap())
-                .collect::<Vec<_>>(),
-        )
+        .allow_origin(HeaderValue::from_str(&config.cors.allowed_origins).unwrap())
         .allow_methods([Method::GET, Method::POST, Method::PUT, Method::DELETE])
         .allow_headers([header::CONTENT_TYPE, header::AUTHORIZATION])
         .allow_credentials(true)

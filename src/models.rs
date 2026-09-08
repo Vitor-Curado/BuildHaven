@@ -13,15 +13,19 @@ pub struct Post {
     pub id: Uuid,
     pub title: String,
     pub content: String,
-    //pub excerpt: String,
     pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
 }
 
 #[derive(Debug, Serialize, Clone)]
 pub struct NewPost {
     pub title: String,
     pub content: String,
-    //pub excerpt: String
+}
+
+pub struct UpdatePost {
+    pub title: Option<String>,
+    pub content: Option<String>,
 }
 
 #[derive(Debug, Clone, sqlx::FromRow)]
@@ -31,12 +35,19 @@ pub struct User {
     pub email: String,
     pub password_hash: String,
     pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
 }
 
 #[derive(Debug, Clone)]
 pub struct Session {
     pub id: Uuid,
     pub user_id: Uuid,
+    pub token_hash: Vec<u8>,
     pub created_at: DateTime<Utc>,
     pub expires_at: DateTime<Utc>,
+}
+
+pub struct CreatedSession {
+    pub session: Session,
+    pub token: String,
 }

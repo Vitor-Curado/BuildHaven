@@ -1,7 +1,8 @@
 use crate::{
+    constants::cookies,
     error::{AppError, AppResult},
     repository::find_user_by_id,
-    session::get_session_by_id,
+    session::{get_session_by_token_hash, hash_session_token},
     state::AppState,
 };
 
@@ -29,11 +30,13 @@ pub async fn require_auth(
     mut request: Request<Body>,
     next: Next,
 ) -> AppResult<Response> {
-    let cookie = jar.get("session_id").ok_or(AppError::Unauthorized)?;
+    let cookie = jar
+        .get(cookies::SESSION_TOKEN)
+        .ok_or(AppError::Unauthorized)?;
 
-    let session_id = cookie.value().parse().map_err(|_| AppError::Unauthorized)?;
+    let token_hash = hash_session_token(cookie.value());
 
-    let session = get_session_by_id(&state.db, session_id)
+    let session = get_session_by_token_hash(&state.db, &token_hash)
         .await?
         .ok_or(AppError::Unauthorized)?;
 

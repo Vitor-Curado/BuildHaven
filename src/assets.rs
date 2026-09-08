@@ -34,9 +34,15 @@ impl Assets {
         }
 
         Ok(Self {
-            css: manifest.get("index.css").ok_or(AppError::Internal)?.clone(),
+            css: manifest
+                .get("index.css")
+                .ok_or(AppError::MissingAsset("index.css"))?
+                .clone(),
 
-            js: manifest.get("app.js").ok_or(AppError::Internal)?.clone(),
+            js: manifest
+                .get("app.js")
+                .ok_or(AppError::MissingAsset("app.js"))?
+                .clone(),
 
             icons,
         })
@@ -166,19 +172,13 @@ fn process_images(manifest: &mut HashMap<String, String>) -> AppResult<()> {
 
 fn optimize_svg(content: &[u8]) -> AppResult<Vec<u8>> {
     // Convert bytes → UTF-8 string
-    let svg_str = std::str::from_utf8(content).map_err(|e| AppError::Other {
-        message: "Invalid UTF-8 in SVG",
-        source: Box::new(e),
-    })?;
+    let svg_str = std::str::from_utf8(content).map_err(AppError::InvalidSvgUtf8)?;
 
     // Default options
     let options = Options::default();
 
     // Parse SVG
-    let tree = Tree::from_str(svg_str, &options).map_err(|e| AppError::Other {
-        message: "Failed to parse SVG",
-        source: Box::new(e),
-    })?;
+    let tree = Tree::from_str(svg_str, &options).map_err(|e| AppError::SvgParse(e.to_string()))?;
 
     // Serialize optimized SVG
     let write_options = WriteOptions::default();
@@ -212,13 +212,9 @@ fn write_manifest(manifest: &HashMap<String, String>) -> AppResult<()> {
 }
 
 pub fn load_manifest() -> Result<HashMap<String, String>, AppError> {
-    let content = std::fs::read_to_string(format!("{}/manifest.json", paths::DIST))
-        .map_err(|_| AppError::Internal)?;
+    let content = std::fs::read_to_string(format!("{}/manifest.json", paths::DIST))?;
 
-    let manifest: HashMap<String, String> = serde_json::from_str(&content).map_err(|e| {
-        tracing::error!(error = %e, "Failed to read manifest");
-        AppError::Internal
-    })?;
+    let manifest: HashMap<String, String> = serde_json::from_str(&content)?;
 
     Ok(manifest)
 }

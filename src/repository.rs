@@ -10,7 +10,7 @@ pub async fn create_post(pool: &PgPool, new_post: &NewPost) -> Result<Post, sqlx
         r#"
         INSERT INTO posts (id, title, content)
         VALUES ($1, $2, $3)
-        RETURNING id, title, content, created_at
+        RETURNING id, title, content, created_at, updated_at
         "#,
         id,
         new_post.title,
@@ -26,7 +26,7 @@ pub async fn get_all_posts(pool: &PgPool) -> Result<Vec<Post>, sqlx::Error> {
     sqlx::query_as!(
         Post,
         r#"
-        SELECT id, title, content, created_at
+        SELECT id, title, content, created_at, updated_at
         FROM posts
         ORDER BY created_at DESC
         "#,
@@ -43,7 +43,7 @@ pub async fn get_posts_paginated(
     sqlx::query_as!(
         Post,
         r#"
-        SELECT id, title, content, created_at
+        SELECT id, title, content, created_at, updated_at
         FROM posts
         ORDER BY created_at DESC
         LIMIT $1 OFFSET $2
@@ -59,7 +59,7 @@ pub async fn get_post_by_id(pool: &PgPool, post_id: Uuid) -> Result<Option<Post>
     let post = sqlx::query_as!(
         Post,
         r#"
-        SELECT id, title, content, created_at
+        SELECT id, title, content, created_at, updated_at
         FROM posts
         WHERE id = $1
         "#,
@@ -89,7 +89,7 @@ pub async fn find_user_by_email(pool: &PgPool, email: &str) -> Result<Option<Use
     let user = sqlx::query_as!(
         User,
         r#"
-        SELECT id, username, email, password_hash, created_at
+        SELECT id, username, email, password_hash, created_at, updated_at
         FROM users
         WHERE email = $1
         "#,
@@ -105,7 +105,7 @@ pub async fn find_user_by_id(pool: &PgPool, user_id: Uuid) -> Result<Option<User
     let user = sqlx::query_as!(
         User,
         r#"
-        SELECT id, username, email, password_hash, created_at
+        SELECT id, username, email, password_hash, created_at, updated_at
         FROM users
         WHERE id = $1
         "#,
@@ -115,17 +115,4 @@ pub async fn find_user_by_id(pool: &PgPool, user_id: Uuid) -> Result<Option<User
     .await?;
 
     Ok(user)
-}
-
-pub async fn delete_expired_sessions(pool: &PgPool) -> Result<u64, sqlx::Error> {
-    let result = sqlx::query!(
-        r#"
-        DELETE FROM sessions
-        WHERE expires_at < NOW()
-        "#
-    )
-    .execute(pool)
-    .await?;
-
-    Ok(result.rows_affected())
 }

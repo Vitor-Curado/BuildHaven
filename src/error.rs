@@ -26,17 +26,10 @@ pub enum AppError {
     Serialization(#[from] serde_json::Error),
 
     #[error("Configuration error: {0}")]
-    Config(String),
+    Config(#[from] envy::Error),
 
     #[error("Bad request: {0}")]
     BadRequest(String),
-
-    #[error("Generic error")]
-    Other {
-        message: &'static str,
-        #[source]
-        source: Box<dyn std::error::Error + Send + Sync>,
-    },
 
     #[error("Resource not found")]
     NotFound,
@@ -44,8 +37,14 @@ pub enum AppError {
     #[error("Authentication error: unauthorized")]
     Unauthorized,
 
-    #[error("Internal server error")]
-    Internal,
+    #[error("Asset manifest is missing required asset: {0}")]
+    MissingAsset(&'static str),
+
+    #[error("Invalid UTF-8 in SVG")]
+    InvalidSvgUtf8(#[source] std::str::Utf8Error),
+
+    #[error("Failed to parse SVG: {0}")]
+    SvgParse(String),
 }
 
 // Type alias for convenience
@@ -82,8 +81,9 @@ impl AppError {
             AppError::Template(_) => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::Io(_) => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::Config(_) => StatusCode::INTERNAL_SERVER_ERROR,
-            AppError::Internal => StatusCode::INTERNAL_SERVER_ERROR,
-            AppError::Other { .. } => StatusCode::INTERNAL_SERVER_ERROR,
+            AppError::MissingAsset(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            AppError::InvalidSvgUtf8(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            AppError::SvgParse(_) => StatusCode::INTERNAL_SERVER_ERROR,
         }
     }
 
@@ -92,6 +92,8 @@ impl AppError {
             AppError::NotFound => errors::NOT_FOUND,
             AppError::Unauthorized => errors::UNAUTHORIZED,
             AppError::BadRequest(_) => errors::BAD_REQUEST,
+            AppError::Config(_) => errors::CONFIG_ERROR,
+            AppError::MissingAsset(_) => errors::MISSING_ASSET,
             _ => errors::INTERNAL,
         }
     }
@@ -106,8 +108,9 @@ impl AppError {
             AppError::Serialization(_) => "SERDE_ERROR",
             AppError::BadRequest(_) => "BAD_REQUEST",
             AppError::Config(_) => "CONFIG_ERROR",
-            AppError::Internal => "INTERNAL",
-            AppError::Other { .. } => "UNKNOWN",
+            AppError::MissingAsset(_) => "MISSING_ASSET",
+            AppError::InvalidSvgUtf8(_) => "INVALID_SVG_UTF8",
+            AppError::SvgParse(_) => "SVG_PARSE_ERROR",
         }
     }
 }

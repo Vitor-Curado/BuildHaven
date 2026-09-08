@@ -20,7 +20,7 @@ async fn wait_for_db(url: &str) {
 }
 
 pub async fn create_pool(config: &Config) -> Result<PgPool, sqlx::Error> {
-    wait_for_db(&config.database.url).await;
+    wait_for_db(&config.database.database_url).await;
 
     PgPoolOptions::new()
         .max_connections(config.database.max_connections)
@@ -28,6 +28,6 @@ pub async fn create_pool(config: &Config) -> Result<PgPool, sqlx::Error> {
         .idle_timeout(Duration::from_secs(config.database.idle_timeout_secs))
         .acquire_timeout(Duration::from_secs(config.database.acquire_timeout_secs))
         .max_lifetime(Duration::from_secs(config.database.max_lifetime_secs))
-        .connect(&config.database.url)
+        .connect(&config.database.database_url)
         .await
 }

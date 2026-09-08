@@ -1,11 +1,9 @@
 /target
-/static/dist/manifest.json
 /static/dist/
-.env
-.env.local
-.env.compose
 .temp.txt
 .index.txt
 benchmarks/results/*.raw
-/src/bin/indexer.rs
+.env
 secrets.env
+app-secrets.env
+db-secrets.env

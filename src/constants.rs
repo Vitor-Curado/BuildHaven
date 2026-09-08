@@ -37,6 +37,8 @@ pub mod paths {
 }
 
 pub mod errors {
+    pub const MISSING_ASSET: &str = "Missing asset";
+    pub const CONFIG_ERROR: &str = "Configuration error";
     pub const BAD_REQUEST: &str = "Bad request";
     pub const NOT_FOUND: &str = "Not found";
     pub const UNAUTHORIZED: &str = "Unauthorized";
@@ -44,6 +46,7 @@ pub mod errors {
 }
 
 pub mod cookies {
+    pub const SESSION_TOKEN: &str = "session_token";
     pub const SESSION_ID: &str = "session_id";
 }
 

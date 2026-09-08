@@ -1,5 +1,5 @@
 use crate::{
-    auth::{verify_password},
+    auth::verify_password,
     constants::{cookies, icons, titles},
     error::{AppError, AppResult},
     models::LoginForm,
@@ -75,7 +75,7 @@ pub async fn login_user(
     let start = Instant::now();
 
     // If correct → create session
-    let session = match create_session(&state.db, user.id, &state.config).await {
+    let created = match create_session(&state.db, user.id, &state.config).await {
         Ok(session) => session,
         Err(_) => {
             let elapsed = start.elapsed();
@@ -88,13 +88,13 @@ pub async fn login_user(
     };
 
     // Create cookie
-    let cookie = Cookie::build((cookies::SESSION_ID, session.id.to_string()))
+    let cookie = Cookie::build((cookies::SESSION_TOKEN, created.token))
         .path("/")
         .http_only(true)
         .secure(state.config.app.cookie_secure)
         .same_site(SameSite::Strict)
         .domain(state.config.app.cookie_domain.clone())
-        .max_age(time::Duration::hours(24))
+        .max_age(time::Duration::hours(state.config.session.duration_hours))
         .build();
 
     // Attach cookie
