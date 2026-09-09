@@ -5,44 +5,51 @@ version = "0.4.2"
 edition = "2024"
 
 [dependencies]
+# --- Web / HTTP ---
+axum = "0.8.9"
 tower-http = { version = "0.6.10", features = ["fs", "trace", "set-header", "compression-gzip", "cors", "limit", "compression-br", "compression-deflate", "request-id"] }
-sqlx = { version = "0.8.6", features = ["postgres", "runtime-tokio-rustls", "uuid", "time", "macros"] }
 tower_governor = { version = "0.8.0", features = ["axum"] }
-axum-extra = { version = "0.12.6", features = ["cookie"] }
 
-tokio = { version = "1.52.2", features = ["full"] }
-serde = { version = "1", features = ["derive"] }
-serde_json = "1.0"
-tower = "0.5.3"
-
+# --- Sessions / authentication ---
 tower-sessions = "0.14"
 tower-sessions-sqlx-store = { version = "0.15", features = ["postgres"] }
+argon2 = "0.6.0"
 
-pulldown-cmark = "0.13.3"
-dotenvy = "0.15.7"
-envy = "0.4"
+# --- Database ---
+sqlx = { version = "0.8.6", features = ["postgres", "runtime-tokio-rustls", "uuid", "time", "macros"] }
+
+# --- Application / serialisation ---
+serde = { version = "1", features = ["derive"] }
+serde_json = "1.0"
 thiserror = "2.0.18"
 
-usvg = "0.47"
-axum = "0.8.9"
+# --- Configuration ---
+dotenvy = "0.15.7"
+envy = "0.4"
+
+# --- Templates / content ---
 askama = "0.16.0"
+pulldown-cmark = "0.13.3"
+usvg = "0.47"
 
-
-# Domain/security
+# --- Domain/security/validation ---
 uuid = {version = "1.23.1", features = ["serde", "v7"]}
 validator = "0.20.0"
-base64 = "0.22.0"
 time = { version = "0.3.47", features = ["formatting"] }
+
+# --- Cryptography / encoding ---
 sha2 = "0.11.0"
-argon2 = "0.6.0"
-rand = "0.9.0"
+hex = "0.4.3"
+
+# -- Async runtime ---
+tokio = { version = "1.52.2", features = ["full"] }
 
 # Observability
 tracing-subscriber = { version = "0.3.23", features = ["env-filter", "json"] }
 prometheus = "0.14.0"
 tracing = "0.1.44"
 
-hex = "0.4.3"
+
 
 # --- Investigate / potentially add ---
 

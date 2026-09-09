@@ -3,6 +3,7 @@ use crate::{
     security::apply_security_headers, state::AppState,
 };
 use axum::Router;
+use time::Duration;
 use tower_http::{
     compression::CompressionLayer,
     request_id::{MakeRequestUuid, PropagateRequestIdLayer, SetRequestIdLayer},
@@ -10,7 +11,6 @@ use tower_http::{
 };
 use tower_sessions::{Expiry, SessionManagerLayer};
 use tower_sessions_sqlx_store::PostgresStore;
-use time::Duration;
 
 pub fn app(state: AppState, session_store: PostgresStore) -> Router {
     let config = &state.config;
@@ -24,7 +24,9 @@ pub fn app(state: AppState, session_store: PostgresStore) -> Router {
         .with_secure(config.app.cookie_secure)
         .with_same_site(tower_sessions::cookie::SameSite::Strict)
         .with_path("/")
-        .with_expiry(Expiry::OnInactivity(Duration::hours(config.session.duration_hours)));
+        .with_expiry(Expiry::OnInactivity(Duration::hours(
+            config.session.duration_hours,
+        )));
 
     let mut router = Router::new()
         .merge(public_routes())

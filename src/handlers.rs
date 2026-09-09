@@ -1,11 +1,10 @@
 use crate::{
     auth::verify_password,
-    constants::{cookies, icons, titles},
+    constants::{icons, titles},
     error::{AppError, AppResult},
     models::LoginForm,
     navbar::DOCS,
     repository::{find_user_by_email, get_all_posts},
-    session::create_session,
     state::AppState,
     templates::{
         BaseTemplateContext, BlogTemplate, ContactTemplate, DocsTemplate, IndexTemplate,
@@ -21,8 +20,8 @@ use axum::{
 };
 
 use askama::Template;
-use axum_extra::extract::cookie::{Cookie, CookieJar, SameSite};
-use std::time::{Duration, Instant};
+use std::time::Instant;
+use tower_sessions::Session;
 
 const DUMMY_HASH: &str =
     "$argon2id$v=19$m=19456,t=2,p=1$c29tZXNhbHQ$C5Z8YlH9l5k6n6u5W1zvQ8FJ5m0e3M3G7pT9oXk2c9Q";
@@ -50,7 +49,7 @@ pub async fn home(State(state): State<AppState>) -> Result<Response, AppError> {
 
 pub async fn login_user(
     State(state): State<AppState>,
-    jar: CookieJar,
+    session: Session,
     Form(form): Form<LoginForm>,
 ) -> impl IntoResponse {
     // Landmine, to be investigated later.
@@ -68,40 +67,17 @@ pub async fn login_user(
     let valid = verify_password(&form.password, hash);
 
     if !valid || user.is_none() {
-        return (jar, Redirect::to("/login"));
+        return Redirect::to("/login");
     }
 
     let user = user.unwrap();
-    let start = Instant::now();
 
-    // If correct → create session
-    let created = match create_session(&state.db, user.id, &state.config).await {
-        Ok(session) => session,
-        Err(_) => {
-            let elapsed = start.elapsed();
+    if let Err(error) = session.insert("user_id", user.id).await {
+        tracing::error!(?error, "Failed to create user sessions");
+        return Redirect::to("/login");
+    }
 
-            if elapsed < Duration::from_millis(150) {
-                tokio::time::sleep(Duration::from_millis(150) - elapsed).await;
-            }
-            return (jar, Redirect::to("/login"));
-        }
-    };
-
-    // Create cookie
-    let cookie = Cookie::build((cookies::SESSION_TOKEN, created.token))
-        .path("/")
-        .http_only(true)
-        .secure(state.config.app.cookie_secure)
-        .same_site(SameSite::Strict)
-        .domain(state.config.app.cookie_domain.clone())
-        .max_age(time::Duration::hours(state.config.session.duration_hours))
-        .build();
-
-    // Attach cookie
-    let jar = jar.add(cookie);
-
-    // Redirect
-    (jar, Redirect::to("/"))
+    Redirect::to("/")
 }
 
 pub async fn login_page(State(state): State<AppState>) -> impl IntoResponse {

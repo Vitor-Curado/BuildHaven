@@ -212,28 +212,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "axum-extra"
-version = "0.12.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "be44683b41ccb9ab2d23a5230015c9c3c55be97a25e4428366de8873103f7970"
-dependencies = [
- "axum",
- "axum-core",
- "bytes",
- "cookie",
- "futures-core",
- "futures-util",
- "http",
- "http-body",
- "http-body-util",
- "mime",
- "pin-project-lite",
- "tower-layer",
- "tower-service",
- "tracing",
-]
-
-[[package]]
 name = "base64"
 version = "0.22.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -324,8 +302,6 @@ dependencies = [
  "argon2",
  "askama",
  "axum",
- "axum-extra",
- "base64",
  "cargo-bloat",
  "dotenvy",
  "envy",
@@ -333,7 +309,6 @@ dependencies = [
  "http-body-util",
  "prometheus",
  "pulldown-cmark",
- "rand 0.9.5",
  "serde",
  "serde_json",
  "sha2 0.11.0",

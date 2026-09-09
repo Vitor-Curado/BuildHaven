@@ -16,7 +16,6 @@ pub mod repository;
 pub mod router;
 pub mod routes;
 pub mod security;
-pub mod session;
 pub mod shutdown;
 pub mod state;
 pub mod telemetry;
