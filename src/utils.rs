@@ -1,4 +1,3 @@
-// src/utils.rs
 use pulldown_cmark::{Parser, html};
 
 #[must_use]

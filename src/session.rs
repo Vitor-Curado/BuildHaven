@@ -1,7 +1,7 @@
 // investigate tower-sessions
 
 use base64::{Engine, engine::general_purpose::URL_SAFE_NO_PAD};
-use chrono::{Duration, Utc};
+use time::OffsetDateTime;
 use rand::RngCore;
 use sqlx::PgPool;
 use uuid::Uuid;
@@ -17,8 +17,8 @@ pub async fn create_session(
     config: &Config,
 ) -> Result<CreatedSession, sqlx::Error> {
     let session_id = Uuid::now_v7();
-    let now = Utc::now();
-    let expires_at = now + Duration::hours(config.session.duration_hours);
+    let now = OffsetDateTime::now_utc();
+    let expires_at = now + time::Duration::hours(config.session.duration_hours);
 
     // Generate a 256-bit session token
     let mut token_bytes = [0u8; 32];
@@ -102,7 +102,7 @@ pub async fn refresh_session_expiry(
     session_id: Uuid,
     config: &Config,
 ) -> Result<(), sqlx::Error> {
-    let new_expires_at = Utc::now() + Duration::hours(config.session.duration_hours);
+    let new_expires_at = OffsetDateTime::now_utc() + time::Duration::hours(config.session.duration_hours);
 
     sqlx::query!(
         "UPDATE sessions SET expires_at = $1 WHERE id = $2",

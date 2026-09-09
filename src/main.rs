@@ -8,6 +8,7 @@ use dotenvy::dotenv;
 #[tokio::main]
 async fn main() -> Result<(), AppError> {
     dotenv().ok();
+
     init_tracing();
 
     let (listener, app) = build_listener_and_app().await?;

@@ -1,4 +1,4 @@
-use chrono::{DateTime, Utc};
+use time::OffsetDateTime;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -13,8 +13,14 @@ pub struct Post {
     pub id: Uuid,
     pub title: String,
     pub content: String,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
+    pub created_at: OffsetDateTime,
+    pub updated_at: OffsetDateTime,
+}
+
+impl Post {
+    pub fn formatted_date(&self) -> String {
+        self.created_at.date().format(&time::macros::format_description!("[year]-[month]-[day]")).unwrap()
+    }
 }
 
 #[derive(Debug, Serialize, Clone)]
@@ -34,8 +40,8 @@ pub struct User {
     pub username: String,
     pub email: String,
     pub password_hash: String,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
+    pub created_at: OffsetDateTime,
+    pub updated_at: OffsetDateTime,
 }
 
 #[derive(Debug, Clone)]
@@ -43,8 +49,8 @@ pub struct Session {
     pub id: Uuid,
     pub user_id: Uuid,
     pub token_hash: Vec<u8>,
-    pub created_at: DateTime<Utc>,
-    pub expires_at: DateTime<Utc>,
+    pub created_at: OffsetDateTime,
+    pub expires_at: OffsetDateTime,
 }
 
 pub struct CreatedSession {
