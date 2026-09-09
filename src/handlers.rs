@@ -53,7 +53,7 @@ pub async fn login_user(
     jar: CookieJar,
     Form(form): Form<LoginForm>,
 ) -> impl IntoResponse {
-    // Find user in DB
+    // Landmine, to be investigated later.
     let user = find_user_by_email(&state.db, &form.email)
         .await
         .ok()

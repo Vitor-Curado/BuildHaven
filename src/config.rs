@@ -58,7 +58,7 @@ impl SecurityConfig {
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct SessionConfig {
-    pub duration_hours: i64,
+    pub duration_hours: i64
 }
 
 impl SessionConfig {

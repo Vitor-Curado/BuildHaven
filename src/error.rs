@@ -37,6 +37,9 @@ pub enum AppError {
     #[error("Authentication error: unauthorized")]
     Unauthorized,
 
+    #[error(transparent)]
+    Session(#[from] tower_sessions::session::Error),
+
     #[error("Asset manifest is missing required asset: {0}")]
     MissingAsset(&'static str),
 
@@ -76,7 +79,7 @@ impl AppError {
             AppError::Unauthorized => StatusCode::UNAUTHORIZED,
             AppError::BadRequest(_) => StatusCode::BAD_REQUEST,
             AppError::Serialization(_) => StatusCode::BAD_REQUEST,
-
+            AppError::Session(_) => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::Database(_) => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::Template(_) => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::Io(_) => StatusCode::INTERNAL_SERVER_ERROR,
@@ -94,6 +97,7 @@ impl AppError {
             AppError::BadRequest(_) => errors::BAD_REQUEST,
             AppError::Config(_) => errors::CONFIG_ERROR,
             AppError::MissingAsset(_) => errors::MISSING_ASSET,
+            AppError::Session(_) => errors::SESSION_ERROR,
             _ => errors::INTERNAL,
         }
     }
@@ -111,6 +115,7 @@ impl AppError {
             AppError::MissingAsset(_) => "MISSING_ASSET",
             AppError::InvalidSvgUtf8(_) => "INVALID_SVG_UTF8",
             AppError::SvgParse(_) => "SVG_PARSE_ERROR",
+            AppError::Session(_) => "SESSION_ERROR",
         }
     }
 }

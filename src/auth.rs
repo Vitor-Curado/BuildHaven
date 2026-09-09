@@ -1,17 +1,16 @@
 use crate::{
-    constants::cookies,
     error::{AppError, AppResult},
     repository::find_user_by_id,
-    session::{get_session_by_token_hash, hash_session_token},
     state::AppState,
 };
 
 use argon2::{
     Argon2,
-    password_hash::{PasswordHash, PasswordVerifier},
+    password_hash::{PasswordVerifier, phc::PasswordHash},
 };
 use axum::{body::Body, extract::State, http::Request, middleware::Next, response::Response};
-use axum_extra::extract::cookie::CookieJar;
+use tower_sessions::Session;
+use uuid::Uuid;
 
 pub fn verify_password(password: &str, hash: &str) -> bool {
     let parsed_hash = match PasswordHash::new(hash) {
@@ -26,21 +25,16 @@ pub fn verify_password(password: &str, hash: &str) -> bool {
 
 pub async fn require_auth(
     State(state): State<AppState>,
-    jar: CookieJar,
+    session: Session,
     mut request: Request<Body>,
     next: Next,
 ) -> AppResult<Response> {
-    let cookie = jar
-        .get(cookies::SESSION_TOKEN)
-        .ok_or(AppError::Unauthorized)?;
-
-    let token_hash = hash_session_token(cookie.value());
-
-    let session = get_session_by_token_hash(&state.db, &token_hash)
+    let user_id = session
+        .get::<Uuid>("user_id")
         .await?
         .ok_or(AppError::Unauthorized)?;
 
-    let user = find_user_by_id(&state.db, session.user_id)
+    let user = find_user_by_id(&state.db, user_id)
         .await?
         .ok_or(AppError::Unauthorized)?;
 

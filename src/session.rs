@@ -1,9 +1,9 @@
 // investigate tower-sessions
 
 use base64::{Engine, engine::general_purpose::URL_SAFE_NO_PAD};
-use time::OffsetDateTime;
 use rand::RngCore;
 use sqlx::PgPool;
+use time::OffsetDateTime;
 use uuid::Uuid;
 
 use crate::{
@@ -102,7 +102,8 @@ pub async fn refresh_session_expiry(
     session_id: Uuid,
     config: &Config,
 ) -> Result<(), sqlx::Error> {
-    let new_expires_at = OffsetDateTime::now_utc() + time::Duration::hours(config.session.duration_hours);
+    let new_expires_at =
+        OffsetDateTime::now_utc() + time::Duration::hours(config.session.duration_hours);
 
     sqlx::query!(
         "UPDATE sessions SET expires_at = $1 WHERE id = $2",

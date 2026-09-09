@@ -1,5 +1,5 @@
-use time::OffsetDateTime;
 use serde::{Deserialize, Serialize};
+use time::OffsetDateTime;
 use uuid::Uuid;
 
 #[derive(Deserialize)]
@@ -19,7 +19,10 @@ pub struct Post {
 
 impl Post {
     pub fn formatted_date(&self) -> String {
-        self.created_at.date().format(&time::macros::format_description!("[year]-[month]-[day]")).unwrap()
+        self.created_at
+            .date()
+            .format(&time::macros::format_description!("[year]-[month]-[day]"))
+            .unwrap()
     }
 }
 
