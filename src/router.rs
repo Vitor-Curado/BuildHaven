@@ -18,6 +18,8 @@ pub fn app(state: AppState, session_store: PostgresStore) -> Router {
         .precompressed_br()
         .precompressed_gzip();
 
+    let dist_service = ServeDir::new("dist").precompressed_br().precompressed_gzip();
+
     let session_layer = SessionManagerLayer::new(session_store)
         .with_name(crate::constants::cookies::SESSION_ID)
         .with_http_only(true)
@@ -32,6 +34,7 @@ pub fn app(state: AppState, session_store: PostgresStore) -> Router {
         .merge(public_routes())
         .layer(session_layer)
         .nest_service("/static", static_service)
+        .nest_service("/dist", dist_service)
         .layer(CompressionLayer::new().br(true).gzip(true).deflate(true))
         .layer(SetRequestIdLayer::x_request_id(MakeRequestUuid))
         .layer(PropagateRequestIdLayer::x_request_id())

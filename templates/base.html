@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{{ base.title }}</title>
 
-        <link rel="icon" href="/static/dist/icons/{{ base.favicon }}">
-        <link rel="stylesheet" href="/static/dist/{{ base.assets.css }}">
+        <link rel="icon" href="/static/media/icons/{{ base.favicon }}">
+        <link rel="stylesheet" href="/dist/{{ base.assets.css }}">
     </head>
 
     <body>
@@ -16,6 +16,6 @@
             {% block content %}{% endblock %}
         </main>
         {% include "partials/footer.html" %}
-        <script src="/static/dist/{{ base.assets.js }}"></script>
+        <script src="/dist/{{ base.assets.js }}"></script>
     </body>
 </html>

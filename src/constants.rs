@@ -1,9 +1,7 @@
 // Ordered alphabetically
 
 pub mod icons {
-    pub const ASSETS: &str = "assets.png";
     pub const BLOG: &str = "blog.png";
-    pub const BOARDGAME: &str = "boardgames.svg";
     pub const CONTACT: &str = "contact.svg";
     pub const DOCS: &str = "blog.png";
     pub const EMAIL: &str = "email.png";
@@ -17,11 +15,9 @@ pub mod icons {
 }
 
 pub mod titles {
-    pub const ASSETS: &str = "Assets";
     pub const BLOG: &str = "Blog";
     pub const CONTACT: &str = "Contact";
     pub const DOCS: &str = "Documentation";
-    pub const FOOD: &str = "Food";
     pub const HOME: &str = "BuildHaven";
     pub const LOGIN: &str = "Login";
     pub const REGISTER: &str = "Register";
@@ -29,11 +25,9 @@ pub mod titles {
 }
 
 pub mod paths {
-    pub const DIST: &str = "static/dist";
+    pub const DIST: &str = "dist";
     pub const CSS: &str = "static/css";
-    pub const JS_ENTRY: &str = "static/js/javascript.js";
-    pub const ICONS_SRC: &str = "static/media/icons";
-    pub const ICONS_DIST: &str = "static/dist/icons";
+    pub const VITE_MANIFEST: &str = "dist/.vite/manifest.json";
 }
 
 pub mod errors {

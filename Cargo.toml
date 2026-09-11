@@ -30,16 +30,11 @@ envy = "0.4"
 # --- Templates / content ---
 askama = "0.16.0"
 pulldown-cmark = "0.13.3"
-usvg = "0.47"
 
 # --- Domain/security/validation ---
 uuid = {version = "1.23.1", features = ["serde", "v7"]}
 validator = "0.20.0"
 time = { version = "0.3.47", features = ["formatting"] }
-
-# --- Cryptography / encoding ---
-sha2 = "0.11.0"
-hex = "0.4.3"
 
 # -- Async runtime ---
 tokio = { version = "1.52.2", features = ["full"] }
@@ -48,8 +43,6 @@ tokio = { version = "1.52.2", features = ["full"] }
 tracing-subscriber = { version = "0.3.23", features = ["env-filter", "json"] }
 prometheus = "0.14.0"
 tracing = "0.1.44"
-
-
 
 # --- Investigate / potentially add ---
 

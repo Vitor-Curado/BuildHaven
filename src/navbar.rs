@@ -87,152 +87,22 @@ pub const LANGUAGES: &[Language] = &[
         label: "French",
         icon: "french.png",
     },
-    Language {
-        code: "pt",
-        label: "Português",
-        icon: "portuguese.png",
-    },
-    Language {
-        code: "zh",
-        label: "中文",
-        icon: "mandarin.png",
-    },
-    Language {
-        code: "ru",
-        label: "Русский",
-        icon: "russian.png",
-    },
-    Language {
-        code: "kr",
-        label: "한국인",
-        icon: "korean.png",
-    },
-    Language {
-        code: "jp",
-        label: "日本語",
-        icon: "japanese.png",
-    },
-    Language {
-        code: "de",
-        label: "Deutsch",
-        icon: "german.png",
-    },
 ];
 
 pub const DOCS: &[DocItem] = &[
     DocItem {
-        title: "Architecture",
-        slug: "architecture",
-        markdown: include_str!("../docs/architecture.md"),
-    },
-    DocItem {
-        title: "Assets",
-        slug: "assets",
-        markdown: include_str!("../docs/assets.md"),
-    },
-    DocItem {
-        title: "Authentication",
-        slug: "authentication",
-        markdown: include_str!("../docs/authentication.md"),
-    },
-    DocItem {
-        title: "Backend",
-        slug: "backend",
-        markdown: include_str!("../docs/backend.md"),
-    },
-    DocItem {
-        title: "Bootstrap",
-        slug: "bootstrap",
-        markdown: include_str!("../docs/bootstrap.md"),
-    },
-    DocItem {
-        title: "CI/CD",
-        slug: "ci-cd",
-        markdown: include_str!("../docs/ci_cd.md"),
-    },
-    DocItem {
-        title: "Dependencies",
-        slug: "dependencies",
-        markdown: include_str!("../docs/dependencies.md"),
-    },
-    DocItem {
-        title: "Deployment",
-        slug: "deployment",
-        markdown: include_str!("../docs/deployment.md"),
-    },
-    DocItem {
-        title: "Diagrams",
-        slug: "diagrams",
-        markdown: include_str!("../docs/diagrams.md"),
-    },
-    DocItem {
-        title: "Features",
-        slug: "features",
-        markdown: include_str!("../docs/features.md"),
-    },
-    DocItem {
-        title: "Frontend",
-        slug: "frontend",
-        markdown: include_str!("../docs/frontend.md"),
-    },
-    DocItem {
-        title: "Glossary",
-        slug: "glossary",
-        markdown: include_str!("../docs/glossary.md"),
-    },
-    DocItem {
-        title: "Infrastructure",
-        slug: "infrastructure",
-        markdown: include_str!("../docs/infrastructure.md"),
-    },
-    DocItem {
-        title: "Jobs",
-        slug: "jobs",
-        markdown: include_str!("../docs/jobs.md"),
-    },
-    DocItem {
-        title: "Modules",
-        slug: "modules",
-        markdown: include_str!("../docs/modules.md"),
-    },
-    DocItem {
-        title: "Observability",
-        slug: "observability",
-        markdown: include_str!("../docs/observability.md"),
-    },
-    DocItem {
-        title: "Principles",
-        slug: "principles",
-        markdown: include_str!("../docs/principles.md"),
-    },
-    DocItem {
-        title: "Roadmap",
-        slug: "roadmap",
-        markdown: include_str!("../docs/roadmap.md"),
-    },
-    DocItem {
-        title: "Security",
-        slug: "security",
-        markdown: include_str!("../docs/security.md"),
-    },
-    DocItem {
-        title: "Session management",
-        slug: "session-management",
-        markdown: include_str!("../docs/session-management.md"),
-    },
-    DocItem {
-        title: "State",
+        title: "Decisions",
         slug: "state",
-        markdown: include_str!("../docs/state.md"),
+        markdown: include_str!("../docs/decisions.md"),
     },
     DocItem {
-        title: "Structure",
+        title: "Learning journey",
         slug: "structure",
-        markdown: include_str!("../docs/structure.md"),
+        markdown: include_str!("../docs/learning-journey.md"),
     },
     DocItem {
-        title: "Testing",
+        title: "Tech stack",
         slug: "testing",
-        markdown: include_str!("../docs/testing.md"),
+        markdown: include_str!("../docs/tech-stack.md"),
     },
 ];

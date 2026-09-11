@@ -1,0 +1,6 @@
+# Engineering decisions
+
+* `Operating system`: The operating system initially started with Fedora Linux due to security, familiarity, and cost since it's free. Later on moved to RHEL not because RHEL was necessary, but to simply taste what it's like playing with the OS the cool kids use
+* `Reverse proxy`: It is and had always been Nginx (pronounced "Engine X") for its simplicity, ease of implementation and of course cost. 
+* `PostgreSQL`: Postgres is *the deal* when it comes to DBs. It is the default option when it comes to most situations in lower scale projects, it can do the job of other technologies, such as `redis`. Easiest decision of my life.
+* `Rust`: Originally, the project was written in `python`, and Python isn't necessarily RAM intensive, but `gunicorn` is. Not really, but in the low-resouce environment that I am, every MB matters, and that was decisive in my need to rewrite to `Rust`. The language seemed new, fascinating and hot to me with all that it promises; type safety, performance comparable to `C`, memory safety. Very early in development I could not for the life of me ship it in `Python` because of `gunicorn`, and when I shipped the prototype in `Rust` it worked. Simple as that.

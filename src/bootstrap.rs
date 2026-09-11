@@ -13,7 +13,7 @@ pub async fn build_listener_and_app() -> AppResult<(TcpListener, axum::Router)> 
     let db_pool = create_pool(&config).await?;
     let session_store = PostgresStore::new(db_pool.clone());
     session_store.migrate().await?;
-    let assets = Arc::new(Assets::build()?);
+    let assets = Arc::new(Assets::new()?);
     let state = AppState::new(db_pool, config, assets);
 
     let port = state.config.app.port;

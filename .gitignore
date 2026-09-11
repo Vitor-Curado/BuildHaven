@@ -1,9 +1,5 @@
 /target
-/static/dist/
-.temp.txt
-.index.txt
+/client/node_modules
+/dist
 benchmarks/results/*.raw
 .env
-secrets.env
-app-secrets.env
-db-secrets.env
