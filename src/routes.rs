@@ -1,6 +1,5 @@
 use crate::{
-    handlers::{blog, contact, docs, home, login_page, login_user, resume},
-    state::AppState,
+    auth::require_auth, handlers::{admin, blog, contact, docs, home, login_page, login_user, resume}, state::{AppState},
 };
 use axum::{Router, routing::get};
 
@@ -15,6 +14,9 @@ pub fn public_routes() -> Router<AppState> {
 }
 
 // Todo: Add authenticated routes here in the future
-pub fn protected_routes() -> Router<AppState> {
+pub fn protected_routes(state: AppState) -> Router<AppState> {
     Router::new()
+        .route("/admin", get(admin))
+        .layer(axum::middleware::from_fn_with_state(state, require_auth))
+        
 }

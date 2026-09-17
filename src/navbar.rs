@@ -76,33 +76,30 @@ pub const THEMES: &[Theme] = &[
     },
 ];
 
-pub const LANGUAGES: &[Language] = &[
-    Language {
-        code: "en",
-        label: "English",
-        icon: "english.png",
-    },
-    Language {
-        code: "fr",
-        label: "French",
-        icon: "french.png",
-    },
-];
-
 pub const DOCS: &[DocItem] = &[
     DocItem {
         title: "Decisions",
-        slug: "state",
+        slug: "decicions",
         markdown: include_str!("../docs/decisions.md"),
     },
     DocItem {
+        title: "Learned concepts",
+        slug: "learned-concepts",
+        markdown: include_str!("../docs/learned-concepts.md"),
+    },
+    DocItem {
         title: "Learning journey",
-        slug: "structure",
+        slug: "learning-journey",
         markdown: include_str!("../docs/learning-journey.md"),
     },
     DocItem {
-        title: "Tech stack",
-        slug: "testing",
-        markdown: include_str!("../docs/tech-stack.md"),
+        title: "Scope",
+        slug: "scope",
+        markdown: include_str!("../docs/scope.md"),
+    },
+    DocItem {
+        title: "What is software engineering",
+        slug: "what-is-software-engineering",
+        markdown: include_str!("../docs/what-is-software-engineering.md"),
     },
 ];

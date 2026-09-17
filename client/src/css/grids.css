@@ -16,7 +16,8 @@
 }
 
 @media (max-width: 768px) {
-  .grid-2, .grid-3 {
+  .grid-2,
+  .grid-3 {
     grid-template-columns: 1fr;
   }
 }

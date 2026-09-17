@@ -1,7 +1,7 @@
 use crate::{
     assets::Assets,
     models::Post,
-    navbar::{DOCS, DocItem, LANGUAGES, Language, NAV_ITEMS, NavItem, THEMES, Theme},
+    navbar::{DOCS, DocItem, NAV_ITEMS, NavItem, THEMES, Theme},
     state::AppState,
 };
 use askama::Template;
@@ -15,7 +15,6 @@ pub struct BaseTemplateContext {
 
     pub nav_items: &'static [NavItem],
     pub themes: &'static [Theme],
-    pub languages: &'static [Language],
 
     pub docs: &'static [DocItem],
 }
@@ -33,7 +32,6 @@ impl BaseTemplateContext {
             assets,
             nav_items: NAV_ITEMS,
             themes: THEMES,
-            languages: LANGUAGES,
             docs,
         }
     }
@@ -83,5 +81,11 @@ pub struct DocsTemplate {
 #[derive(Template)]
 #[template(path = "pages/contact_me.html")]
 pub struct ContactTemplate {
+    pub base: BaseTemplateContext,
+}
+
+#[derive(Template)]
+#[template(path = "pages/admin.html")]
+pub struct AdminTemplate {
     pub base: BaseTemplateContext,
 }

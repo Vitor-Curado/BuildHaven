@@ -7,7 +7,7 @@ use crate::{
     repository::{find_user_by_email, get_all_posts},
     state::AppState,
     templates::{
-        BaseTemplateContext, BlogTemplate, ContactTemplate, DocsTemplate, IndexTemplate,
+        AdminTemplate, BaseTemplateContext, BlogTemplate, ContactTemplate, DocsTemplate, IndexTemplate,
         LoginTemplate, ResumeTemplate,
     },
     utils::markdown_to_html,
@@ -77,7 +77,7 @@ pub async fn login_user(
         return Redirect::to("/login");
     }
 
-    Redirect::to("/")
+    Redirect::to("/admin")
 }
 
 pub async fn login_page(State(state): State<AppState>) -> impl IntoResponse {
@@ -129,5 +129,12 @@ pub async fn docs(Path(slug): Path<String>, State(state): State<AppState>) -> Ap
 pub async fn contact(State(state): State<AppState>) -> AppResult<Response> {
     render_template(ContactTemplate {
         base: BaseTemplateContext::build_base_context(&state, titles::CONTACT, icons::CONTACT),
+    })
+}
+
+pub async fn admin(State(state): State<AppState>) -> AppResult<Response> {
+    render_template(AdminTemplate {
+        // Temporary values
+        base: BaseTemplateContext::build_base_context(&state, titles::BLOG, icons::DOCS),
     })
 }

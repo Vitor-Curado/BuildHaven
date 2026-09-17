@@ -1,6 +1,5 @@
 use crate::{
-    cors::apply_cors, logging::apply_logging, routes::public_routes,
-    security::apply_security_headers, state::AppState,
+    cors::apply_cors, logging::apply_logging, routes::{protected_routes, public_routes}, security::apply_security_headers, state::AppState,
 };
 use axum::Router;
 use time::Duration;
@@ -14,7 +13,7 @@ use tower_sessions_sqlx_store::PostgresStore;
 
 pub fn app(state: AppState, session_store: PostgresStore) -> Router {
     let config = &state.config;
-    let static_service = ServeDir::new("static")
+    let media_service = ServeDir::new("media")
         .precompressed_br()
         .precompressed_gzip();
 
@@ -32,8 +31,9 @@ pub fn app(state: AppState, session_store: PostgresStore) -> Router {
 
     let mut router = Router::new()
         .merge(public_routes())
+        .merge(protected_routes(state.clone()))
         .layer(session_layer)
-        .nest_service("/static", static_service)
+        .nest_service("/media", media_service)
         .nest_service("/dist", dist_service)
         .layer(CompressionLayer::new().br(true).gzip(true).deflate(true))
         .layer(SetRequestIdLayer::x_request_id(MakeRequestUuid))

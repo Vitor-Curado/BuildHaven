@@ -1,6 +1,6 @@
 # 📘 Victor's Personal Website
 
-**Version:** 0.4.
+**Version:** 0.5.0
 **Last updated:** September 08, 2026  
 
 A personal blog, made with the help of ChatGPT, no I didn't use agents nor have I ever touched one. No, I don't know what I'm doing and I'm learning as I go.
@@ -22,3 +22,8 @@ A personal blog, made with the help of ChatGPT, no I didn't use agents nor have 
 - **Tracing:** OpenTelemetry (planned)
 
 ---
+What is this?
+What does it do?
+What is it built with?
+Where is it deployed?
+How do I run it?

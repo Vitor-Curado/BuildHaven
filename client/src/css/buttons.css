@@ -23,11 +23,9 @@
 }
 
 .button-ghost {
-
   background: none;
 
   color: var(--color-accent);
-
 }
 
 .button-ghost:hover {
