@@ -1,7 +1,7 @@
 use crate::{
     assets::Assets,
     models::Post,
-    navbar::{DOCS, DocItem, NAV_ITEMS, NavItem, THEMES, Theme},
+    navbar::{DOCS, DocItem, THEMES, Theme},
     state::AppState,
 };
 use askama::Template;
@@ -12,10 +12,7 @@ pub struct BaseTemplateContext {
     pub title: String,
     pub favicon: &'static str,
     pub assets: Arc<Assets>,
-
-    pub nav_items: &'static [NavItem],
     pub themes: &'static [Theme],
-
     pub docs: &'static [DocItem],
 }
 
@@ -30,7 +27,6 @@ impl BaseTemplateContext {
             title: title.into(),
             favicon,
             assets,
-            nav_items: NAV_ITEMS,
             themes: THEMES,
             docs,
         }

@@ -1,7 +1,5 @@
 use serde::Serialize;
 
-use crate::constants::icons::{BLOG, CONTACT, HOME, RESUME};
-
 #[derive(Clone, Copy)]
 pub struct NavItem {
     pub title: &'static str,
@@ -30,49 +28,26 @@ pub struct DocItem {
     pub markdown: &'static str,
 }
 
-pub const NAV_ITEMS: &[NavItem] = &[
-    NavItem {
-        title: "Home",
-        href: "/",
-        icon: HOME,
-    },
-    NavItem {
-        title: "Blog",
-        href: "/blog",
-        icon: BLOG,
-    },
-    NavItem {
-        title: "Resume",
-        href: "/resume",
-        icon: RESUME,
-    },
-    NavItem {
-        title: "Contact",
-        href: "/contact",
-        icon: CONTACT,
-    },
-];
-
 pub const THEMES: &[Theme] = &[
     Theme {
         id: "sunset",
         name: "Sunset",
-        icon: "sun-theme.png",
+        icon: "sunset.png",
     },
     Theme {
         id: "night",
         name: "Night",
-        icon: "night-theme.png",
+        icon: "night.png",
     },
     Theme {
         id: "forest",
         name: "Forest",
-        icon: "forest-theme.png",
+        icon: "forest.png",
     },
     Theme {
         id: "ocean",
         name: "Ocean",
-        icon: "ocean-theme.png",
+        icon: "ocean.png",
     },
 ];
 
