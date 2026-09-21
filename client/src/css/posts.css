@@ -26,5 +26,5 @@
 .post-date {
   font-size: var(--font-size-extra-small);
 
-  color: var(--color-muted-text);
+  color: var(--color-text-muted);
 }

@@ -10,7 +10,11 @@ CREATE TABLE users (
 CREATE TABLE posts (
     id UUID PRIMARY KEY,
     title TEXT NOT NULL,
+    slug TEXT NOT NULL UNIQUE,
     content TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'draft',
+    views INTEGER NOT NULL DEFAULT 0,
+    published_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );

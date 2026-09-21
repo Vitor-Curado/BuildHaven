@@ -1,38 +1,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Blog Posts</h1>
+<header>
+  <h1> Blog </h1>
+</header>
 
+{% if posts.is_empty() %}
+  <p>No posts yet.</p>
+{% else %}
 <section class="posts">
-
-  {% if posts.is_empty() %}
-    <p>No posts yet.</p>
-  {% endif %}
-
   {% for post in posts %}
-    <article class="post">
-
+    <article class="post card">
       <header class="post-header">
         <h2 class="post-title">
-          {{ post.title }}
+          <a href="/blog/{{ post.slug }}"> {{ post.title }} </a>
         </h2>
 
-        <time class="post-date">
-          {{ post.formatted_date() }}
+        <time datetime="{{ post.published_at }}">
+          {{ post.published_at }}
         </time>
       </header>
 
-      <div class="post-content">
-        <p>
-          {{ post.content }}
-        </p>
-      </div>
-
-      <hr>
-
+      <a href="/blog/{{ post.slug }}"> Read post </a>
     </article>
   {% endfor %}
-
 </section>
-
+{% endif %}
 {% endblock %}

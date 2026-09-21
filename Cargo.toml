@@ -22,6 +22,7 @@ sqlx = { version = "0.8.6", features = ["postgres", "runtime-tokio-rustls", "uui
 serde = { version = "1", features = ["derive"] }
 serde_json = "1.0"
 thiserror = "2.0.18"
+slug = "0.1"
 
 # --- Configuration ---
 dotenvy = "0.15.7"

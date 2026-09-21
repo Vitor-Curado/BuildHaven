@@ -67,6 +67,14 @@ pub struct BlogTemplate {
 }
 
 #[derive(Template)]
+#[template(path = "pages/blog_post.html")]
+pub struct BlogPostTemplate {
+    pub base: BaseTemplateContext,
+    pub post: Post,
+    pub content_html: String,
+}
+
+#[derive(Template)]
 #[template(path = "pages/docs.html", escape = "none")]
 pub struct DocsTemplate {
     pub base: BaseTemplateContext,
@@ -84,4 +92,24 @@ pub struct ContactTemplate {
 #[template(path = "pages/admin.html")]
 pub struct AdminTemplate {
     pub base: BaseTemplateContext,
+}
+
+#[derive(Template)]
+#[template(path = "pages/admin/posts.html")]
+pub struct AdminPostsTemplate {
+    pub base: BaseTemplateContext,
+    pub posts: Vec<Post>,
+}
+
+#[derive(Template)]
+#[template(path = "pages/admin/post_new.html")]
+pub struct AdminNewPostTemplate {
+    pub base: BaseTemplateContext,
+}
+
+#[derive(Template)]
+#[template(path = "pages/admin/post_edit.html")]
+pub struct AdminEditPostTemplate {
+    pub base: BaseTemplateContext,
+    pub post: Post,
 }

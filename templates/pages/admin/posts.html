@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <header>
+        <h1>Posts</h1>
+        <a href="/admin/posts/new">New Post</a>
+    </header>
+
+    {% if posts.is_empty() %}
+        <p> No posts yet. </p>
+    {% else %}
+        <section aria-label="Posts">
+            {% for post in posts %}
+                <article class="card">
+                    <header>
+                        <h2> {{ post.title }} </h2>
+
+                        {% if let Some(published_at) = post.published_at %}
+                            <time datetime="{{ published_at }}"> {{ published_at }} </time>
+                        {{% endif%}}
+                    </header>
+
+                    <div>
+                        <a href="/admin/posts/{{ post.id }}/edit"> Edit </a>
+                        <form action="/admin/posts/{{ post.id }}/delete" method="post"> <button type="submit"> Delete </button></form>
+                    </div>
+                </article>
+            {% endfor %}
+        </section>
+    {% endif %}
+{% endblock %}

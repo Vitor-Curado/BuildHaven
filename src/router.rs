@@ -1,5 +1,9 @@
 use crate::{
-    cors::apply_cors, logging::apply_logging, routes::{protected_routes, public_routes}, security::apply_security_headers, state::AppState,
+    cors::apply_cors,
+    logging::apply_logging,
+    routes::{protected_routes, public_routes},
+    security::apply_security_headers,
+    state::AppState,
 };
 use axum::Router;
 use time::Duration;
@@ -17,7 +21,9 @@ pub fn app(state: AppState, session_store: PostgresStore) -> Router {
         .precompressed_br()
         .precompressed_gzip();
 
-    let dist_service = ServeDir::new("dist").precompressed_br().precompressed_gzip();
+    let dist_service = ServeDir::new("dist")
+        .precompressed_br()
+        .precompressed_gzip();
 
     let session_layer = SessionManagerLayer::new(session_store)
         .with_name(crate::constants::cookies::SESSION_ID)

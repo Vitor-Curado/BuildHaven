@@ -1,4 +1,4 @@
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use time::OffsetDateTime;
 use uuid::Uuid;
 
@@ -12,7 +12,11 @@ pub struct LoginForm {
 pub struct Post {
     pub id: Uuid,
     pub title: String,
+    pub slug: String,
     pub content: String,
+    pub status: String,
+    pub views: i32,
+    pub published_at: Option<OffsetDateTime>,
     pub created_at: OffsetDateTime,
     pub updated_at: OffsetDateTime,
 }
@@ -26,15 +30,16 @@ impl Post {
     }
 }
 
-#[derive(Debug, Serialize, Clone)]
+#[derive(Debug, Deserialize)]
 pub struct NewPost {
     pub title: String,
     pub content: String,
 }
 
+#[derive(Debug, Deserialize)]
 pub struct UpdatePost {
-    pub title: Option<String>,
-    pub content: Option<String>,
+    pub title: String,
+    pub content: String,
 }
 
 #[derive(Debug, Clone, sqlx::FromRow)]

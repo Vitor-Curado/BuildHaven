@@ -2,13 +2,17 @@ use crate::{
     auth::verify_password,
     constants::{icons, titles},
     error::{AppError, AppResult},
-    models::LoginForm,
+    models::{LoginForm, NewPost, UpdatePost},
     navbar::DOCS,
-    repository::{find_user_by_email, get_all_posts},
+    repository::{
+        create_post, delete_post, find_user_by_email, get_all_posts, get_post_by_id,
+        get_posts_by_slug, update_post,
+    },
     state::AppState,
     templates::{
-        AdminTemplate, BaseTemplateContext, BlogTemplate, ContactTemplate, DocsTemplate, IndexTemplate,
-        LoginTemplate, ResumeTemplate,
+        AdminEditPostTemplate, AdminNewPostTemplate, AdminPostsTemplate, AdminTemplate,
+        BaseTemplateContext, BlogPostTemplate, BlogTemplate, ContactTemplate, DocsTemplate,
+        IndexTemplate, LoginTemplate, ResumeTemplate,
     },
     utils::markdown_to_html,
 };
@@ -22,6 +26,7 @@ use axum::{
 use askama::Template;
 use std::time::Instant;
 use tower_sessions::Session;
+use uuid::Uuid;
 
 const DUMMY_HASH: &str =
     "$argon2id$v=19$m=19456,t=2,p=1$c29tZXNhbHQ$C5Z8YlH9l5k6n6u5W1zvQ8FJ5m0e3M3G7pT9oXk2c9Q";
@@ -107,6 +112,23 @@ pub async fn blog(State(state): State<AppState>) -> AppResult<Response> {
     })
 }
 
+pub async fn blog_post(
+    State(state): State<AppState>,
+    Path(slug): Path<String>,
+) -> AppResult<Response> {
+    let post = get_posts_by_slug(&state.db, slug)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    let content_html = markdown_to_html(&post.content);
+
+    render_template(BlogPostTemplate {
+        base: BaseTemplateContext::build_base_context(&state, &post.title, icons::BLOG),
+        content_html,
+        post,
+    })
+}
+
 pub async fn docs(Path(slug): Path<String>, State(state): State<AppState>) -> AppResult<Response> {
     let doc = DOCS
         .iter()
@@ -132,9 +154,76 @@ pub async fn contact(State(state): State<AppState>) -> AppResult<Response> {
     })
 }
 
+// ***** Admin stuff *****
+
 pub async fn admin(State(state): State<AppState>) -> AppResult<Response> {
     render_template(AdminTemplate {
         // Temporary values
         base: BaseTemplateContext::build_base_context(&state, titles::BLOG, icons::DOCS),
     })
+}
+
+pub async fn admin_posts(State(state): State<AppState>) -> AppResult<Response> {
+    let posts = get_all_posts(&state.db).await?;
+
+    render_template(AdminPostsTemplate {
+        base: BaseTemplateContext::build_base_context(&state, "Manage Posts", icons::BLOG),
+        posts,
+    })
+}
+
+pub async fn admin_new_post(State(state): State<AppState>) -> AppResult<Response> {
+    render_template(AdminNewPostTemplate {
+        base: BaseTemplateContext::build_base_context(&state, "New Post", icons::BLOG),
+    })
+}
+
+pub async fn admin_create_post(
+    State(state): State<AppState>,
+    Form(form): Form<NewPost>,
+) -> AppResult<Response> {
+    create_post(&state.db, &form).await?;
+
+    Ok(Redirect::to("/admin/posts").into_response())
+}
+
+pub async fn admin_edit_post(
+    Path(post_id): Path<Uuid>,
+    State(state): State<AppState>,
+) -> AppResult<Response> {
+    let post = get_post_by_id(&state.db, post_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    render_template(AdminEditPostTemplate {
+        base: BaseTemplateContext::build_base_context(&state, "Edit post", icons::BLOG),
+        post,
+    })
+}
+
+pub async fn admin_update_post(
+    Path(post_id): Path<Uuid>,
+    State(state): State<AppState>,
+    Form(form): Form<UpdatePost>,
+) -> AppResult<Response> {
+    let updated = update_post(&state.db, post_id, &form).await?;
+
+    if !updated {
+        return Err(AppError::NotFound);
+    }
+
+    Ok(Redirect::to("/admin/posts").into_response())
+}
+
+pub async fn admin_delete_post(
+    Path(post_id): Path<Uuid>,
+    State(state): State<AppState>,
+) -> AppResult<Response> {
+    let deleted = delete_post(&state.db, post_id).await?;
+
+    if !deleted {
+        return Err(AppError::NotFound);
+    }
+
+    Ok(Redirect::to("/admin/posts").into_response())
 }
