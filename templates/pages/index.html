@@ -1,7 +1,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-Buildhaven
-Back to square one, boys;
+  <header>
+    <h1> Blog </h1>
+  </header>
 
+  {% if posts.is_empty() %}
+    <p>No posts yet.</p>
+  {% else %}
+    <section class="posts">
+      {% for post in posts %}
+        <article class="post card">
+          <header class="post-header">
+            <h2 class="post-title">
+              <a href="/blog/{{ post.slug }}"> {{ post.title }} </a>
+            </h2>
+            {% if let Some(published_at) = post.published_at %}
+                <time datetime="{{ published_at }}">
+                {{ published_at }}
+                </time>
+            {% endif %}
+          </header>
+          <a href="/blog/{{ post.slug }}"> Read post </a>
+        </article>
+      {% endfor %}
+    </section>
+  {% endif %}
 {% endblock %}

@@ -1,6 +1,6 @@
 .center {
   margin-inline: auto;
-  max-width: var(--content-width, 60ch);
+  max-width: var(--content-width-narrow);
 }
 
 .stack {
@@ -26,7 +26,9 @@
 }
 
 .readable {
-  max-width: min(65ch, 100%);
+  max-width: var(--content-width-narrow);
+  margin-inline: auto;
+  padding: var(--spacing-medium);
 }
 
 .flow > * + * {

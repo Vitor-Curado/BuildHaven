@@ -11,7 +11,7 @@ use crate::{
     state::AppState,
     templates::{
         AdminEditPostTemplate, AdminNewPostTemplate, AdminPostsTemplate, AdminTemplate,
-        BaseTemplateContext, BlogPostTemplate, BlogTemplate, ContactTemplate, DocsTemplate,
+        BaseTemplateContext, BlogPostTemplate, ContactTemplate, DocsTemplate,
         IndexTemplate, LoginTemplate, ResumeTemplate,
     },
     utils::markdown_to_html,
@@ -47,8 +47,11 @@ pub fn render_template<T: Template>(t: T) -> AppResult<Response> {
 }
 
 pub async fn home(State(state): State<AppState>) -> Result<Response, AppError> {
+    let posts = get_all_posts(&state.db).await?;
+
     render_template(IndexTemplate {
-        base: BaseTemplateContext::build_base_context(&state, titles::HOME, icons::HOME),
+        base: BaseTemplateContext::build_base_context(&state, titles::BLOG, icons::BLOG),
+        posts,
     })
 }
 
@@ -97,18 +100,6 @@ pub async fn login_page(State(state): State<AppState>) -> impl IntoResponse {
 pub async fn resume(State(state): State<AppState>) -> AppResult<Response> {
     render_template(ResumeTemplate {
         base: BaseTemplateContext::build_base_context(&state, titles::RESUME, icons::RESUME),
-    })
-}
-
-/// Renders the blog page.
-/// # Panics
-/// This function will panic if the template rendering fails.
-pub async fn blog(State(state): State<AppState>) -> AppResult<Response> {
-    let posts = get_all_posts(&state.db).await?;
-
-    render_template(BlogTemplate {
-        base: BaseTemplateContext::build_base_context(&state, titles::BLOG, icons::BLOG),
-        posts,
     })
 }
 

@@ -17,7 +17,7 @@
   visibility: hidden;
   margin: 0;
   padding: var(--spacing-extra-small) 0;
-  z-index: 1000;
+  z-index: var(--z-index-dropdown);
   opacity: 0;
   pointer-events: none;
   transform: translateY(-4px);
@@ -45,6 +45,6 @@
 }
 
 .active-theme {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   outline: 2px solid var(--color-accent);
 }

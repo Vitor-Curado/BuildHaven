@@ -42,12 +42,6 @@ impl BaseTemplateContext {
 }
 
 #[derive(Template)]
-#[template(path = "pages/index.html", escape = "none")]
-pub struct IndexTemplate {
-    pub base: BaseTemplateContext,
-}
-
-#[derive(Template)]
 #[template(path = "pages/login.html")]
 pub struct LoginTemplate {
     pub base: BaseTemplateContext,
@@ -60,8 +54,8 @@ pub struct ResumeTemplate {
 }
 
 #[derive(Template)]
-#[template(path = "pages/blog.html")]
-pub struct BlogTemplate {
+#[template(path = "pages/index.html")]
+pub struct IndexTemplate {
     pub base: BaseTemplateContext,
     pub posts: Vec<Post>,
 }

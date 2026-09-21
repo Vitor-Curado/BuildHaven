@@ -28,6 +28,14 @@ impl Post {
             .format(&time::macros::format_description!("[year]-[month]-[day]"))
             .unwrap()
     }
+
+    pub fn formatted_published_date(&self) -> Option<String> {
+        self.published_at.map(|date| {
+            date.date()
+                .format(&time::macros::format_description!("[year]-[month]-[day]"))
+                .unwrap()
+        })
+    }
 }
 
 #[derive(Debug, Deserialize)]

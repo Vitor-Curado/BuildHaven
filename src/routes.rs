@@ -2,7 +2,7 @@ use crate::{
     auth::require_auth,
     handlers::{
         admin, admin_create_post, admin_delete_post, admin_edit_post, admin_new_post, admin_posts,
-        admin_update_post, blog, blog_post, contact, docs, home, login_page, login_user, resume,
+        admin_update_post, blog_post, contact, docs, home, login_page, login_user, resume,
     },
     state::AppState,
 };
@@ -17,7 +17,6 @@ pub fn public_routes() -> Router<AppState> {
         .route("/docs/{slug}", get(docs))
         .route("/login", get(login_page).post(login_user))
         .route("/resume", get(resume))
-        .route("/blog", get(blog))
         .route("/blog/{slug}", get(blog_post))
         .route("/contact", get(contact))
 }
