@@ -56,6 +56,28 @@ pub async fn get_all_posts(pool: &PgPool) -> Result<Vec<Post>, sqlx::Error> {
     .await
 }
 
+pub async fn get_published_posts(pool: &PgPool) -> Result<Vec<Post>, sqlx::Error> {
+    sqlx::query_as::<_, Post>(
+        r#"
+        SELECT 
+            id,
+            title,
+            slug,
+            content,
+            status,
+            views,
+            published_at,
+            created_at,
+            updated_at
+        FROM posts
+        WHERE status = $1
+        ORDER BY created_at DESC
+        "#
+    )
+    .bind("published")
+    .fetch_all(pool).await
+}
+
 pub async fn get_posts_paginated(
     pool: &PgPool,
     limit: i64,
@@ -167,6 +189,42 @@ pub async fn update_post(
         post_id,
         update.title,
         update.content
+    )
+    .execute(pool)
+    .await?;
+
+    Ok(result.rows_affected() > 0)
+}
+
+pub async fn publish_post(pool: &PgPool, post_id: Uuid) -> Result<bool, sqlx::Error> {
+    let result = sqlx::query!(
+        r#"
+        UPDATE posts
+        SET
+            status = 'published',
+            published_at = NOW(),
+            updated_at = NOW()
+        WHERE id = $1
+        "#,
+        post_id
+    )
+    .execute(pool)
+    .await?;
+
+    Ok(result.rows_affected() > 0)
+}
+
+pub async fn unpublish_post(pool: &PgPool, post_id: Uuid) -> Result<bool, sqlx::Error> {
+    let result = sqlx::query!(
+        r#"
+        UPDATE posts
+        SET 
+            status = 'draft',
+            published_at = NULL,
+            updated_at = NOW()
+        WHERE id = $1
+        "#,
+        post_id
     )
     .execute(pool)
     .await?;

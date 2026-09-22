@@ -1,20 +1,11 @@
 use crate::{
-    auth::verify_password,
-    constants::{icons, titles},
-    error::{AppError, AppResult},
-    models::{LoginForm, NewPost, UpdatePost},
-    navbar::DOCS,
-    repository::{
-        create_post, delete_post, find_user_by_email, get_all_posts, get_post_by_id,
-        get_posts_by_slug, update_post,
-    },
-    state::AppState,
-    templates::{
+    auth::verify_password, constants::{icons, titles}, error::{AppError, AppResult}, models::{LoginForm, NewPost, UpdatePost}, navbar::DOCS, repository::{
+        create_post, delete_post, find_user_by_email, get_all_posts, get_post_by_id, get_posts_by_slug, get_published_posts, publish_post, unpublish_post, update_post,
+    }, state::AppState, templates::{
         AdminEditPostTemplate, AdminNewPostTemplate, AdminPostsTemplate, AdminTemplate,
         BaseTemplateContext, BlogPostTemplate, ContactTemplate, DocsTemplate,
         IndexTemplate, LoginTemplate, ResumeTemplate,
-    },
-    utils::markdown_to_html,
+    }, utils::markdown_to_html,
 };
 
 use axum::{
@@ -46,12 +37,31 @@ pub fn render_template<T: Template>(t: T) -> AppResult<Response> {
     Ok(Html(html).into_response())
 }
 
+// pub fn generate_static_pages()
+
 pub async fn home(State(state): State<AppState>) -> Result<Response, AppError> {
-    let posts = get_all_posts(&state.db).await?;
+    let posts = get_published_posts(&state.db).await?;
 
     render_template(IndexTemplate {
         base: BaseTemplateContext::build_base_context(&state, titles::BLOG, icons::BLOG),
         posts,
+    })
+}
+
+pub async fn blog_post(
+    State(state): State<AppState>,
+    Path(slug): Path<String>,
+) -> AppResult<Response> {
+    let post = get_posts_by_slug(&state.db, slug)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    let content_html = markdown_to_html(&post.content);
+
+    render_template(BlogPostTemplate {
+        base: BaseTemplateContext::build_base_context(&state, &post.title, icons::BLOG),
+        content_html,
+        post,
     })
 }
 
@@ -100,23 +110,6 @@ pub async fn login_page(State(state): State<AppState>) -> impl IntoResponse {
 pub async fn resume(State(state): State<AppState>) -> AppResult<Response> {
     render_template(ResumeTemplate {
         base: BaseTemplateContext::build_base_context(&state, titles::RESUME, icons::RESUME),
-    })
-}
-
-pub async fn blog_post(
-    State(state): State<AppState>,
-    Path(slug): Path<String>,
-) -> AppResult<Response> {
-    let post = get_posts_by_slug(&state.db, slug)
-        .await?
-        .ok_or(AppError::NotFound)?;
-
-    let content_html = markdown_to_html(&post.content);
-
-    render_template(BlogPostTemplate {
-        base: BaseTemplateContext::build_base_context(&state, &post.title, icons::BLOG),
-        content_html,
-        post,
     })
 }
 
@@ -217,4 +210,30 @@ pub async fn admin_delete_post(
     }
 
     Ok(Redirect::to("/admin/posts").into_response())
+}
+
+pub async fn admin_publish_post(
+    State(state): State<AppState>,
+    Path(post_id): Path<Uuid>
+) -> AppResult<Response> {
+    let updated = publish_post(&state.db, post_id).await?;
+
+    if !updated {
+        return Err(AppError::NotFound);
+    }
+
+    Ok(Redirect::to(&format!("/admin/posts")).into_response())
+}
+
+pub async fn admin_unpublish_post(
+    State(state): State<AppState>,
+    Path(post_id): Path<Uuid>
+) -> AppResult<Response> {
+    let updated = unpublish_post(&state.db, post_id).await?;
+
+    if !updated {
+        return Err(AppError::NotFound);
+    }
+
+    Ok(Redirect::to(&format!("/admin/posts")).into_response())
 }

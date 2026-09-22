@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        UPDATE posts\n        SET \n            status = 'draft',\n            published_at = NULL,\n            updated_at = NOW()\n        WHERE id = $1\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "e5d3588fbea15453c895224f8ae1c24a3a40ccfa04a5530a692cc9f3d174b268"
+}

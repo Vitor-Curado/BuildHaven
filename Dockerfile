@@ -19,8 +19,8 @@ COPY --from=planner /app/recipe.json recipe.json
 RUN cargo chef cook --release --recipe-path recipe.json
 
 COPY . .
+RUN cargo run --release --bin assets
 RUN cargo build --release
-#RUN cargo run --bin assets
 
 # ---------- Runtime stage ----------
 FROM debian:bookworm-slim
@@ -30,10 +30,12 @@ FROM debian:bookworm-slim
 WORKDIR /app
 
 COPY --from=builder /app/target/release/buildhaven .
+COPY --from=builder /app/static ./static
 
 COPY templates ./templates
-COPY static ./static
-COPY readme.md ./readme.md
+COPY media ./media
+COPY dist ./dist
+COPY docs ./docs
 
 RUN useradd -m nonroot
 USER root

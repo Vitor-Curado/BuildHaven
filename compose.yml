@@ -1,12 +1,11 @@
 services:
   app:
-    image: ghcr.io/vitor-curado/buildhaven:latest
+    image: ghcr.io/vitor-curado/buildhaven:arm64
     ports:
       - "3000:3000"
     restart: always
     env_file:
-      - config.env
-      - app-secrets.env
+      - .env
     depends_on:
       db:
         condition: service_healthy
@@ -17,7 +16,7 @@ services:
     image: postgres:18
     restart: always
     env_file:
-      - db-secrets.env
+      - .env
     volumes:
       - postgres_data:/var/lib/postgresql/18/data # works
       #- postgres_data:/var/lib/postgresql/data:Z (doesn't work)
@@ -64,9 +63,8 @@ services:
     restart: always
     volumes:
       - grafana_data:/var/lib/grafana
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+    env_file:
+      - .env
     apiVersion: 1
     datasources:
       - name: VictoriaMetrics

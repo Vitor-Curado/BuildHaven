@@ -40,3 +40,11 @@ cargo doc --no-deps
 
 # To benchmark
 cargo bench || true
+
+# In prod
+sudo podman run -d \
+  --name buildhaven-postgres \
+  --network buildhaven-net \
+  --env-file /etc/BuildHaven/.env \
+  -v buildhaven-postgres-data:/var/lib/postgresql/data \
+  docker.io/library/postgres:latest

@@ -13,7 +13,7 @@
         <article class="post card">
           <header class="post-header">
             <h2 class="post-title">
-              <a href="/blog/{{ post.slug }}"> {{ post.title }} </a>
+              <a href="/{{ post.slug }}"> {{ post.title }} </a>
             </h2>
             {% if let Some(published_at) = post.published_at %}
                 <time datetime="{{ published_at }}">
@@ -21,7 +21,7 @@
                 </time>
             {% endif %}
           </header>
-          <a href="/blog/{{ post.slug }}"> Read post </a>
+          <a href="/{{ post.slug }}"> Read post </a>
         </article>
       {% endfor %}
     </section>

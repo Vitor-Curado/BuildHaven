@@ -14,14 +14,19 @@
                 <article class="card">
                     <header>
                         <h2> {{ post.title }} </h2>
+                        <p><strong> Status: </strong> {{ post.status }} </p>
 
                         {% if let Some(published_at) = post.published_at %}
-                            <time datetime="{{ published_at }}"> {{ published_at }} </time>
+                            <p> <strong> Published: </strong> <time datetime="{{ published_at }}"> {{ published_at }} </time> </p>
                         {% endif %}
+
+                        <p> <strong> Created: </strong> <time datetime="{{ post.created_at }}"> {{ post.created_at }} </time> </p>
+                        <p> <strong> Updated: </strong> <time datetime="{{ post.updated_at }}"> {{ post.updated_at }} </time> </p>
+                        <p> <strong> Views: </strong> {{ post.views }} </p>
                     </header>
 
                     <div>
-                        <a href="/admin/posts/{{ post.id }}/edit"> Edit </a>
+                        <a href="/admin/posts/{{ post.id }}"> Edit </a>
                         <form action="/admin/posts/{{ post.id }}/delete" method="post"> <button type="submit"> Delete </button></form>
                     </div>
                 </article>

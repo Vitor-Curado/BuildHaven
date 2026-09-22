@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n        SELECT id, title, content, created_at\n        FROM posts\n        ORDER BY created_at DESC\n        LIMIT $1 OFFSET $2\n        ",
+  "query": "\n        SELECT id, username, email, password_hash, created_at, updated_at\n        FROM users\n        WHERE email = $1\n        ",
   "describe": {
     "columns": [
       {
@@ -10,32 +10,43 @@
       },
       {
         "ordinal": 1,
-        "name": "title",
+        "name": "username",
         "type_info": "Text"
       },
       {
         "ordinal": 2,
-        "name": "content",
+        "name": "email",
         "type_info": "Text"
       },
       {
         "ordinal": 3,
+        "name": "password_hash",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
         "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 5,
+        "name": "updated_at",
         "type_info": "Timestamptz"
       }
     ],
     "parameters": {
       "Left": [
-        "Int8",
-        "Int8"
+        "Text"
       ]
     },
     "nullable": [
       false,
       false,
       false,
+      false,
+      false,
       false
     ]
   },
-  "hash": "4d48f51d419421809d474e27629ba02925a83a67fce2493f2004010a2d07d100"
+  "hash": "0606ff26e18175f52bbbb97756189d0baee6d644fccc715ce1912bfe72382377"
 }

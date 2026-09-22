@@ -1,9 +1,9 @@
 use crate::{
-    constants::paths::VITE_MANIFEST,
-    error::{AppError, AppResult},
+    constants::{icons, paths::VITE_MANIFEST, titles}, error::{AppError, AppResult}, navbar::DOCS, templates::{BaseTemplateContext, ContactTemplate},
 };
+use askama::Template;
 use serde::Deserialize;
-use std::fs;
+use std::{fs, path::Path, sync::Arc};
 
 #[derive(Debug, Deserialize)]
 struct ViteManifestEntry {
@@ -39,5 +39,25 @@ impl Assets {
                 .ok_or(AppError::MissingAsset("index.css"))?,
             js: manifest.index.file,
         })
+    }
+
+    pub fn generate_all_static_pages(&self) -> AppResult<()> {
+        self.generate_contact()
+    }
+
+    fn generate_contact(&self) -> AppResult<()> {
+        let base = BaseTemplateContext::new(titles::CONTACT, icons::CONTACT, Arc::new(self.clone()), DOCS);
+        let template = ContactTemplate { base };
+
+        self.write_static_page("contact", template)
+    }
+
+    fn write_static_page<T: Template>(&self, route: &str, template: T) -> AppResult<()> {
+        let directory = format!("static/{route}");
+        fs::create_dir_all(&directory)?;
+        let html = template.render()?;
+        fs::write(format!("{directory}/index.html"), html)?;
+        
+        Ok(())
     }
 }
