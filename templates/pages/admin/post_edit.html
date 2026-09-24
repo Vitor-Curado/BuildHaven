@@ -10,11 +10,11 @@
         {% endif %}
     </header>
     
-
-    <form method="post" action="/admin/posts/{{ post.id }}">
-        <div>
-            <label for="title"> Title </label>
+    <form class="form" method="post" action="/admin/posts/{{ post.id }}">
+        <div class="form-group">
+            <label class="form-label" for="title"> Title </label>
             <input
+                class="form-field"
                 type="text"
                 id="title"
                 name="title"
@@ -23,17 +23,19 @@
             >
         </div>
 
-        <div>
-            <label for="content"> Content </label>
+        <div class="form-group">
+            <label class="form-label" for="content"> Content </label>
             <textarea
+                class="form-field"
                 id="content"
                 name="content"
                 rows="20"
                 required
             >{{ post.content }}</textarea>
         </div>
-
-        <button type="submit"> Save Changes </button>
+        <div class="form-actions">
+            <button type="submit"> Save Changes </button>
+        </div>
     </form>
 
     {% if post.status == "published" %}

@@ -12,6 +12,7 @@ FROM rust:latest AS builder
 WORKDIR /app
 
 ENV SQLX_OFFLINE=true
+ENV CARGO_BUILD_JOBS=1
 
 RUN cargo install cargo-chef
 

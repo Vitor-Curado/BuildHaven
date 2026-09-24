@@ -1,5 +1,6 @@
 /target
 /client/node_modules
 /dist
+/static
 benchmarks/results/*.raw
 .env

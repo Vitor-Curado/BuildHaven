@@ -72,10 +72,11 @@ pub async fn get_published_posts(pool: &PgPool) -> Result<Vec<Post>, sqlx::Error
         FROM posts
         WHERE status = $1
         ORDER BY created_at DESC
-        "#
+        "#,
     )
     .bind("published")
-    .fetch_all(pool).await
+    .fetch_all(pool)
+    .await
 }
 
 pub async fn get_posts_paginated(

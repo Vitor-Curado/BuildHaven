@@ -35,8 +35,11 @@ My original choice of CI/CD was `Woodpecker CI` coming from my obsession to have
 ## Minor decisions
 
 * **Reverse proxy:** It started with `Nginx`, and I have been rocking the initial config ever since. Haven't felt the need to change it in... so long, actually.
-* **SSR templating engine:** Since we're in `Rust`, I ended up with `Askama`. No particular reason. Works flawlessly, feels like Jinja2 from Python
+* **Orchestration:** There are usually two options, `systemd` (.service file) and `compose` (.yml file). I opted for `systemd` simply out of inertia; the one I'm most familiar with. It works, `podman` literally generated the .service file for me, and I don't need to check it ever.  
+* **SSR templating engine:** Since we're in `Rust`, I ended up with `Askama`. No particular reason. Works flawlessly, feels like Jinja2 from Python.
 * **Containerisation technology:** `Podman` out of inertia, the Fedora/RHEL/RPM native pod manager that *comes out of the box*, podman. Daemon-less, it's pretty good
 * **Runtime image:** I tried `distroless` at first because I felt edgy and cool and sweaty tryhard about it shaving even the kernel, but I eventually felt the kernel was necessary for debugging, so I returned to `Debian's bookworm-slim` and have never looked back
 * **Version Control System:** GitHub, I hope I don't need to explain this. Alongside with it, I use GitHub Container Registry a lot which has pretty good plans for public repositories
-* **Cloud provider:** Initially DigitalOcean for its simplicity and ease of use, migrating to AWS since I no longer feel overwhelmed
+* **Cloud provider:** Initially DigitalOcean for its simplicity and ease of use, migrating to AWS since it no longer overwhelms me
+* **Production server architecture:** Initially, I used x86 simply because there was no other option. In AWS, though, they offer ARM64 casually, and out of curiosity I decided to give it a try given ARM is a liiittle bit better than x86 when it comes to production servers. For me though it was more for the experience of it. Sometimes do I regret my decisions? Plenty, but it felt bearable enough not to whine my way back to x86. Because I do not have the dedicated hardware for it, though, it takes actual more than 10 minutes to build the image and ship it to GHCR
+* **Version control system:** Fresh out of college, `Git` and `GitHub` are what one would expect from a junior. The ecosystem around it, for me `GitHub Container Registry` (GHCR), is what made me stick to it. I'm not saying others are bad because I don't know about other options, but sending my stuff to 

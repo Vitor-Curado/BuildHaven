@@ -1,9 +1,13 @@
 use crate::{
-    constants::{icons, paths::VITE_MANIFEST, titles}, error::{AppError, AppResult}, navbar::DOCS, templates::{BaseTemplateContext, ContactTemplate},
+    constants::{icons, paths::VITE_MANIFEST, titles},
+    error::{AppError, AppResult},
+    navbar::DOCS,
+    templates::{BaseTemplateContext, ContactTemplate, DocsTemplate},
+    utils::markdown_to_html,
 };
 use askama::Template;
 use serde::Deserialize;
-use std::{fs, path::Path, sync::Arc};
+use std::{fs, sync::Arc};
 
 #[derive(Debug, Deserialize)]
 struct ViteManifestEntry {
@@ -42,14 +46,39 @@ impl Assets {
     }
 
     pub fn generate_all_static_pages(&self) -> AppResult<()> {
-        self.generate_contact()
+        self.generate_contact()?;
+        self.generate_docs()
     }
 
     fn generate_contact(&self) -> AppResult<()> {
-        let base = BaseTemplateContext::new(titles::CONTACT, icons::CONTACT, Arc::new(self.clone()), DOCS);
+        let base = BaseTemplateContext::new(
+            titles::CONTACT,
+            icons::CONTACT,
+            Arc::new(self.clone()),
+            DOCS,
+        );
         let template = ContactTemplate { base };
 
         self.write_static_page("contact", template)
+    }
+
+    fn generate_docs(&self) -> AppResult<()> {
+        for doc in DOCS {
+            let base =
+                BaseTemplateContext::new(doc.title, icons::DOCS, Arc::new(self.clone()), DOCS);
+
+            let html = markdown_to_html(doc.markdown);
+
+            let template = DocsTemplate {
+                base,
+                title: doc.title,
+                content_html: html,
+            };
+
+            self.write_static_page(&format!("docs/{}", doc.slug), template)?;
+        }
+
+        Ok(())
     }
 
     fn write_static_page<T: Template>(&self, route: &str, template: T) -> AppResult<()> {
@@ -57,7 +86,7 @@ impl Assets {
         fs::create_dir_all(&directory)?;
         let html = template.render()?;
         fs::write(format!("{directory}/index.html"), html)?;
-        
+
         Ok(())
     }
 }

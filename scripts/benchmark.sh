@@ -23,7 +23,7 @@ echo "Duration: $DURATION"
 echo "=============================="
 echo ""
 
-wrk \
+wrk2 \
   -t$THREADS \
   -c$CONNECTIONS \
   -d$DURATION \

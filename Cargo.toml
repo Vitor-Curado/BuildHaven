@@ -7,7 +7,7 @@ edition = "2024"
 [dependencies]
 # --- Web / HTTP ---
 axum = "0.8.9"
-tower-http = { version = "0.6.10", features = ["fs", "trace", "set-header", "compression-gzip", "cors", "limit", "compression-br", "compression-deflate", "request-id"] }
+tower-http = { version = "0.7.1", features = ["fs", "trace", "set-header", "compression-gzip", "cors", "limit", "compression-br", "compression-deflate", "request-id"] }
 tower_governor = { version = "0.8.0", features = ["axum"] }
 
 # --- Sessions / authentication ---
@@ -19,7 +19,7 @@ argon2 = "0.6.0"
 sqlx = { version = "0.8.6", features = ["postgres", "runtime-tokio-rustls", "uuid", "time", "macros"] }
 
 # --- Application / serialisation ---
-serde = { version = "1", features = ["derive"] }
+serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0"
 thiserror = "2.0.18"
 slug = "0.1"
@@ -38,7 +38,7 @@ validator = "0.20.0"
 time = { version = "0.3.47", features = ["formatting"] }
 
 # -- Async runtime ---
-tokio = { version = "1.52.2", features = ["full"] }
+tokio = { version = "1.53.1", features = ["full"] }
 
 # Observability
 tracing-subscriber = { version = "0.3.23", features = ["env-filter", "json"] }

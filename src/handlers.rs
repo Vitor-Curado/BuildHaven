@@ -1,11 +1,18 @@
 use crate::{
-    auth::verify_password, constants::{icons, titles}, error::{AppError, AppResult}, models::{LoginForm, NewPost, UpdatePost}, navbar::DOCS, repository::{
-        create_post, delete_post, find_user_by_email, get_all_posts, get_post_by_id, get_posts_by_slug, get_published_posts, publish_post, unpublish_post, update_post,
-    }, state::AppState, templates::{
+    auth::verify_password,
+    constants::{icons, titles},
+    error::{AppError, AppResult},
+    models::{LoginForm, NewPost, UpdatePost},
+    repository::{
+        create_post, delete_post, find_user_by_email, get_all_posts, get_post_by_id,
+        get_posts_by_slug, get_published_posts, publish_post, unpublish_post, update_post,
+    },
+    state::AppState,
+    templates::{
         AdminEditPostTemplate, AdminNewPostTemplate, AdminPostsTemplate, AdminTemplate,
-        BaseTemplateContext, BlogPostTemplate, ContactTemplate, DocsTemplate,
-        IndexTemplate, LoginTemplate, ResumeTemplate,
-    }, utils::markdown_to_html,
+        BaseTemplateContext, BlogPostTemplate, IndexTemplate, LoginTemplate, ResumeTemplate,
+    },
+    utils::markdown_to_html,
 };
 
 use axum::{
@@ -36,8 +43,6 @@ pub fn render_template<T: Template>(t: T) -> AppResult<Response> {
     tracing::debug!("Template render took {:?}", start.elapsed());
     Ok(Html(html).into_response())
 }
-
-// pub fn generate_static_pages()
 
 pub async fn home(State(state): State<AppState>) -> Result<Response, AppError> {
     let posts = get_published_posts(&state.db).await?;
@@ -110,31 +115,6 @@ pub async fn login_page(State(state): State<AppState>) -> impl IntoResponse {
 pub async fn resume(State(state): State<AppState>) -> AppResult<Response> {
     render_template(ResumeTemplate {
         base: BaseTemplateContext::build_base_context(&state, titles::RESUME, icons::RESUME),
-    })
-}
-
-pub async fn docs(Path(slug): Path<String>, State(state): State<AppState>) -> AppResult<Response> {
-    let doc = DOCS
-        .iter()
-        .find(|d| d.slug == slug)
-        .ok_or(AppError::NotFound)?;
-
-    let html = markdown_to_html(doc.markdown);
-
-    render_template(DocsTemplate {
-        base: BaseTemplateContext::build_base_context(&state, doc.title, icons::DOCS),
-
-        title: doc.title,
-        content_html: html,
-    })
-}
-
-/// Renders the contact page.
-/// # Panics
-/// This function will panic if the template rendering fails.
-pub async fn contact(State(state): State<AppState>) -> AppResult<Response> {
-    render_template(ContactTemplate {
-        base: BaseTemplateContext::build_base_context(&state, titles::CONTACT, icons::CONTACT),
     })
 }
 
@@ -214,7 +194,7 @@ pub async fn admin_delete_post(
 
 pub async fn admin_publish_post(
     State(state): State<AppState>,
-    Path(post_id): Path<Uuid>
+    Path(post_id): Path<Uuid>,
 ) -> AppResult<Response> {
     let updated = publish_post(&state.db, post_id).await?;
 
@@ -227,7 +207,7 @@ pub async fn admin_publish_post(
 
 pub async fn admin_unpublish_post(
     State(state): State<AppState>,
-    Path(post_id): Path<Uuid>
+    Path(post_id): Path<Uuid>,
 ) -> AppResult<Response> {
     let updated = unpublish_post(&state.db, post_id).await?;
 

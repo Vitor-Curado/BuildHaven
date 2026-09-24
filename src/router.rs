@@ -17,11 +17,18 @@ use tower_sessions_sqlx_store::PostgresStore;
 
 pub fn app(state: AppState, session_store: PostgresStore) -> Router {
     let config = &state.config;
+
     let media_service = ServeDir::new("media")
         .precompressed_br()
         .precompressed_gzip();
-
     let dist_service = ServeDir::new("dist")
+        .precompressed_br()
+        .precompressed_gzip();
+    let contact_service = ServeDir::new("static/contact")
+        .precompressed_br()
+        .precompressed_gzip();
+    let docs_service = ServeDir::new("static/docs/")
+        .redirect_path_prefix("/docs")
         .precompressed_br()
         .precompressed_gzip();
 
@@ -41,6 +48,8 @@ pub fn app(state: AppState, session_store: PostgresStore) -> Router {
         .layer(session_layer)
         .nest_service("/media", media_service)
         .nest_service("/dist", dist_service)
+        .nest_service("/contact", contact_service)
+        .nest_service("/docs", docs_service)
         .layer(CompressionLayer::new().br(true).gzip(true).deflate(true))
         .layer(SetRequestIdLayer::x_request_id(MakeRequestUuid))
         .layer(PropagateRequestIdLayer::x_request_id())

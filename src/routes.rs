@@ -1,7 +1,11 @@
 use crate::{
-    auth::require_auth, handlers::{
-        admin, admin_create_post, admin_delete_post, admin_edit_post, admin_new_post, admin_posts, admin_publish_post, admin_unpublish_post, admin_update_post, blog_post, contact, docs, home, login_page, login_user, resume,
-    }, state::AppState,
+    auth::require_auth,
+    handlers::{
+        admin, admin_create_post, admin_delete_post, admin_edit_post, admin_new_post, admin_posts,
+        admin_publish_post, admin_unpublish_post, admin_update_post, blog_post, home, login_page,
+        login_user, resume,
+    },
+    state::AppState,
 };
 use axum::{
     Router,
@@ -12,10 +16,8 @@ pub fn public_routes() -> Router<AppState> {
     Router::new()
         .route("/", get(home))
         .route("/{slug}", get(blog_post))
-        .route("/docs/{slug}", get(docs))
         .route("/login", get(login_page).post(login_user))
         .route("/resume", get(resume))
-        .route("/contact", get(contact))
 }
 
 // Todo: Add authenticated routes here in the future
