@@ -48,3 +48,9 @@ pub mod cookies {
 pub mod service {
     pub const NAME: &str = "buildhaven";
 }
+
+pub mod project {
+    pub const NAME: &str = "BuildHaven";
+    pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+    pub const REPOSITORY: &str = "https://github.com/Vitor-Curado/BuildHaven/";
+}

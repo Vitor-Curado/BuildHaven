@@ -1,0 +1,17 @@
+[Unit]
+Description=BuildHaven VictoriaMetrics
+
+[Container]
+ContainerName=victoriametrics
+Image=docker.io/victoriametrics/victoria-metrics:latest
+Network=buildhaven.network
+Volume=victoriametrics.volume:/storage
+Exec=-storageDataPath=/storage
+Exec=-httpListenAddr=:8428
+PublishPort=127.0.0.1:8428:8428
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

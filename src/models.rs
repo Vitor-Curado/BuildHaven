@@ -1,5 +1,5 @@
 use serde::Deserialize;
-use time::OffsetDateTime;
+use time::{OffsetDateTime, Duration};
 use uuid::Uuid;
 
 #[derive(Deserialize)]
@@ -22,19 +22,57 @@ pub struct Post {
 }
 
 impl Post {
-    pub fn formatted_date(&self) -> String {
+    pub fn formatted_created_at(&self) -> String {
         self.created_at
-            .date()
-            .format(&time::macros::format_description!("[year]-[month]-[day]"))
+            .format(&time::macros::format_description!("[month repr:long] [day], [year] | [hour]:[minute]"))
             .unwrap()
     }
 
-    pub fn formatted_published_date(&self) -> Option<String> {
+    pub fn formatted_published_at(&self) -> Option<String> {
         self.published_at.map(|date| {
-            date.date()
-                .format(&time::macros::format_description!("[year]-[month]-[day]"))
+            date.format(&time::macros::format_description!("[month repr:long] [day], [year] | [hour]:[minute]"))
                 .unwrap()
         })
+    }
+
+    pub fn formatted_updated_at(&self) -> String {
+        self.updated_at
+                .format(&time::macros::format_description!("[month repr:long] [day], [year] | [hour]:[minute]"))
+                .unwrap()
+    }
+
+    pub fn time_to_publish(&self) -> Option<Duration> {
+        self.published_at.map(|published_at| {
+            published_at - self.created_at
+        })
+    }
+
+    pub fn formatted_time_to_publish(&self) -> Option<String> {
+        self.time_to_publish().map(Self::format_duration)
+    }
+
+    pub fn time_since_publication(&self) -> Duration {
+        match self.published_at {
+            Some(published_at) => self.updated_at - published_at,
+            None => self.updated_at - self.created_at,
+        }
+    }
+
+    pub fn formatted_time_since_publication(&self) -> String {
+        Self::format_duration(self.time_since_publication())
+    }
+
+    fn format_duration(duration: Duration) -> String {
+        let total_seconds = duration.whole_seconds();
+        let days = total_seconds / 86400;
+        let hours = (total_seconds % 86400) / 3600;
+        let minutes = (total_seconds % 3600) / 60;
+
+        match (days, hours, minutes) {
+            (0, 0, minutes) => format!("{minutes} minutes"),
+            (0, hours, minutes) => format!("{hours} hours, {minutes} minutes"),
+            (days, hours, minutes) => format!("{days} days, {hours} hours, {minutes} minutes")
+        }
     }
 }
 

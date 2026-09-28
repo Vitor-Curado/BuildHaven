@@ -233,6 +233,24 @@ pub async fn unpublish_post(pool: &PgPool, post_id: Uuid) -> Result<bool, sqlx::
     Ok(result.rows_affected() > 0)
 }
 
+pub async fn increment_post_views(pool: &PgPool, post_id: Uuid) -> Result<bool, sqlx::Error> {
+    let result = sqlx::query!(
+        r#"
+        UPDATE posts
+        SET
+            views = views + 1
+        WHERE id = $1
+        "#,
+        post_id
+    )
+    .execute(pool)
+    .await?;
+
+    Ok(result.rows_affected() > 0)
+}
+
+// *** User-related stuff ***
+
 pub async fn find_user_by_email(pool: &PgPool, email: &str) -> Result<Option<User>, sqlx::Error> {
     let user = sqlx::query_as!(
         User,

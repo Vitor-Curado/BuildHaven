@@ -1,0 +1,5 @@
+[Unit]
+Description=BuildHaven Grafana data volume
+
+[Volume]
+VolumeName=buildhaven-grafana-data

@@ -1,0 +1,15 @@
+[Unit]
+Description=BuildHaven PostgreSQL database
+
+[Container]
+ContainerName=buildhaven-postgres
+Image=docker.io/library/postgres:18.6
+Network=buildhaven.network
+Volume=postgres.volume:/var/lib/postgresql
+EnvironmentFile=/etc/BuildHaven/.env
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

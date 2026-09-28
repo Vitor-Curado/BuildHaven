@@ -42,8 +42,9 @@ tokio = { version = "1.53.1", features = ["full"] }
 
 # Observability
 tracing-subscriber = { version = "0.3.23", features = ["env-filter", "json"] }
-prometheus = "0.14.0"
+metrics-exporter-prometheus = "0.18"
 tracing = "0.1.44"
+metrics = "0.24"
 
 # --- Investigate / potentially add ---
 

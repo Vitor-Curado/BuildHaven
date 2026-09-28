@@ -1,18 +1,10 @@
 use crate::{
-    auth::verify_password,
-    constants::{icons, titles},
-    error::{AppError, AppResult},
-    models::{LoginForm, NewPost, UpdatePost},
-    repository::{
-        create_post, delete_post, find_user_by_email, get_all_posts, get_post_by_id,
-        get_posts_by_slug, get_published_posts, publish_post, unpublish_post, update_post,
-    },
-    state::AppState,
-    templates::{
+    auth::verify_password, constants::{icons, titles}, error::{AppError, AppResult}, models::{LoginForm, NewPost, UpdatePost}, repository::{
+        create_post, delete_post, find_user_by_email, get_all_posts, get_post_by_id, get_posts_by_slug, get_published_posts, increment_post_views, publish_post, unpublish_post, update_post,
+    }, state::AppState, templates::{
         AdminEditPostTemplate, AdminNewPostTemplate, AdminPostsTemplate, AdminTemplate,
         BaseTemplateContext, BlogPostTemplate, IndexTemplate, LoginTemplate, ResumeTemplate,
-    },
-    utils::markdown_to_html,
+    }, utils::markdown_to_html,
 };
 
 use axum::{
@@ -60,6 +52,8 @@ pub async fn blog_post(
     let post = get_posts_by_slug(&state.db, slug)
         .await?
         .ok_or(AppError::NotFound)?;
+
+    increment_post_views(&state.db, post.id).await?;
 
     let content_html = markdown_to_html(&post.content);
 

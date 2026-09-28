@@ -17,7 +17,6 @@ pub async fn graceful_shutdown_signal() {
 
     #[cfg(not(unix))]
     let terminate = std::future::pending::<()>();
-
     tokio::select! {
         _ = ctrl_c => {},
         _ = terminate => {},

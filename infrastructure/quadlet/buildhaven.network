@@ -1,0 +1,5 @@
+[Unit]
+Description=BuildHaven Podman network
+
+[Network]
+NetworkName=buildhaven-net

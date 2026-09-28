@@ -1,0 +1,5 @@
+[Unit]
+Description=BuildHaven VictoriaMetrics data volume
+
+[Volume]
+VolumeName=buildhaven-victoriametrics-data

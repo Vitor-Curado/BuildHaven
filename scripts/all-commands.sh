@@ -50,6 +50,4 @@ sudo podman run -d \
   docker.io/library/postgres:latest
 
 # Build to (then ship to) prod
-podman build --platform linux/arm64 \
-  -t ghcr.io/vitor-curado/buildhaven:arm64 \
-  .
+podman build --platform linux/arm64 -t ghcr.io/vitor-curado/buildhaven:arm64 .

@@ -20,7 +20,6 @@ pub fn public_routes() -> Router<AppState> {
         .route("/resume", get(resume))
 }
 
-// Todo: Add authenticated routes here in the future
 pub fn protected_routes(state: AppState) -> Router<AppState> {
     Router::new()
         .route("/admin", get(admin))

@@ -1,0 +1,16 @@
+[Unit]
+Description=BuildHaven Grafana
+
+[Container]
+ContainerName=grafana
+Image=docker.io/grafana/grafana:13.2.2
+Network=buildhaven.network
+Volume=grafana.volume:/var/lib/grafana
+EnvironmentFile=/etc/BuildHaven/.env
+PublishPort=127.0.0.1:3001:3000
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -5,10 +5,14 @@
     <header class="blog-post-header">
         <h1>{{ post.title }}</h1>
 
-        {% if let Some(published_at) = post.published_at %}
-            <time datetime="{{ published_at }}">
-                {{ published_at }}
-            </time>
+        {% if let Some(published_at) = post.formatted_published_at() %}
+            <p>
+                <strong> Published: </strong>
+                <time datetime="{{ published_at }}">
+                    {{ post.formatted_published_at().unwrap() }}
+                </time>
+                ({{ post.formatted_time_to_publish().unwrap() }} after creation)
+            </p>
         {% endif %}
     </header>
 

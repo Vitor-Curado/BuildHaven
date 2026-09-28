@@ -1,0 +1,17 @@
+[Unit]
+Description=BuildHaven application
+
+[Container]
+ContainerName=buildhaven
+Image=ghcr.io/vitor-curado/buildhaven:arm64
+Network=buildhaven.network
+EnvironmentFile=/etc/BuildHaven/.env
+PublishPort=3000:3000
+
+[Service]
+Environment=REGISTRY_AUTH_FILE=/root/.config/containers/auth.json
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

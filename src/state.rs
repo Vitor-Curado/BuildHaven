@@ -1,4 +1,3 @@
-// src/state.rs
 use crate::{assets::Assets, config::Config};
 
 use sqlx::PgPool;

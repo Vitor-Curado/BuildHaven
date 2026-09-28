@@ -1,0 +1,5 @@
+[Unit]
+Description=BuildHaven PostgreSQL data volume
+
+[Volume]
+VolumeName=buildhaven-postgres-data

@@ -1,11 +1,12 @@
 use crate::{
     cors::apply_cors,
     logging::apply_logging,
+    metrics::{init_metrics, metrics_endpoint, record_http_metrics},
     routes::{protected_routes, public_routes},
     security::apply_security_headers,
     state::AppState,
 };
-use axum::Router;
+use axum::{Extension, Router, middleware::from_fn, routing::get};
 use time::Duration;
 use tower_http::{
     compression::CompressionLayer,
@@ -42,9 +43,12 @@ pub fn app(state: AppState, session_store: PostgresStore) -> Router {
             config.session.duration_hours,
         )));
 
+    let metrics_handle = init_metrics();
+
     let mut router = Router::new()
         .merge(public_routes())
         .merge(protected_routes(state.clone()))
+        .route("/metrics", get(metrics_endpoint))
         .layer(session_layer)
         .nest_service("/media", media_service)
         .nest_service("/dist", dist_service)
@@ -53,11 +57,13 @@ pub fn app(state: AppState, session_store: PostgresStore) -> Router {
         .layer(CompressionLayer::new().br(true).gzip(true).deflate(true))
         .layer(SetRequestIdLayer::x_request_id(MakeRequestUuid))
         .layer(PropagateRequestIdLayer::x_request_id())
+        .layer(Extension(metrics_handle))
         .with_state(state.clone());
 
     router = apply_security_headers(router, config);
     router = apply_logging(router, config);
     router = apply_cors(router, config);
+    router = router.layer(from_fn(record_http_metrics));
 
     router
 }
