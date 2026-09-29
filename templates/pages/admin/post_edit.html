@@ -8,6 +8,8 @@
         {% if let Some(published_at) = post.published_at %}
             <p><strong> Published: </strong> <time datetime="{{ published_at }}"> {{ published_at }} </time> </p>
         {% endif %}
+
+        <p> <a href="/admin/posts"> <= Back to Posts </a> </p>
     </header>
     
     <form class="form" method="post" action="/admin/posts/{{ post.id }}">

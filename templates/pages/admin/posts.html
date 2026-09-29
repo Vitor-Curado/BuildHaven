@@ -3,7 +3,13 @@
 {% block content %}
     <header>
         <h1>Posts</h1>
-        <a href="/admin/posts/new">New Post</a>
+        <p>
+            <a href="/admin/posts/new">New Post</a>
+        </p>
+        <p>
+            <a href="/admin"> <= Back to Admin </a>
+        </p>
+        
     </header>
 
     {% if posts.is_empty() %}
@@ -40,3 +46,4 @@
         </section>
     {% endif %}
 {% endblock %}
+

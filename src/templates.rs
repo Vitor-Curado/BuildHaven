@@ -13,7 +13,7 @@ pub struct BaseTemplateContext {
     pub favicon: &'static str,
     pub assets: Arc<Assets>,
     pub themes: &'static [Theme],
-    pub docs: &'static [DocItem],
+    pub docs: &'static [DocItem]
 }
 
 impl BaseTemplateContext {

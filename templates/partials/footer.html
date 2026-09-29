@@ -1,88 +1,28 @@
 <footer class="footer container">
+    <div class="footer-content">
 
-    <section class="footer-grid grid grid-auto">
+        <nav class="footer-nav" aria-label="Footer">
+            <a href="/about" class="footer-link">About</a>
+            <a href="/contact" class="footer-link">Contact</a>
+        </nav>
 
-        <!-- Identity / About -->
-        <div class="footer-section">
-            <h2 class="text-large">Victor Curado</h2>
-            <p class="text-extra-medium">
-                Rust developer focused on performance,
-                clarity, and maintainable systems.
-            </p>
-        </div>
+        <a
+            href="https://www.linkedin.com/in/vitor-curado/"
+            class="footer-link footer-copy"
+        >
+            © 2025 Vitor Curado
+        </a>
 
-        <!-- Navigation -->
-        <div class="footer-section">
-            <h2 class="text-large">Navigation</h2>
+        <span class="footer-tech">
+            Rust · TypeScript · PostgreSQL · AWS
+        </span>
 
-            <ul class="footer-links">
-                <li>
-                    <a href="/" class="footer-link">
-                        Home
-                    </a>
-                </li>
+        <a
+            href="{{ crate::constants::project::REPOSITORY }}"
+            class="footer-link footer-version"
+        >
+            v{{ crate::constants::project::VERSION }}
+        </a>
 
-                <li>
-                    <a href="/resume" class="footer-link">
-                        Resume
-                    </a>
-                </li>
-
-                <li>
-                    <a href="/blog" class="footer-link">
-                        Blog
-                    </a>
-                </li>
-
-                <li>
-                    <a href="/contact" class="footer-link">
-                        Contact
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- External / Professional -->
-        <div class="footer-section">
-            <h2 class="footer-title">Professional</h2>
-
-            <ul class="footer-links">
-                <li>
-                    <a href="https://github.com/Vitor-Curado"
-                       class="footer-link">
-                        GitHub
-                    </a>
-                </li>
-
-                <li>
-                    <a href="https://www.linkedin.com/in/vitor-curado/"
-                       class="footer-link">
-                        LinkedIn
-                    </a>
-                </li>
-
-                <li>
-                    <a href="mailto:vitorbmcurado@proton.me"
-                       class="footer-link">
-                        Email
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-    </section>
-
-    <section class="footer-bottom">
-
-        <p class="footer-copy">
-            © 2026 Victor Curado.
-            Built with Rust, TypeScript and PostgreSQL, deployed on AWS EC2.
-        </p>
-
-        <p class="footer-version">
-            <a href="{{ crate::constants::project::REPOSITORY }}" class="footer-link"> v{{ crate::constants::project::VERSION }} </a>
-        </p>
-
-    </section>
-
+    </div>
 </footer>
