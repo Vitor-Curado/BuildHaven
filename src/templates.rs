@@ -61,7 +61,7 @@ pub struct IndexTemplate {
 }
 
 #[derive(Template)]
-#[template(path = "pages/blog_post.html")]
+#[template(path = "pages/blog_post.html", escape = "none")]
 pub struct BlogPostTemplate {
     pub base: BaseTemplateContext,
     pub post: Post,
