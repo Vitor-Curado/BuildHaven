@@ -24,7 +24,26 @@
                 required
             >
         </div>
-
+        <div class="form-group">
+            <label class="form-label" for="seo_title"> SEO Title </label>
+            <input
+                class="form-field"
+                type="text"
+                id="seo_title"
+                name="seo_title"
+                value="{{ post.seo_title }}"
+                required
+            >
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="meta_description"> Meta Description </label>
+            <textarea
+                class="form-field"
+                id="meta_description"
+                name="meta_description"
+                rows="5"
+                required>{{ post.meta_description }}</textarea>
+        </div>
         <div class="form-group">
             <label class="form-label" for="content"> Content </label>
             <textarea

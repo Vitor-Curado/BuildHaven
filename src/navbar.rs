@@ -49,6 +49,16 @@ pub const THEMES: &[Theme] = &[
         name: "Ocean",
         icon: "ocean.png",
     },
+    Theme {
+        id: "amethyst",
+        name: "Amethyst",
+        icon: "amethyst.png",
+    },
+    Theme {
+        id: "burgundy",
+        name: "Burgundy",
+        icon: "burgundy.png",
+    }
 ];
 
 pub const DOCS: &[DocItem] = &[

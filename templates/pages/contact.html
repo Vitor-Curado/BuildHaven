@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1> Contact information </h1>
+    <ul class="contact-list grid grid-auto">
+        <li class="card contact-item">
+            <img class="contact-icon" src="/media/icons/email.svg" alt="Email">
+            <a class="contact-link" href="mailto:{{ crate::constants::contact_information::EMAIL }}"> Email </a>
+        </li>
+        <li class="card contact-item">
+            <img class="contact-icon" src="/media/icons/linkedin.svg" alt="LinkedIn">
+            <a class="contact-link" href="{{ crate::constants::contact_information::LINKEDIN }}"> LinkedIn </a>
+        </li>
+        <li class="card contact-item">
+            <img class="contact-icon" src="/media/icons/github.svg" alt="GitHub">
+            <a class="contact-link" href="{{ crate::constants::contact_information::GITHUB }}"> GitHub </a>
+        </li>
+        <li class="card contact-item">
+            <img class="contact-icon" src="/media/icons/whatsapp.svg" alt="WhatsApp">
+            <a class="contact-link" href="{{ crate::constants::contact_information::WHATSAPP }}"> WhatsApp </a>
+        </li>
+    </ul>
+{% endblock %}

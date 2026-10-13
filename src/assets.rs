@@ -54,7 +54,7 @@ impl Assets {
         let base = BaseTemplateContext::new(
             titles::CONTACT,
             constants::seo_descriptions::CONTACT,
-            "/contact".into(),
+            constants::seo_canonical_paths::CONTACT.into(),
             icons::CONTACT,
             Arc::new(self.clone()),
             DOCS,
@@ -69,7 +69,7 @@ impl Assets {
             let base = BaseTemplateContext::new(
                 doc.title,
                 constants::seo_descriptions::DOCS,
-                "/docs".into(),
+                constants::seo_canonical_paths::DOCS.into(),
                 icons::DOCS,
                 Arc::new(self.clone()),
                 DOCS,

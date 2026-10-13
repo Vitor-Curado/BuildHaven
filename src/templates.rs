@@ -2,7 +2,7 @@ use crate::{
     assets::Assets,
     models::Post,
     navbar::{DOCS, DocItem, THEMES, Theme},
-    state::AppState,
+    state::AppState
 };
 use askama::Template;
 use std::sync::Arc;
@@ -82,7 +82,7 @@ pub struct ResumeTemplate {
 #[template(path = "pages/index.html")]
 pub struct IndexTemplate {
     pub base: BaseTemplateContext,
-    pub posts: Vec<Post>,
+    pub posts: Vec<Post>
 }
 
 #[derive(Template)]
@@ -102,7 +102,7 @@ pub struct DocsTemplate {
 }
 
 #[derive(Template)]
-#[template(path = "pages/contact_me.html")]
+#[template(path = "pages/contact.html")]
 pub struct ContactTemplate {
     pub base: BaseTemplateContext,
 }

@@ -19,7 +19,6 @@ pub mod icons {
     pub const CONTACT: &str = "contact.svg";
     pub const DOCS: &str = "blog.png";
     pub const EMAIL: &str = "email.png";
-    pub const FOOD: &str = "food.svg";
     pub const HOME: &str = "home.svg";
     pub const LANGUAGE: &str = "language.svg";
     pub const LOGIN: &str = "login.svg";
@@ -81,4 +80,11 @@ pub mod seo_canonical_paths {
     pub const BLOG: &str = endpoints::BLOG_POST;
     pub const CONTACT: &str = endpoints::CONTACT;
     pub const DOCS: &str = endpoints::DOCS;
+}
+
+pub mod contact_information {
+    pub const EMAIL: &str = "vitorbmcurado@proton.me";
+    pub const LINKEDIN: &str = "https://www.linkedin.com/in/vitor-curado/";
+    pub const GITHUB: &str = "https://github.com/Vitor-Curado";
+    pub const WHATSAPP: &str = "https://wa.me/16477817484";
 }

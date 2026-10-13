@@ -24,6 +24,12 @@
                     ({{ post.formatted_time_since_publication().unwrap() }} after creation)
                 </p>
             {% endif %}
+            <p>
+              <strong> Views: </strong> {{ post.views }}
+            </p>
+            <p>
+              <strong> Tags: </strong> Not yet implemented
+            </p>
           </header>
           <a href="/{{ post.slug }}"> Read post </a>
         </article>

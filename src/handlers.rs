@@ -71,13 +71,13 @@ pub async fn blog_post(
     increment_post_views(&state.db, post.id).await?;
 
     let content_html = markdown_to_html(&post.content);
-
+    let canonical_path = format!("/{}", post.slug);
     render_template(BlogPostTemplate {
         base: BaseTemplateContext::build_base_context(
             &state,
             &post.title,
             &post.meta_description,
-            &post.slug,
+            &canonical_path,
             icons::BLOG,
         ),
         content_html,

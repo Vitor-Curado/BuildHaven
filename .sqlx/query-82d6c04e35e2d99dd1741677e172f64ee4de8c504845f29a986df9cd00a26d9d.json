@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT \n    id,\n    title,\n    seo_title,\n    meta_description,\n    slug,\n    content,\n    status,\n    views,\n    published_at,\n    created_at,\n    updated_at\nFROM posts\nWHERE status = $1\nORDER BY created_at DESC;",
+  "query": "SELECT \n    id,\n    title,\n    seo_title,\n    meta_description,\n    slug,\n    content,\n    status,\n    views,\n    published_at,\n    created_at,\n    updated_at\nFROM posts\nWHERE status = $1\nORDER BY published_at DESC NULLS LAST, created_at DESC;",
   "describe": {
     "columns": [
       {
@@ -78,5 +78,5 @@
       false
     ]
   },
-  "hash": "26374205eee75892af94ef7836ad78d1b4c0e52c8ae847642054d2b177e575be"
+  "hash": "82d6c04e35e2d99dd1741677e172f64ee4de8c504845f29a986df9cd00a26d9d"
 }
