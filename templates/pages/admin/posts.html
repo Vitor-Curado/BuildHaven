@@ -28,12 +28,12 @@
                                 <time datetime="{{ published_at }}">
                                     {{ post.formatted_published_at().unwrap() }}
                                 </time>
-                                ({{ post.formatted_time_to_publish().unwrap() }} after creation)
+                                ({{ post.formatted_time_since_publication().unwrap() }} after creation)
                             </p>
                         {% endif %}
 
                         <p> <strong> Created: </strong> <time datetime="{{ post.created_at }}"> {{ post.formatted_created_at() }} </time> </p>
-                        <p> <strong> Updated: </strong> <time datetime="{{ post.updated_at }}"> {{ post.formatted_updated_at() }} </time> ({{ post.formatted_time_since_publication() }} later) </p>
+                        <p> <strong> Updated: </strong> <time datetime="{{ post.updated_at }}"> {{ post.formatted_updated_at() }} </time> ({{ post.formatted_time_since_update() }} since last update) </p>
                         <p> <strong> Views: </strong> {{ post.views }} </p>
                     </header>
 

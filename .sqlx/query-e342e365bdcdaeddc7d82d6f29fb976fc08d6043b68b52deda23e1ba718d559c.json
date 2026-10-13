@@ -1,0 +1,18 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE posts\nSET\n    title = $2,\n    seo_title = $3,\n    meta_description = $4,\n    content = $5,\n    updated_at = NOW()\nWHERE id = $1;",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text",
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "e342e365bdcdaeddc7d82d6f29fb976fc08d6043b68b52deda23e1ba718d559c"
+}

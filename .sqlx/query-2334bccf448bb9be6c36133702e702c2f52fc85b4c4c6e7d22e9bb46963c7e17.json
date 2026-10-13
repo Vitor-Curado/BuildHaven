@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n        DELETE FROM posts\n        WHERE id = $1\n        ",
+  "query": "UPDATE posts\nSET\n    views = views + 1\nWHERE id = $1;",
   "describe": {
     "columns": [],
     "parameters": {
@@ -10,5 +10,5 @@
     },
     "nullable": []
   },
-  "hash": "d522a5226ae07d781595351e2db592678e46fa0db686e0d70d387a557f2130ea"
+  "hash": "2334bccf448bb9be6c36133702e702c2f52fc85b4c4c6e7d22e9bb46963c7e17"
 }

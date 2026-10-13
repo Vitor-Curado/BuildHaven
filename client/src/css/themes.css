@@ -37,3 +37,23 @@
   --color-200: #fdba74;
   --color-100: #fff7ed;
 }
+
+[data-theme="amethyst"] {
+  --color-900: #1b102b;
+  --color-700: #35204f;
+  --color-600: #6d28d9;
+  --color-500: #8b5cf6;
+  --color-300: #a78bfa;
+  --color-200: #c4b5fd;
+  --color-100: #ede9fe;
+}
+
+[data-theme="burgundy"] {
+  --color-900: #2b1018;
+  --color-700: #581c2d;
+  --color-600: #9f3150;
+  --color-500: #be4865;
+  --color-300: #d17a8d;
+  --color-200: #e8aeb9;
+  --color-100: #fff1f2;
+}

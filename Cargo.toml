@@ -1,7 +1,7 @@
 [package]
 name = "buildhaven"
 default-run = "buildhaven"
-version = "0.4.2"
+version = "0.5.1"
 edition = "2024"
 
 [dependencies]
@@ -47,21 +47,8 @@ tracing = "0.1.44"
 metrics = "0.24"
 
 # --- Investigate / potentially add ---
-
-# Sessions / authentication
-# tower-sessions
-# axum-oidc / openidconnect
-
-# Observability
-# opentelemetry
-# tracing-opentelemetry
-# opentelemetry-prometheus
-
 # API
 # utoipa
-
-# Validation
-# axum-valid
 
 # Authorization — only if custom RBAC gets complicated
 # casbin
@@ -74,9 +61,6 @@ metrics = "0.24"
 
 # Email — only if you send email
 # lettre
-
-# Configuration — probably unnecessary unless config gets complicated
-# figment / config
 
 # CSRF — only if you're doing cookie-based browser auth
 # tower-csrf

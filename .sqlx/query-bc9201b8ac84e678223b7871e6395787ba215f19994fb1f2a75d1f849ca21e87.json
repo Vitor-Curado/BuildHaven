@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n        SELECT \n            id, \n            title, \n            slug, \n            content, \n            status, \n            views, \n            published_at, \n            created_at, \n            updated_at\n        FROM posts\n        ORDER BY created_at DESC\n        LIMIT $1 OFFSET $2\n        ",
+  "query": "SELECT \n    id, \n    title, \n    seo_title,\n    meta_description,\n    slug,\n    content, \n    status,\n    views,\n    published_at,\n    created_at, \n    updated_at\nFROM posts\nwhere slug = $1\nAND status = 'published';",
   "describe": {
     "columns": [
       {
@@ -15,47 +15,58 @@
       },
       {
         "ordinal": 2,
-        "name": "slug",
+        "name": "seo_title",
         "type_info": "Text"
       },
       {
         "ordinal": 3,
-        "name": "content",
+        "name": "meta_description",
         "type_info": "Text"
       },
       {
         "ordinal": 4,
-        "name": "status",
+        "name": "slug",
         "type_info": "Text"
       },
       {
         "ordinal": 5,
+        "name": "content",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 6,
+        "name": "status",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 7,
         "name": "views",
         "type_info": "Int4"
       },
       {
-        "ordinal": 6,
+        "ordinal": 8,
         "name": "published_at",
         "type_info": "Timestamptz"
       },
       {
-        "ordinal": 7,
+        "ordinal": 9,
         "name": "created_at",
         "type_info": "Timestamptz"
       },
       {
-        "ordinal": 8,
+        "ordinal": 10,
         "name": "updated_at",
         "type_info": "Timestamptz"
       }
     ],
     "parameters": {
       "Left": [
-        "Int8",
-        "Int8"
+        "Text"
       ]
     },
     "nullable": [
+      false,
+      false,
       false,
       false,
       false,
@@ -67,5 +78,5 @@
       false
     ]
   },
-  "hash": "3c491b559ba1a44346561b1229b86d5d931b23ddb205d5a45ecfd37f7b0fdad5"
+  "hash": "bc9201b8ac84e678223b7871e6395787ba215f19994fb1f2a75d1f849ca21e87"
 }

@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n        SELECT id, username, email, password_hash, created_at, updated_at\n        FROM users\n        WHERE id = $1\n        ",
+  "query": "SELECT id, name, slug, created_at, colour\nFROM tags\nORDER BY name ASC;",
   "describe": {
     "columns": [
       {
@@ -10,37 +10,29 @@
       },
       {
         "ordinal": 1,
-        "name": "username",
+        "name": "name",
         "type_info": "Text"
       },
       {
         "ordinal": 2,
-        "name": "email",
+        "name": "slug",
         "type_info": "Text"
       },
       {
         "ordinal": 3,
-        "name": "password_hash",
-        "type_info": "Text"
-      },
-      {
-        "ordinal": 4,
         "name": "created_at",
         "type_info": "Timestamptz"
       },
       {
-        "ordinal": 5,
-        "name": "updated_at",
-        "type_info": "Timestamptz"
+        "ordinal": 4,
+        "name": "colour",
+        "type_info": "Text"
       }
     ],
     "parameters": {
-      "Left": [
-        "Uuid"
-      ]
+      "Left": []
     },
     "nullable": [
-      false,
       false,
       false,
       false,
@@ -48,5 +40,5 @@
       false
     ]
   },
-  "hash": "fda15a5898a1f694107c42a7081f7b773e16e90340e0363421d4114a45f51a08"
+  "hash": "ca4e99ca380c02816ff353da857ee9bfe4d5d190ecd833b67290dc90e6c3acd9"
 }

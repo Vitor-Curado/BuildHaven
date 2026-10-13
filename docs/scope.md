@@ -22,9 +22,7 @@ As I get the ropes of what goes where, how to twist, bend, deploy it and so fort
 
 I wouldn't, though, before I feel confident in: 
 
-* `Client Sider Rendering`, basically `TypeScript` and `React`
-* `Static Site Generation`
-* Being able to mix SSR, CSR and SSG (I still have issues learning how to share the static asset pipeline)
+* `Email service` (like Amazon's SES)
 * `Payments` (like Peter Thiel's Stripe payments API)
 * `Migrations` (those are hard, okay? Mentally and emotionally)
 

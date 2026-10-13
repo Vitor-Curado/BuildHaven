@@ -4,6 +4,7 @@ use serde::Deserialize;
 #[derive(Debug, Clone, Deserialize)]
 pub struct AppConfig {
     pub port: u16,
+    pub public_base_url: String,
     pub max_request_body_size: usize,
     pub cookie_domain: String,
     pub cookie_secure: bool,

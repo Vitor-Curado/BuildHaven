@@ -1,10 +1,19 @@
 use crate::{
-    auth::verify_password, constants::{icons, titles}, error::{AppError, AppResult}, models::{LoginForm, NewPost, UpdatePost}, repository::{
-        create_post, delete_post, find_user_by_email, get_all_posts, get_post_by_id, get_posts_by_slug, get_published_posts, increment_post_views, publish_post, unpublish_post, update_post,
-    }, state::AppState, templates::{
+    auth::verify_password,
+    constants::{self, icons, titles},
+    error::{AppError, AppResult},
+    models::{LoginForm, NewPost, UpdatePost},
+    repository::{
+        create_post, delete_post, find_user_by_email, get_all_posts, get_post_by_id,
+        get_posts_by_slug, get_published_posts, increment_post_views, publish_post, unpublish_post,
+        update_post,
+    },
+    state::AppState,
+    templates::{
         AdminEditPostTemplate, AdminNewPostTemplate, AdminPostsTemplate, AdminTemplate,
-        BaseTemplateContext, BlogPostTemplate, IndexTemplate, LoginTemplate, ResumeTemplate,
-    }, utils::markdown_to_html,
+        BaseTemplateContext, BlogPostTemplate, IndexTemplate, LoginTemplate,
+    },
+    utils::markdown_to_html,
 };
 
 use axum::{
@@ -40,7 +49,13 @@ pub async fn home(State(state): State<AppState>) -> Result<Response, AppError> {
     let posts = get_published_posts(&state.db).await?;
 
     render_template(IndexTemplate {
-        base: BaseTemplateContext::build_base_context(&state, titles::BLOG, icons::BLOG),
+        base: BaseTemplateContext::build_base_context(
+            &state,
+            titles::BLOG,
+            constants::seo_descriptions::HOME,
+            "/",
+            icons::BLOG,
+        ),
         posts,
     })
 }
@@ -58,7 +73,13 @@ pub async fn blog_post(
     let content_html = markdown_to_html(&post.content);
 
     render_template(BlogPostTemplate {
-        base: BaseTemplateContext::build_base_context(&state, &post.title, icons::BLOG),
+        base: BaseTemplateContext::build_base_context(
+            &state,
+            &post.title,
+            &post.meta_description,
+            &post.slug,
+            icons::BLOG,
+        ),
         content_html,
         post,
     })
@@ -99,16 +120,13 @@ pub async fn login_user(
 
 pub async fn login_page(State(state): State<AppState>) -> impl IntoResponse {
     render_template(LoginTemplate {
-        base: BaseTemplateContext::build_base_context(&state, titles::LOGIN, icons::LOGIN),
-    })
-}
-
-/// Renders the resume page.
-/// # Panics
-/// This function will panic if the template rendering fails.
-pub async fn resume(State(state): State<AppState>) -> AppResult<Response> {
-    render_template(ResumeTemplate {
-        base: BaseTemplateContext::build_base_context(&state, titles::RESUME, icons::RESUME),
+        base: BaseTemplateContext::build_base_context(
+            &state,
+            titles::LOGIN,
+            constants::seo_descriptions::LOGIN,
+            "/login",
+            icons::LOGIN,
+        ),
     })
 }
 
@@ -117,7 +135,13 @@ pub async fn resume(State(state): State<AppState>) -> AppResult<Response> {
 pub async fn admin(State(state): State<AppState>) -> AppResult<Response> {
     render_template(AdminTemplate {
         // Temporary values
-        base: BaseTemplateContext::build_base_context(&state, titles::BLOG, icons::DOCS),
+        base: BaseTemplateContext::build_base_context(
+            &state,
+            titles::BLOG,
+            constants::seo_descriptions::BLOG,
+            "/admin",
+            icons::DOCS,
+        ),
     })
 }
 
@@ -125,14 +149,26 @@ pub async fn admin_posts(State(state): State<AppState>) -> AppResult<Response> {
     let posts = get_all_posts(&state.db).await?;
 
     render_template(AdminPostsTemplate {
-        base: BaseTemplateContext::build_base_context(&state, "Manage Posts", icons::BLOG),
+        base: BaseTemplateContext::build_base_context(
+            &state,
+            "Manage Posts",
+            constants::seo_descriptions::BLOG,
+            "/admin/posts",
+            icons::BLOG,
+        ),
         posts,
     })
 }
 
 pub async fn admin_new_post(State(state): State<AppState>) -> AppResult<Response> {
     render_template(AdminNewPostTemplate {
-        base: BaseTemplateContext::build_base_context(&state, "New Post", icons::BLOG),
+        base: BaseTemplateContext::build_base_context(
+            &state,
+            "New Post",
+            constants::seo_descriptions::BLOG,
+            "/admin/new-post",
+            icons::BLOG,
+        ),
     })
 }
 
@@ -154,7 +190,13 @@ pub async fn admin_edit_post(
         .ok_or(AppError::NotFound)?;
 
     render_template(AdminEditPostTemplate {
-        base: BaseTemplateContext::build_base_context(&state, "Edit post", icons::BLOG),
+        base: BaseTemplateContext::build_base_context(
+            &state,
+            "Edit post",
+            constants::seo_descriptions::BLOG,
+            &format!("/admin/posts/{}", post.id),
+            icons::BLOG,
+        ),
         post,
     })
 }

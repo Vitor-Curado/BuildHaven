@@ -22,4 +22,6 @@ We have aspects that remind us of plumbing, hence why we have so many plumbing t
 
 That includes passing down knowledge and wisdom, mentoring the newcomers. 
 
-By *professional*, I mean we have to learn how to face non-technical people, whether it be C-suite, PMs, clients or even our ma and pa, and deliver a professional response, unafraid to tell them X, Y and Z about their idea sucks. That goes without saying for any profession, I guess.
+By *professional*, I mean we have to learn how to face non-technical people, whether it be C-suite, PMs, clients or even our ma and pa, and deliver a professional response, unafraid to tell them X, Y and Z about their idea sucks. That goes without saying for any profession.
+
+### A schizo mechanic (WIP)

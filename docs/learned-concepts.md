@@ -43,7 +43,7 @@ For small scale projects, these are largely optional and even unwanted as they i
 
 ### The cloud
 
-The name really fails the commoner, the lay person because I thought it was something hard. No, it isn't. The cloud is what we call managed... stuff for rent. Could be just storage, for example AWS's S3, I am not a customer but I guess one can probably just rent managed GPUs. The most famous and most straightforward one I can think off the top of my head is AWS EC2, which is a computer, headless, that you can connect from anywhere in the world. AWS is generally less accessible to the common person, and it can feel overwhelming because it's the real deal; it's serious. Comes with a lot of customisations. If one wishes for something simpler, other providers for example DigitalOcean provide droplets, which was my gateway drug into remote servers and it served me wonders, when I created an AWS account I didn't even feel overwhelmed.
+The name really fails the commoner, the lay person because I thought it was something hard. No, it isn't. The cloud is what we call managed... stuff for rent. Could be just storage, for example AWS's S3, I am not a customer but I guess one can probably just rent managed GPUs. The most famous and most straightforward one I can think off the top of my head is AWS EC2, which is a computer, headless, that you can connect from anywhere in the world. AWS is generally less accessible to the common person, and it can feel overwhelming because it's the real deal; it's serious. Comes with a lot of customisations. If one wishes for something simpler, other providers for example DigitalOcean provide droplets, which was my gateway drug into remote servers and it served me wonders. Once familiarised with D.O., I didn't even feel overwhelmed when entering the AWS ecosystem.
 
 Other cloud stuff I can think of, from Amazon of course but every providers should have their own, include:
 
@@ -55,6 +55,10 @@ It goes without saying, but storing things in a particular EC2 instance isn't a 
 ### Object Relational Managers, ORMs
 
 ORMs are a must when it comes to day-to-day software development. One learns their importance when one attempts to live without them, at first. Using a pure SQL library, for example Rust's SQLx (#2) is the equivalent of running with weights on your heels. One may get used to, and it makes one harder, but the moment they take those weights off they blast way faster. Using an ORM feels like running after one takes the weights off the heels. I kinda do think using raw SQL first is a good idea to make one thankful for an ORM. It won't restrict freedom, but the ergonomy it provides to the developer team is totally worth it, specially if there's barely any overhead. Even with overhead and performance loses, it's still worth it.
+
+### ACID compliant
+
+"hey is that ACID Compliant?"
 
 ### Documentation and testing 
 

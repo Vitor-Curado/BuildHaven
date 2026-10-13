@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n        SELECT \n            id, \n            title, \n            slug,\n            content,\n            status,\n            views,\n            published_at, \n            created_at, \n            updated_at\n        FROM posts\n        ORDER BY created_at DESC\n        ",
+  "query": "SELECT\n    p.id,\n    p.title,\n    p.seo_title,\n    p.meta_description,\n    p.slug,\n    p.content,\n    p.status,\n    p.views,\n    p.published_at,\n    p.created_at,\n    p.updated_at\nFROM posts AS p\nINNER JOIN posts_tags AS pt ON pt.post_id = p.id\nINNER JOIN tags AS t ON t.id = pt.tag_id\nWHERE t.slug = $1\n    AND p.status = 'published'\nORDER BY p.published_at DESC NULLS LAST, p.created_at DESC;",
   "describe": {
     "columns": [
       {
@@ -15,44 +15,58 @@
       },
       {
         "ordinal": 2,
-        "name": "slug",
+        "name": "seo_title",
         "type_info": "Text"
       },
       {
         "ordinal": 3,
-        "name": "content",
+        "name": "meta_description",
         "type_info": "Text"
       },
       {
         "ordinal": 4,
-        "name": "status",
+        "name": "slug",
         "type_info": "Text"
       },
       {
         "ordinal": 5,
+        "name": "content",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 6,
+        "name": "status",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 7,
         "name": "views",
         "type_info": "Int4"
       },
       {
-        "ordinal": 6,
+        "ordinal": 8,
         "name": "published_at",
         "type_info": "Timestamptz"
       },
       {
-        "ordinal": 7,
+        "ordinal": 9,
         "name": "created_at",
         "type_info": "Timestamptz"
       },
       {
-        "ordinal": 8,
+        "ordinal": 10,
         "name": "updated_at",
         "type_info": "Timestamptz"
       }
     ],
     "parameters": {
-      "Left": []
+      "Left": [
+        "Text"
+      ]
     },
     "nullable": [
+      false,
+      false,
       false,
       false,
       false,
@@ -64,5 +78,5 @@
       false
     ]
   },
-  "hash": "bfc2bf836b3c08c9a67d7c1b4ff04b29703c5baf99e6a3c4d0377008bb11d8d5"
+  "hash": "91111f60542855ffab3e5ee1d0683318f0a15fa7ebf608c9c9dfb5a0aeebd23e"
 }

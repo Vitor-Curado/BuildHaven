@@ -1,0 +1,82 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT \n    id, \n    title, \n    seo_title,\n    meta_description,\n    slug,\n    content, \n    status,\n    views,\n    published_at,\n    created_at, \n    updated_at\nFROM posts\nWHERE id = $1;",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "title",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "seo_title",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "meta_description",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
+        "name": "slug",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 5,
+        "name": "content",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 6,
+        "name": "status",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 7,
+        "name": "views",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 8,
+        "name": "published_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 9,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 10,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+    ]
+  },
+  "hash": "42e34f3b8c93a6684e442cc9fa5fc4a9a9fcf82e807c9902ecc5f2427f2897c3"
+}

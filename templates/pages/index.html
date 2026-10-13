@@ -21,7 +21,7 @@
                     <time datetime="{{ published_at }}">
                         {{ post.formatted_published_at().unwrap() }}
                     </time>
-                    ({{ post.formatted_time_to_publish().unwrap() }} after creation)
+                    ({{ post.formatted_time_since_publication().unwrap() }} after creation)
                 </p>
             {% endif %}
           </header>

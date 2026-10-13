@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n        INSERT INTO posts (id, title, slug, content)\n        VALUES ($1, $2, $3, $4)\n        RETURNING \n            id, \n            title, \n            slug,\n            content,\n            status,\n            views,\n            published_at, \n            created_at, \n            updated_at\n        ",
+  "query": "SELECT \n    id, \n    title, \n    seo_title,\n    meta_description,\n    slug,\n    content,\n    status,\n    views,\n    published_at, \n    created_at, \n    updated_at\nFROM posts\nORDER BY created_at DESC;",
   "describe": {
     "columns": [
       {
@@ -15,49 +15,56 @@
       },
       {
         "ordinal": 2,
-        "name": "slug",
+        "name": "seo_title",
         "type_info": "Text"
       },
       {
         "ordinal": 3,
-        "name": "content",
+        "name": "meta_description",
         "type_info": "Text"
       },
       {
         "ordinal": 4,
-        "name": "status",
+        "name": "slug",
         "type_info": "Text"
       },
       {
         "ordinal": 5,
+        "name": "content",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 6,
+        "name": "status",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 7,
         "name": "views",
         "type_info": "Int4"
       },
       {
-        "ordinal": 6,
+        "ordinal": 8,
         "name": "published_at",
         "type_info": "Timestamptz"
       },
       {
-        "ordinal": 7,
+        "ordinal": 9,
         "name": "created_at",
         "type_info": "Timestamptz"
       },
       {
-        "ordinal": 8,
+        "ordinal": 10,
         "name": "updated_at",
         "type_info": "Timestamptz"
       }
     ],
     "parameters": {
-      "Left": [
-        "Uuid",
-        "Text",
-        "Text",
-        "Text"
-      ]
+      "Left": []
     },
     "nullable": [
+      false,
+      false,
       false,
       false,
       false,
@@ -69,5 +76,5 @@
       false
     ]
   },
-  "hash": "1ee4185fbd72f6b4b4a400b05c4f20bdacfdc7188b1478583515b1e98d4380b9"
+  "hash": "ce7f7270d0989d3efb042cc021c782b3abb74ca03575b70edb1928fb3ba372db"
 }

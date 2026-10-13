@@ -23,10 +23,10 @@ echo "Duration: $DURATION"
 echo "=============================="
 echo ""
 
-wrk2 \
-  -t$THREADS \
-  -c$CONNECTIONS \
-  -d$DURATION \
+wrk \
+  -t"$THREADS" \
+  -c"$CONNECTIONS" \
+  -d"$DURATION" \
   --latency \
   "$URL"
 

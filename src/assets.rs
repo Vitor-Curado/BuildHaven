@@ -1,5 +1,5 @@
 use crate::{
-    constants::{icons, paths::VITE_MANIFEST, titles},
+    constants::{self, icons, paths::VITE_MANIFEST, titles},
     error::{AppError, AppResult},
     navbar::DOCS,
     templates::{BaseTemplateContext, ContactTemplate, DocsTemplate},
@@ -53,6 +53,8 @@ impl Assets {
     fn generate_contact(&self) -> AppResult<()> {
         let base = BaseTemplateContext::new(
             titles::CONTACT,
+            constants::seo_descriptions::CONTACT,
+            "/contact".into(),
             icons::CONTACT,
             Arc::new(self.clone()),
             DOCS,
@@ -64,8 +66,14 @@ impl Assets {
 
     fn generate_docs(&self) -> AppResult<()> {
         for doc in DOCS {
-            let base =
-                BaseTemplateContext::new(doc.title, icons::DOCS, Arc::new(self.clone()), DOCS);
+            let base = BaseTemplateContext::new(
+                doc.title,
+                constants::seo_descriptions::DOCS,
+                "/docs".into(),
+                icons::DOCS,
+                Arc::new(self.clone()),
+                DOCS,
+            );
 
             let html = markdown_to_html(doc.markdown);
 
